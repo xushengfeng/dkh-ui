@@ -214,7 +214,9 @@ function pack<EL extends HTMLElement>(
         },
         add: (els: { el: HTMLElement } | { el: HTMLElement }[]) => {
             if (Array.isArray(els)) {
-                el.append(...els.map((i) => i.el));
+                const f = document.createDocumentFragment();
+                f.append(...els.map((i) => i.el));
+                el.append(f);
             } else {
                 el.append(els.el);
             }
