@@ -274,14 +274,15 @@ function a(t: el0, url: string, newTab?: string) {
     return na;
 }
 
-function view(el: el0 | el0[], stack?: "x" | "y") {
+function view(el?: el0 | el0[], stack?: "x" | "y") {
     const div = pack(document.createElement("div"));
-    if (Array.isArray(el)) {
-        el.forEach((el) => div.push(el.el));
-        div.render();
-    } else {
-        div.el.append(el.el);
-    }
+    if (el)
+        if (Array.isArray(el)) {
+            el.forEach((el) => div.push(el.el));
+            div.render();
+        } else {
+            div.el.append(el.el);
+        }
     if (stack) div.style({ display: "flex" });
     if (stack === "x") div.style({ "flex-direction": "row" });
     else if (stack === "y") div.style({ "flex-direction": "column" });
