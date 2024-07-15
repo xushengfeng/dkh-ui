@@ -164,8 +164,12 @@ function pureStyle() {
     });
 }
 
-function pack<EL extends HTMLElement>(el: EL) {
-    let f = document.createDocumentFragment();
+function pack<EL extends HTMLElement>(
+    el: EL,
+    frag?: DocumentFragment,
+    fun?: (el: EL, v: unknown, trans?: typeof t) => void
+) {
+    if (!frag) frag = document.createDocumentFragment();
     return {
         el,
         style: (css: css) => {
@@ -179,34 +183,34 @@ function pack<EL extends HTMLElement>(el: EL) {
                     .join("");
                 el.style[n] = css[i];
             }
-            return pack(el);
+            return pack(el, frag, fun);
         },
         events: (es: { [key in keyof HTMLElementEventMap]?: (event: HTMLElementEventMap[key]) => void }) => {
             for (let i in es) {
                 el.addEventListener(i, es[i]);
             }
-            return pack(el);
+            return pack(el, frag, fun);
         },
         on: <key extends keyof HTMLElementEventMap>(e: key, cb: (event: HTMLElementEventMap[key]) => void) => {
             el.addEventListener(e, cb);
-            return pack(el);
+            return pack(el, frag, fun);
         },
         class: (...classes: string[]) => {
             classes.forEach((i) => el.classList.add(i));
-            return pack(el);
+            return pack(el, frag, fun);
         },
         attr: (attr: { [k: string]: string }) => {
             for (let i in attr) {
                 el.setAttribute(i, attr[i]);
             }
-            return pack(el);
+            return pack(el, frag, fun);
         },
         push: (el: HTMLElement) => {
-            f.append(el);
+            frag.append(el);
         },
         render: () => {
-            el.append(f);
-            return pack(el);
+            el.append(frag);
+            return pack(el, null, fun);
         },
         add: (els: { el: HTMLElement } | { el: HTMLElement }[]) => {
             if (Array.isArray(els)) {
@@ -214,7 +218,16 @@ function pack<EL extends HTMLElement>(el: EL) {
             } else {
                 el.append(els.el);
             }
-            return pack(el);
+            return pack(el, frag, fun);
+        },
+        value: (f: (el: EL, v: unknown, trans?: typeof t) => void) => {
+            fun = f;
+            let x = pack(el, frag, fun);
+            return x;
+        },
+        sv: (v: unknown) => {
+            if (fun) fun(el, v, t);
+            return pack(el, frag, fun);
         },
     };
 }
