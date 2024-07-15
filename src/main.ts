@@ -15,12 +15,10 @@ function pureStyle() {
     addStyle({
         "*,::before,::after": {
             "box-sizing": "border-box",
-            // @ts-ignore
             "border-width": "0",
             "border-style": "solid",
         },
         "html,:host": {
-            // @ts-ignore
             "line-height": "1.5",
             "-webkit-text-size-adjust": "100%",
             "-moz-tab-size": "4",
@@ -28,19 +26,15 @@ function pureStyle() {
             "-webkit-tap-highlight-color": "transparent",
         },
         body: {
-            // @ts-ignore
             margin: "0",
             "line-height": "inherit",
         },
         hr: {
-            // @ts-ignore
             height: "0",
             color: "inherit",
-            // @ts-ignore
             "border-top-width": "1px",
         },
         "abbr:where([title])": {
-            // @ts-ignore
             "text-decoration": "underline dotted",
         },
         "h1,h2,h3,h4,h5,h6": {
@@ -64,28 +58,23 @@ function pureStyle() {
         },
         "sub,sup": {
             "font-size": "75%",
-            // @ts-ignore
             "line-height": "0",
             position: "relative",
             "vertical-align": "baseline",
         },
         sub: {
-            // @ts-ignore
             bottom: "-0.25em",
         },
         sup: {
-            // @ts-ignore
             top: " -0.5em",
         },
         table: {
-            // @ts-ignore
             "text-indent": "0",
             "border-color": "inherit",
             "border-collapse": "collapse",
         },
         "button,input,optgroup,select,textarea": {
             "font-family": "inherit",
-            // @ts-ignore
             "font-feature-settings": "inherit",
             "font-variation-settings": "inherit",
             "font-size": "100%",
@@ -93,9 +82,7 @@ function pureStyle() {
             "line-height": "inherit",
             "letter-spacing": "inherit",
             color: "inherit",
-            // @ts-ignore
             margin: "0",
-            // @ts-ignore
             padding: "0",
         },
         "button,select": {
@@ -103,13 +90,10 @@ function pureStyle() {
         },
         "button,input:where([type='button']),input:where([type='reset']),input:where([type='submit'])": {
             "-webkit-appearance": "button",
-            // @ts-ignore
             "background-color": "transparent",
-            // @ts-ignore
             "background-image": "none",
         },
         ":-moz-focusring": {
-            // @ts-ignore
             outline: "auto",
         },
         ":-moz-ui-invalid": {
@@ -123,15 +107,12 @@ function pureStyle() {
         },
         "[type='search']": {
             "-webkit-appearance": "textfield",
-            // @ts-ignore
             "outline-offset": "-2px",
         },
         "::-webkit-search-decoration": {
-            // @ts-ignore
             "-webkit-appearance": "none",
         },
         "::-webkit-file-upload-button": {
-            // @ts-ignore
             "-webkit-appearance": "button",
             font: "inherit",
         },
@@ -139,36 +120,28 @@ function pureStyle() {
             display: "list-item",
         },
         "blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre": {
-            // @ts-ignore
             margin: "0",
         },
         fieldset: {
-            // @ts-ignore
             margin: "0",
-            // @ts-ignore
             padding: "0",
         },
         legend: {
-            // @ts-ignore
             padding: "0",
         },
 
         "ol,ul,menu": {
             "list-style": "none",
-            // @ts-ignore
             margin: "0",
-            // @ts-ignore
             padding: "0",
         },
         dialog: {
-            // @ts-ignore
             padding: "0",
         },
         textarea: {
             resize: "vertical",
         },
         "input::placeholder,textarea::placeholder": {
-            // @ts-ignore
             opacity: "1",
         },
         'button,[role="button"]': {
@@ -182,7 +155,6 @@ function pureStyle() {
             "vertical-align": "middle",
         },
         "img,video": {
-            // @ts-ignore
             "max-width": "100%",
             height: "auto",
         },

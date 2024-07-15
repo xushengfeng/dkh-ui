@@ -1,18 +1,25 @@
 export { css };
 type css = Partial<css0>;
 type css0 = {
-    "align-content": "center" | "flex-end" | "flex-start" | "space-around" | "space-between" | "stretch";
-    "align-items": "baseline" | "center" | "flex-end" | "flex-start" | "stretch";
-    "align-self": "auto" | "baseline" | "center" | "flex-end" | "flex-start" | "stretch";
-    all: string;
-    animation: string;
-    "animation-delay": string;
-    "animation-direction": "alternate" | "alternate-reverse" | "normal" | "reverse";
-    "animation-duration": string;
-    "animation-fill-mode": "backwards" | "both" | "forwards" | "none";
-    "animation-iteration-count": "infinite";
-    "animation-name": "none";
-    "animation-play-state": "paused" | "running";
+    "align-content":
+        | "center"
+        | "flex-end"
+        | "flex-start"
+        | "space-around"
+        | "space-between"
+        | "stretch"
+        | (string & {});
+    "align-items": "baseline" | "center" | "flex-end" | "flex-start" | "stretch" | (string & {});
+    "align-self": "auto" | "baseline" | "center" | "flex-end" | "flex-start" | "stretch" | (string & {});
+    all: string & {};
+    animation: string & {};
+    "animation-delay": string & {};
+    "animation-direction": "alternate" | "alternate-reverse" | "normal" | "reverse" | (string & {});
+    "animation-duration": string & {};
+    "animation-fill-mode": "backwards" | "both" | "forwards" | "none" | (string & {});
+    "animation-iteration-count": "infinite" | (string & {});
+    "animation-name": "none" | (string & {});
+    "animation-play-state": "paused" | "running" | (string & {});
     "animation-timing-function":
         | "cubic-bezier()"
         | "ease"
@@ -22,10 +29,11 @@ type css0 = {
         | "linear"
         | "step-end"
         | "step-start"
-        | "steps()";
-    "backface-visibility": "hidden" | "visible";
-    background: string;
-    "background-attachment": "fixed" | "local" | "scroll" | "inherit";
+        | "steps()"
+        | (string & {});
+    "backface-visibility": "hidden" | "visible" | (string & {});
+    background: string & {};
+    "background-attachment": "fixed" | "local" | "scroll" | "inherit" | (string & {});
     "background-blend-mode":
         | "color"
         | "color-burn"
@@ -42,24 +50,26 @@ type css0 = {
         | "overlay"
         | "saturation"
         | "screen"
-        | "soft-light";
-    "background-clip": "border-box" | "content-box" | "padding-box" | "inherit";
-    "background-color": "inherit";
+        | "soft-light"
+        | (string & {});
+    "background-clip": "border-box" | "content-box" | "padding-box" | "inherit" | (string & {});
+    "background-color": "inherit" | (string & {});
     "background-image":
         | "image()"
         | "linear-gradient()"
         | "radial-gradient()"
         | "repeating-linear-gradient()"
         | "repeating-radial-gradient()"
-        | "url()";
-    "background-origin": "border-box" | "content-box" | "padding-box" | "inherit";
-    "background-position": "left" | "center" | "right" | "bottom" | "top";
-    "background-repeat": "no-repeat" | "repeat" | "repeat-x" | "repeat-y" | "round" | "space";
-    "background-size": "auto" | "contain" | "cover";
-    border: string;
-    "border-collapse": "collapse" | "separate" | "inherit";
-    "border-color": "inherit";
-    "border-spacing": "inherit";
+        | "url()"
+        | (string & {});
+    "background-origin": "border-box" | "content-box" | "padding-box" | "inherit" | (string & {});
+    "background-position": "left" | "center" | "right" | "bottom" | "top" | (string & {});
+    "background-repeat": "no-repeat" | "repeat" | "repeat-x" | "repeat-y" | "round" | "space" | (string & {});
+    "background-size": "auto" | "contain" | "cover" | (string & {});
+    border: string & {};
+    "border-collapse": "collapse" | "separate" | "inherit" | (string & {});
+    "border-color": "inherit" | (string & {});
+    "border-spacing": "inherit" | (string & {});
     "border-style":
         | "dashed"
         | "dotted"
@@ -71,11 +81,12 @@ type css0 = {
         | "outset"
         | "ridge"
         | "solid"
-        | "inherit";
-    "border-bottom": string;
-    "border-bottom-color": "inherit";
-    "border-bottom-left-radius": string;
-    "border-bottom-right-radius": string;
+        | "inherit"
+        | (string & {});
+    "border-bottom": string & {};
+    "border-bottom-color": "inherit" | (string & {});
+    "border-bottom-left-radius": string & {};
+    "border-bottom-right-radius": string & {};
     "border-bottom-style":
         | "dashed"
         | "dotted"
@@ -87,16 +98,17 @@ type css0 = {
         | "outset"
         | "ridge"
         | "solid"
-        | "inherit";
-    "border-bottom-width": "medium" | "thin" | "thick" | "inherit";
-    "border-image": "url()";
-    "border-image-outset": string;
-    "border-image-slice": string;
-    "border-image-source": string;
-    "border-image-repeat": "repeat" | "round" | "space" | "stretch";
-    "border-image-width": "auto";
-    "border-left": string;
-    "border-left-color": "inherit";
+        | "inherit"
+        | (string & {});
+    "border-bottom-width": "medium" | "thin" | "thick" | "inherit" | (string & {});
+    "border-image": "url()" | (string & {});
+    "border-image-outset": string & {};
+    "border-image-slice": string & {};
+    "border-image-source": string & {};
+    "border-image-repeat": "repeat" | "round" | "space" | "stretch" | (string & {});
+    "border-image-width": "auto" | (string & {});
+    "border-left": string & {};
+    "border-left-color": "inherit" | (string & {});
     "border-left-style":
         | "dashed"
         | "dotted"
@@ -108,11 +120,12 @@ type css0 = {
         | "outset"
         | "ridge"
         | "solid"
-        | "inherit";
-    "border-left-width": "medium" | "thin" | "thick" | "inherit";
-    "border-radius": string;
-    "border-right": string;
-    "border-right-color": "inherit";
+        | "inherit"
+        | (string & {});
+    "border-left-width": "medium" | "thin" | "thick" | "inherit" | (string & {});
+    "border-radius": string & {};
+    "border-right": string & {};
+    "border-right-color": "inherit" | (string & {});
     "border-right-style":
         | "dashed"
         | "dotted"
@@ -124,12 +137,13 @@ type css0 = {
         | "outset"
         | "ridge"
         | "solid"
-        | "inherit";
-    "border-right-width": "medium" | "thin" | "thick" | "inherit";
-    "border-top": string;
-    "border-top-color": "inherit";
-    "border-top-left-radius": string;
-    "border-top-right-radius": string;
+        | "inherit"
+        | (string & {});
+    "border-right-width": "medium" | "thin" | "thick" | "inherit" | (string & {});
+    "border-top": string & {};
+    "border-top-color": "inherit" | (string & {});
+    "border-top-left-radius": string & {};
+    "border-top-right-radius": string & {};
     "border-top-style":
         | "dashed"
         | "dotted"
@@ -141,13 +155,14 @@ type css0 = {
         | "outset"
         | "ridge"
         | "solid"
-        | "inherit";
-    "border-top-width": "medium" | "thin" | "thick" | "inherit";
-    "border-width": "medium" | "thin" | "thick" | "inherit";
-    "box-decoration-break": "clone" | "slice";
-    "box-shadow": string;
-    "box-sizing": "border-box" | "content-box" | "inherit";
-    bottom: "auto" | "inherit";
+        | "inherit"
+        | (string & {});
+    "border-top-width": "medium" | "thin" | "thick" | "inherit" | (string & {});
+    "border-width": "medium" | "thin" | "thick" | "inherit" | (string & {});
+    "box-decoration-break": "clone" | "slice" | (string & {});
+    "box-shadow": string & {};
+    "box-sizing": "border-box" | "content-box" | "inherit" | (string & {});
+    bottom: "auto" | "inherit" | (string & {});
     "break-after":
         | "always"
         | "auto"
@@ -159,7 +174,8 @@ type css0 = {
         | "left"
         | "page"
         | "region"
-        | "right";
+        | "right"
+        | (string & {});
     "break-before":
         | "always"
         | "auto"
@@ -171,19 +187,20 @@ type css0 = {
         | "left"
         | "page"
         | "region"
-        | "right";
-    "break-inside": "auto" | "avoid" | "avoid-column" | "avoid-page" | "avoid-region";
-    "caption-side": "bottom" | "top" | "inherit";
-    "caret-color": "auto";
-    clear: "both" | "left" | "none" | "right" | "inherit";
-    clip: "auto" | "inherit";
-    color: "inherit";
-    columns: string;
-    "column-count": string;
-    "column-fill": "auto" | "balance";
-    "column-gap": "normal";
-    "column-rule": string;
-    "column-rule-color": string;
+        | "right"
+        | (string & {});
+    "break-inside": "auto" | "avoid" | "avoid-column" | "avoid-page" | "avoid-region" | (string & {});
+    "caption-side": "bottom" | "top" | "inherit" | (string & {});
+    "caret-color": "auto" | (string & {});
+    clear: "both" | "left" | "none" | "right" | "inherit" | (string & {});
+    clip: "auto" | "inherit" | (string & {});
+    color: "inherit" | (string & {});
+    columns: string & {};
+    "column-count": string & {};
+    "column-fill": "auto" | "balance" | (string & {});
+    "column-gap": "normal" | (string & {});
+    "column-rule": string & {};
+    "column-rule-color": string & {};
     "column-rule-style":
         | "dashed"
         | "dotted"
@@ -195,10 +212,11 @@ type css0 = {
         | "outset"
         | "ridge"
         | "solid"
-        | "inherit";
-    "column-rule-width": "medium" | "thin" | "thick" | "inherit";
-    "column-span": "all" | "none";
-    "column-width": "auto" | "inherit";
+        | "inherit"
+        | (string & {});
+    "column-rule-width": "medium" | "thin" | "thick" | "inherit" | (string & {});
+    "column-span": "all" | "none" | (string & {});
+    "column-width": "auto" | "inherit" | (string & {});
     content:
         | "attr()"
         | "close-quote"
@@ -207,9 +225,10 @@ type css0 = {
         | "normal"
         | "none"
         | "open-quote"
-        | "inherit";
-    "counter-increment": "none" | "inherit";
-    "counter-reset": "none" | "inherit";
+        | "inherit"
+        | (string & {});
+    "counter-increment": "none" | "inherit" | (string & {});
+    "counter-reset": "none" | "inherit" | (string & {});
     cursor:
         | "alias"
         | "all-scroll"
@@ -247,8 +266,9 @@ type css0 = {
         | "w-resize"
         | "wait"
         | "zoom-in"
-        | "zoom-out";
-    direction: "ltr" | "rtl" | "inherit";
+        | "zoom-out"
+        | (string & {});
+    direction: "ltr" | "rtl" | "inherit" | (string & {});
     display:
         | "block"
         | "contents"
@@ -273,8 +293,9 @@ type css0 = {
         | "table-header-group"
         | "table-row"
         | "table-row-group"
-        | "inherit";
-    "empty-cells": "hide" | "show" | "inherit";
+        | "inherit"
+        | (string & {});
+    "empty-cells": "hide" | "show" | "inherit" | (string & {});
     filter:
         | "blur()"
         | "brightness()"
@@ -288,23 +309,32 @@ type css0 = {
         | "opacity()"
         | "sepia()"
         | "saturate()"
-        | "url()";
-    flex: "auto" | "initial" | "none";
-    "flex-basis": "auto";
-    "flex-direction": "column" | "column-reverse" | "row" | "row-reverse";
-    "flex-flow": "column" | "column-reverse" | "nowrap" | "row" | "row-reverse" | "wrap" | "wrap-reverse";
-    "flex-grow": string;
-    "flex-shrink": string;
-    "flex-wrap": "nowrap" | "wrap" | "wrap-reverse";
-    float: "left" | "right" | "none" | "inherit";
-    font: string;
-    "font-display": "auto" | "block" | "swap" | "fallback" | "optional";
-    "font-family": "cursive" | "fantasy" | "inherit" | "monospace" | "sans-serif" | "serif";
-    "font-feature-settings": "normal";
-    "font-kerning": "auto" | "none" | "normal";
-    "font-language-override": "normal";
-    "font-size": string;
-    "font-size-adjust": "auto" | "none";
+        | "url()"
+        | (string & {});
+    flex: "auto" | "initial" | "none" | (string & {});
+    "flex-basis": "auto" | (string & {});
+    "flex-direction": "column" | "column-reverse" | "row" | "row-reverse" | (string & {});
+    "flex-flow":
+        | "column"
+        | "column-reverse"
+        | "nowrap"
+        | "row"
+        | "row-reverse"
+        | "wrap"
+        | "wrap-reverse"
+        | (string & {});
+    "flex-grow": string & {};
+    "flex-shrink": string & {};
+    "flex-wrap": "nowrap" | "wrap" | "wrap-reverse" | (string & {});
+    float: "left" | "right" | "none" | "inherit" | (string & {});
+    font: string & {};
+    "font-display": "auto" | "block" | "swap" | "fallback" | "optional" | (string & {});
+    "font-family": "cursive" | "fantasy" | "inherit" | "monospace" | "sans-serif" | "serif" | (string & {});
+    "font-feature-settings": "normal" | (string & {});
+    "font-kerning": "auto" | "none" | "normal" | (string & {});
+    "font-language-override": "normal" | (string & {});
+    "font-size": string & {};
+    "font-size-adjust": "auto" | "none" | (string & {});
     "font-stretch":
         | "condensed"
         | "expanded"
@@ -314,11 +344,12 @@ type css0 = {
         | "semi-condensed"
         | "semi-expanded"
         | "ultra-condensed"
-        | "ultra-expanded";
-    "font-style": "italic" | "normal" | "oblique";
-    "font-synthesis": "none" | "style" | "weight";
-    "font-variant": "normal" | "small-caps" | "inherit";
-    "font-variant-alternates": "normal";
+        | "ultra-expanded"
+        | (string & {});
+    "font-style": "italic" | "normal" | "oblique" | (string & {});
+    "font-synthesis": "none" | "style" | "weight" | (string & {});
+    "font-variant": "normal" | "small-caps" | "inherit" | (string & {});
+    "font-variant-alternates": "normal" | (string & {});
     "font-variant-caps":
         | "normal"
         | "small-caps"
@@ -326,11 +357,12 @@ type css0 = {
         | "petite-caps"
         | "all-petite-caps"
         | "unicase"
-        | "titling-caps";
-    "font-variant-east-asian": "normal";
-    "font-variant-ligatures": "normal" | "none";
-    "font-variant-numeric": "normal";
-    "font-variant-position": "normal" | "sub" | "super";
+        | "titling-caps"
+        | (string & {});
+    "font-variant-east-asian": "normal" | (string & {});
+    "font-variant-ligatures": "normal" | "none" | (string & {});
+    "font-variant-numeric": "normal" | (string & {});
+    "font-variant-position": "normal" | "sub" | "super" | (string & {});
     "font-weight":
         | "bold"
         | "bolder"
@@ -345,32 +377,33 @@ type css0 = {
         | "700"
         | "800"
         | "900"
-        | "inherit";
-    grid: string;
-    "grid-area": string;
-    "grid-auto-columns": string;
-    "grid-auto-flow": "row" | "column" | "dense";
-    "grid-auto-rows": string;
-    "grid-column": "auto";
-    "grid-column-end": string;
-    "grid-column-gap": string;
-    "grid-column-start": string;
-    "grid-gap": string;
-    "grid-row": "auto";
-    "grid-row-end": string;
-    "grid-row-start": string;
-    "grid-row-gap": string;
-    "grid-template": "none";
-    "grid-template-areas": string;
-    "grid-template-columns": "auto";
-    "grid-template-rows": "auto";
-    "hanging-punctuation": "allow-end" | "first" | "force-end" | "last" | "none";
-    height: "auto" | "inherit";
-    hyphens: "auto" | "manual" | "none";
-    "image-orientation": string;
-    "image-resolution": "from-image" | "snap";
-    isolation: "auto" | "isolate";
-    "justify-content": "center" | "flex-end" | "flex-start" | "space-around" | "space-between";
+        | "inherit"
+        | (string & {});
+    grid: string & {};
+    "grid-area": string & {};
+    "grid-auto-columns": string & {};
+    "grid-auto-flow": "row" | "column" | "dense" | (string & {});
+    "grid-auto-rows": string & {};
+    "grid-column": "auto" | (string & {});
+    "grid-column-end": string & {};
+    "grid-column-gap": string & {};
+    "grid-column-start": string & {};
+    "grid-gap": string & {};
+    "grid-row": "auto" | (string & {});
+    "grid-row-end": string & {};
+    "grid-row-start": string & {};
+    "grid-row-gap": string & {};
+    "grid-template": "none" | (string & {});
+    "grid-template-areas": string & {};
+    "grid-template-columns": "auto" | (string & {});
+    "grid-template-rows": "auto" | (string & {});
+    "hanging-punctuation": "allow-end" | "first" | "force-end" | "last" | "none" | (string & {});
+    height: "auto" | "inherit" | (string & {});
+    hyphens: "auto" | "manual" | "none" | (string & {});
+    "image-orientation": string & {};
+    "image-resolution": "from-image" | "snap" | (string & {});
+    isolation: "auto" | "isolate" | (string & {});
+    "justify-content": "center" | "flex-end" | "flex-start" | "space-around" | "space-between" | (string & {});
     "justify-items":
         | "auto"
         | "normal"
@@ -391,7 +424,8 @@ type css0 = {
         | "unsafe"
         | "legacy"
         | "inherit"
-        | "initial";
+        | "initial"
+        | (string & {});
     "justify-self":
         | "auto"
         | "normal"
@@ -411,10 +445,11 @@ type css0 = {
         | "safe"
         | "unsafe"
         | "inherit"
-        | "initial";
-    left: "auto" | "inherit";
-    "letter-spacing": "normal" | "inherit";
-    "line-height": "normal" | "inherit";
+        | "initial"
+        | (string & {});
+    left: "auto" | "inherit" | (string & {});
+    "letter-spacing": "normal" | "inherit" | (string & {});
+    "line-height": "normal" | "inherit" | (string & {});
     "list-style":
         | "none"
         | "inherit"
@@ -436,9 +471,10 @@ type css0 = {
         | "square"
         | "upper-alpha"
         | "upper-latin"
-        | "upper-roman";
-    "list-style-image": "none" | "url()" | "inherit";
-    "list-style-position": "inside" | "outside" | "inherit";
+        | "upper-roman"
+        | (string & {});
+    "list-style-image": "none" | "url()" | "inherit" | (string & {});
+    "list-style-position": "inside" | "outside" | "inherit" | (string & {});
     "list-style-type":
         | "armenian"
         | "circle"
@@ -455,16 +491,17 @@ type css0 = {
         | "upper-alpha"
         | "upper-latin"
         | "upper-roman"
-        | "inherit";
-    margin: "auto" | "inherit";
-    "margin-bottom": "auto" | "inherit";
-    "margin-left": "auto" | "inherit";
-    "margin-right": "auto" | "inherit";
-    "margin-top": "auto" | "inherit";
-    "max-height": "none" | "inherit";
-    "max-width": "none" | "inherit";
-    "min-height": "inherit";
-    "min-width": "inherit";
+        | "inherit"
+        | (string & {});
+    margin: "auto" | "inherit" | (string & {});
+    "margin-bottom": "auto" | "inherit" | (string & {});
+    "margin-left": "auto" | "inherit" | (string & {});
+    "margin-right": "auto" | "inherit" | (string & {});
+    "margin-top": "auto" | "inherit" | (string & {});
+    "max-height": "none" | "inherit" | (string & {});
+    "max-width": "none" | "inherit" | (string & {});
+    "min-height": "inherit" | (string & {});
+    "min-width": "inherit" | (string & {});
     "mix-blend-mode":
         | "color"
         | "color-burn"
@@ -481,15 +518,16 @@ type css0 = {
         | "overlay"
         | "saturation"
         | "screen"
-        | "soft-light";
-    "object-fit": "contain" | "cover" | "fill" | "none" | "scale-down";
-    "object-position": "left" | "center" | "right" | "bottom" | "top";
-    opacity: "inherit";
-    order: string;
-    orphans: "inherit";
-    outline: "inherit";
-    "outline-color": "invert" | "inherit";
-    "outline-offset": "inherit";
+        | "soft-light"
+        | (string & {});
+    "object-fit": "contain" | "cover" | "fill" | "none" | "scale-down" | (string & {});
+    "object-position": "left" | "center" | "right" | "bottom" | "top" | (string & {});
+    opacity: "inherit" | (string & {});
+    order: string & {};
+    orphans: "inherit" | (string & {});
+    outline: "inherit" | (string & {});
+    "outline-color": "invert" | "inherit" | (string & {});
+    "outline-offset": "inherit" | (string & {});
     "outline-style":
         | "dashed"
         | "dotted"
@@ -501,21 +539,22 @@ type css0 = {
         | "outset"
         | "ridge"
         | "solid"
-        | "inherit";
-    "outline-width": "medium" | "thin" | "thick" | "inherit";
-    overflow: "auto" | "hidden" | "scroll" | "visible" | "inherit";
-    "overflow-x": "auto" | "hidden" | "scroll" | "visible" | "inherit";
-    "overflow-y": "auto" | "hidden" | "scroll" | "visible" | "inherit";
-    padding: "inherit";
-    "padding-bottom": string;
-    "padding-left": string;
-    "padding-right": string;
-    "padding-top": string;
-    "page-break-after": "always" | "auto" | "avoid" | "left" | "right" | "inherit";
-    "page-break-before": "always" | "auto" | "avoid" | "left" | "right" | "inherit";
-    "page-break-inside": "auto" | "avoid" | "inherit";
-    perspective: "none";
-    "perspective-origin": "bottom" | "center" | "left" | "right" | "top";
+        | "inherit"
+        | (string & {});
+    "outline-width": "medium" | "thin" | "thick" | "inherit" | (string & {});
+    overflow: "auto" | "hidden" | "scroll" | "visible" | "inherit" | (string & {});
+    "overflow-x": "auto" | "hidden" | "scroll" | "visible" | "inherit" | (string & {});
+    "overflow-y": "auto" | "hidden" | "scroll" | "visible" | "inherit" | (string & {});
+    padding: "inherit" | (string & {});
+    "padding-bottom": string & {};
+    "padding-left": string & {};
+    "padding-right": string & {};
+    "padding-top": string & {};
+    "page-break-after": "always" | "auto" | "avoid" | "left" | "right" | "inherit" | (string & {});
+    "page-break-before": "always" | "auto" | "avoid" | "left" | "right" | "inherit" | (string & {});
+    "page-break-inside": "auto" | "avoid" | "inherit" | (string & {});
+    perspective: "none" | (string & {});
+    "perspective-origin": "bottom" | "center" | "left" | "right" | "top" | (string & {});
     "pointer-events":
         | "all"
         | "auto"
@@ -527,9 +566,10 @@ type css0 = {
         | "visible"
         | "visibleFill"
         | "visiblePainted"
-        | "visibleStroke";
-    position: "absolute" | "fixed" | "relative" | "static" | "sticky" | "inherit";
-    quotes: "none" | "inherit";
+        | "visibleStroke"
+        | (string & {});
+    position: "absolute" | "fixed" | "relative" | "static" | "sticky" | "inherit" | (string & {});
+    quotes: "none" | "inherit" | (string & {});
     "region-break-after":
         | "always"
         | "auto"
@@ -541,7 +581,8 @@ type css0 = {
         | "left"
         | "page"
         | "region"
-        | "right";
+        | "right"
+        | (string & {});
     "region-break-before":
         | "always"
         | "auto"
@@ -553,17 +594,26 @@ type css0 = {
         | "left"
         | "page"
         | "region"
-        | "right";
-    "region-break-inside": "auto" | "avoid" | "avoid-column" | "avoid-page" | "avoid-region";
-    "region-fragment": "auto" | "break";
-    resize: "both" | "horizontal" | "none" | "vertical" | "inherit";
-    right: "auto" | "inherit";
-    "scroll-behavior": "auto" | "smooth";
-    "scroll-snap-type": "none" | "x" | "y" | "block" | "inline" | "both" | "mandatory" | "proximity";
-    src: "url()";
-    "shape-image-threshold": string;
-    "shape-inside": "auto" | "circle()" | "ellipse()" | "inherit" | "outside-shape" | "polygon()" | "rectangle()";
-    "shape-margin": string;
+        | "right"
+        | (string & {});
+    "region-break-inside": "auto" | "avoid" | "avoid-column" | "avoid-page" | "avoid-region" | (string & {});
+    "region-fragment": "auto" | "break" | (string & {});
+    resize: "both" | "horizontal" | "none" | "vertical" | "inherit" | (string & {});
+    right: "auto" | "inherit" | (string & {});
+    "scroll-behavior": "auto" | "smooth" | (string & {});
+    "scroll-snap-type": "none" | "x" | "y" | "block" | "inline" | "both" | "mandatory" | "proximity" | (string & {});
+    src: "url()" | (string & {});
+    "shape-image-threshold": string & {};
+    "shape-inside":
+        | "auto"
+        | "circle()"
+        | "ellipse()"
+        | "inherit"
+        | "outside-shape"
+        | "polygon()"
+        | "rectangle()"
+        | (string & {});
+    "shape-margin": string & {};
     "shape-outside":
         | "none"
         | "inherit"
@@ -580,9 +630,10 @@ type css0 = {
         | "linear-gradient()"
         | "radial-gradient()"
         | "repeating-linear-gradient()"
-        | "repeating-radial-gradient()";
-    "tab-size": string;
-    "table-layout": "auto" | "fixed" | "inherit";
+        | "repeating-radial-gradient()"
+        | (string & {});
+    "tab-size": string & {};
+    "table-layout": "auto" | "fixed" | "inherit" | (string & {});
     "text-align":
         | "start"
         | "end"
@@ -592,25 +643,35 @@ type css0 = {
         | "right"
         | "match-parent"
         | "justify-all"
-        | "inherit";
-    "text-align-last": "center" | "left" | "justify" | "right" | "inherit";
-    "text-decoration": "line-through" | "none" | "overline" | "underline" | "inherit";
-    "text-decoration-color": string;
-    "text-decoration-line": "line-through" | "none" | "overline" | "underline";
-    "text-decoration-skip": "edges" | "ink" | "none" | "objects" | "spaces";
-    "text-decoration-style": "dashed" | "dotted" | "double" | "solid" | "wavy";
-    "text-emphasis": string;
-    "text-emphasis-color": string;
-    "text-emphasis-position": "above" | "below" | "left" | "right";
-    "text-emphasis-style": "circle" | "dot" | "double-circle" | "filled" | "none" | "open" | "sesame" | "triangle";
-    "text-indent": "inherit";
-    "text-justify": "auto" | "none" | "inter-word" | "inter-character" | "inherit";
-    "text-overflow": "clip" | "ellipsis" | "inherit";
-    "text-shadow": string;
-    "text-rendering": "auto" | "geometricPrecision" | "optimizeLegibility" | "optimizeSpeed";
-    "text-transform": "capitalize" | "full-width" | "lowercase" | "none" | "uppercase" | "inherit";
-    "text-underline-position": "alphabetic" | "auto" | "below" | "left" | "right";
-    top: "auto" | "inherit";
+        | "inherit"
+        | (string & {});
+    "text-align-last": "center" | "left" | "justify" | "right" | "inherit" | (string & {});
+    "text-decoration": "line-through" | "none" | "overline" | "underline" | "inherit" | (string & {});
+    "text-decoration-color": string & {};
+    "text-decoration-line": "line-through" | "none" | "overline" | "underline" | (string & {});
+    "text-decoration-skip": "edges" | "ink" | "none" | "objects" | "spaces" | (string & {});
+    "text-decoration-style": "dashed" | "dotted" | "double" | "solid" | "wavy" | (string & {});
+    "text-emphasis": string & {};
+    "text-emphasis-color": string & {};
+    "text-emphasis-position": "above" | "below" | "left" | "right" | (string & {});
+    "text-emphasis-style":
+        | "circle"
+        | "dot"
+        | "double-circle"
+        | "filled"
+        | "none"
+        | "open"
+        | "sesame"
+        | "triangle"
+        | (string & {});
+    "text-indent": "inherit" | (string & {});
+    "text-justify": "auto" | "none" | "inter-word" | "inter-character" | "inherit" | (string & {});
+    "text-overflow": "clip" | "ellipsis" | "inherit" | (string & {});
+    "text-shadow": string & {};
+    "text-rendering": "auto" | "geometricPrecision" | "optimizeLegibility" | "optimizeSpeed" | (string & {});
+    "text-transform": "capitalize" | "full-width" | "lowercase" | "none" | "uppercase" | "inherit" | (string & {});
+    "text-underline-position": "alphabetic" | "auto" | "below" | "left" | "right" | (string & {});
+    top: "auto" | "inherit" | (string & {});
     transform:
         | "matrix()"
         | "matrix3d()"
@@ -632,13 +693,14 @@ type css0 = {
         | "translate3d()"
         | "translateX()"
         | "translateY()"
-        | "translateZ()";
-    "transform-origin": "bottom" | "center" | "left" | "right" | "top";
-    "transform-style": "flat" | "preserve-3d";
-    transition: string;
-    "transition-delay": string;
-    "transition-duration": string;
-    "transition-property": "all" | "none";
+        | "translateZ()"
+        | (string & {});
+    "transform-origin": "bottom" | "center" | "left" | "right" | "top" | (string & {});
+    "transform-style": "flat" | "preserve-3d" | (string & {});
+    transition: string & {};
+    "transition-delay": string & {};
+    "transition-duration": string & {};
+    "transition-property": "all" | "none" | (string & {});
     "transition-timing-function":
         | "cubic-bezier()"
         | "ease"
@@ -648,10 +710,11 @@ type css0 = {
         | "linear"
         | "step-end"
         | "step-start"
-        | "steps()";
-    "unicode-bidi": "bidi-override" | "embed" | "normal" | "inherit";
-    "unicode-range": string;
-    "user-select": "all" | "auto" | "contain" | "none" | "text";
+        | "steps()"
+        | (string & {});
+    "unicode-bidi": "bidi-override" | "embed" | "normal" | "inherit" | (string & {});
+    "unicode-range": string & {};
+    "user-select": "all" | "auto" | "contain" | "none" | "text" | (string & {});
     "vertical-align":
         | "baseline"
         | "bottom"
@@ -661,14 +724,25 @@ type css0 = {
         | "text-bottom"
         | "text-top"
         | "top"
-        | "inherit";
-    visibility: "collapse" | "hidden" | "visible" | "inherit";
-    "white-space": "normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap" | "inherit";
-    widows: "inherit";
-    width: "auto" | "inherit";
-    "will-change": "auto" | "contents" | "opacity" | "scroll-position" | "transform" | "inherit" | "initial" | "unset";
-    "word-break": "normal" | "break-all" | "keep-all";
-    "word-spacing": "normal" | "inherit";
-    "word-wrap": "break-word" | "normal";
-    "z-index": "auto" | "inherit";
+        | "inherit"
+        | (string & {});
+    visibility: "collapse" | "hidden" | "visible" | "inherit" | (string & {});
+    "white-space": "normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap" | "inherit" | (string & {});
+    widows: "inherit" | (string & {});
+    width: "auto" | "inherit" | (string & {});
+    "will-change":
+        | "auto"
+        | "contents"
+        | "opacity"
+        | "scroll-position"
+        | "transform"
+        | "inherit"
+        | "initial"
+        | "unset"
+        | (string & {});
+    "word-break": "normal" | "break-all" | "keep-all" | (string & {});
+    "word-spacing": "normal" | "inherit" | (string & {});
+    "word-wrap": "break-word" | "normal" | (string & {});
+    "z-index": "auto" | "inherit" | (string & {});
+    [key: string]: string;
 };
