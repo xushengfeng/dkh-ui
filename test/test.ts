@@ -17,7 +17,7 @@ const v = view([t, b], "x").style({ "align-items": "center" });
 document.body.append(v.el);
 
 document.body.append(
-    input("hi").on("input", (e) => {
-        t.sv(e.currentTarget.value);
+    input("hi").on("input", (_e, cel) => {
+        t.sv(cel.value);
     }).el
 );

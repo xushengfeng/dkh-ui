@@ -185,14 +185,21 @@ function pack<EL extends HTMLElement>(
             }
             return pack(el, frag, fun);
         },
-        events: (es: { [key in keyof HTMLElementEventMap]?: (event: HTMLElementEventMap[key]) => void }) => {
+        events: (es: {
+            [key in keyof HTMLElementEventMap]?: (event?: HTMLElementEventMap[key], cel?: typeof el) => void;
+        }) => {
             for (let i in es) {
-                el.addEventListener(i, es[i]);
+                el.addEventListener(i, (ev) => {
+                    es[i](ev, el);
+                });
             }
             return pack(el, frag, fun);
         },
-        on: <key extends keyof HTMLElementEventMap>(e: key, cb: (event: HTMLElementEventMap[key]) => void) => {
-            el.addEventListener(e, cb);
+        on: <key extends keyof HTMLElementEventMap>(
+            e: key,
+            cb: (event?: HTMLElementEventMap[key], cel?: typeof el) => void
+        ) => {
+            el.addEventListener(e, (ev) => cb(ev, el));
             return pack(el, frag, fun);
         },
         class: (...classes: string[]) => {
