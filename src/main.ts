@@ -2,7 +2,7 @@
 
 import { css } from "./type";
 
-export { setTranslate, pureStyle, pack, ele, elFromId, txt, p, a, view, spacer, image, addStyle };
+export { setTranslate, pureStyle, pack, ele, elFromId, txt, p, a, view, spacer, image, input, button, addStyle };
 
 let t = (s: string) => s;
 
@@ -301,7 +301,17 @@ function image(src: string, name: string) {
     return img;
 }
 
-function input() {}
+function button(el?: el0 | el0[]) {
+    const button = pack(document.createElement("button"));
+    if (el) button.add(el);
+    return button;
+}
+
+function input(name: string) {
+    const input = pack(document.createElement("input"));
+    input.attr({ name: t(name), type: "text" });
+    return input;
+}
 
 function addStyle(style: { [className: string]: css }) {
     let css = "";
