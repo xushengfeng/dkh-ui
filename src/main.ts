@@ -167,9 +167,13 @@ function pureStyle() {
 function pack<EL extends HTMLElement>(
     el: EL,
     frag?: DocumentFragment,
-    fun?: (el: EL, v: unknown, trans?: typeof t) => void
+    setter?: (el: EL, v: unknown, trans?: typeof t) => void,
+    getter?: (el: EL) => unknown
 ) {
     if (!frag) frag = document.createDocumentFragment();
+    function p(el: EL) {
+        return pack(el, frag, setter, getter);
+    }
     return {
         el,
         style: (css: css) => {
@@ -183,7 +187,7 @@ function pack<EL extends HTMLElement>(
                     .join("");
                 el.style[n] = css[i];
             }
-            return pack(el, frag, fun);
+            return p(el);
         },
         events: (es: {
             [key in keyof HTMLElementEventMap]?: (event?: HTMLElementEventMap[key], cel?: typeof el) => void;
@@ -193,31 +197,32 @@ function pack<EL extends HTMLElement>(
                     es[i](ev, el);
                 });
             }
-            return pack(el, frag, fun);
+            return p(el);
         },
         on: <key extends keyof HTMLElementEventMap>(
             e: key,
             cb: (event?: HTMLElementEventMap[key], cel?: typeof el) => void
         ) => {
             el.addEventListener(e, (ev) => cb(ev, el));
-            return pack(el, frag, fun);
+            return p(el);
         },
         class: (...classes: string[]) => {
             classes.forEach((i) => el.classList.add(i));
-            return pack(el, frag, fun);
+            return p(el);
         },
         attr: (attr: { [k: string]: string }) => {
             for (let i in attr) {
                 el.setAttribute(i, attr[i]);
             }
-            return pack(el, frag, fun);
+            return p(el);
         },
         push: (el: HTMLElement) => {
             frag.append(el);
         },
         render: () => {
             el.append(frag);
-            return pack(el, null, fun);
+            frag = null;
+            return p(el);
         },
         add: (els: { el: HTMLElement } | { el: HTMLElement }[]) => {
             if (Array.isArray(els)) {
@@ -227,16 +232,22 @@ function pack<EL extends HTMLElement>(
             } else {
                 el.append(els.el);
             }
-            return pack(el, frag, fun);
+            return p(el);
         },
-        value: (f: (el: EL, v: unknown, trans?: typeof t) => void) => {
-            fun = f;
-            let x = pack(el, frag, fun);
-            return x;
+        bindSet: (f: (el: EL, v: unknown, trans?: typeof t) => void) => {
+            setter = f;
+            return p(el);
+        },
+        bindGet: (f: (el: EL) => unknown) => {
+            getter = f;
+            return p(el);
         },
         sv: (v: unknown) => {
-            if (fun) fun(el, v, t);
-            return pack(el, frag, fun);
+            if (setter) setter(el, v, t);
+            return p(el);
+        },
+        gv: () => {
+            return getter(el);
         },
     };
 }
@@ -317,6 +328,8 @@ function button(el?: el0 | el0[]) {
 function input(name: string) {
     const input = pack(document.createElement("input"));
     input.attr({ name: t(name), type: "text" });
+    input.bindSet((el, v: string) => (el.value = v));
+    input.bindGet((el) => el.value);
     return input;
 }
 
