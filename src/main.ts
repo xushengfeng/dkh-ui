@@ -216,16 +216,6 @@ function pack<EL extends HTMLElement>(
             }
             return p(el);
         },
-        events: (es: {
-            [key in keyof HTMLElementEventMap]?: (event?: HTMLElementEventMap[key], cel?: typeof el) => void;
-        }) => {
-            for (let i in es) {
-                el.addEventListener(i, (ev) => {
-                    es[i](ev, el);
-                });
-            }
-            return p(el);
-        },
         on: <key extends keyof HTMLElementEventMap>(
             e: key,
             cb: (event?: HTMLElementEventMap[key], cel?: typeof el) => void
