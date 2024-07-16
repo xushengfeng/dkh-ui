@@ -270,19 +270,37 @@ function pack<EL extends HTMLElement>(
             }
             return p(el);
         },
-        push: (el: HTMLElement) => {
-            frag.append(el);
-        },
-        render: () => {
-            el.append(frag);
-            frag = null;
-            return p(el);
-        },
-        add: (els: { el: HTMLElement } | { el: HTMLElement }[]) => {
+        add: (els: { el: HTMLElement } | { el: HTMLElement }[], firstRender?: number, slice?: number) => {
             if (Array.isArray(els)) {
-                const f = document.createDocumentFragment();
-                f.append(...els.map((i) => i.el));
-                el.append(f);
+                const list = els;
+                let renderI = 0;
+                function start(width: number) {
+                    if (width === 1) {
+                        el.append(list[renderI].el);
+                    } else {
+                        const end = Math.min(renderI + width, list.length);
+                        const f = document.createDocumentFragment();
+                        f.append(...list.slice(renderI, end).map((i) => i.el));
+                        el.append(f);
+                    }
+                }
+                if (firstRender) {
+                    if (!slice) slice = 1;
+                    start(firstRender);
+                    function w() {
+                        requestAnimationFrame(() => {
+                            if (renderI < list.length) {
+                                start(slice);
+                                renderI += slice;
+                                w();
+                            }
+                        });
+                    }
+                    renderI += firstRender;
+                    w();
+                } else {
+                    start(ele.length);
+                }
             } else {
                 el.append(els.el);
             }
@@ -348,13 +366,7 @@ function a(t: el0, url: string, newTab?: string) {
 
 function view(el?: el0 | el0[], stack?: "x" | "y") {
     const div = pack(document.createElement("div"));
-    if (el)
-        if (Array.isArray(el)) {
-            el.forEach((el) => div.push(el.el));
-            div.render();
-        } else {
-            div.el.append(el.el);
-        }
+    if (el) div.add(el);
     if (stack) div.style({ display: "flex" });
     if (stack === "x") div.style({ "flex-direction": "row" });
     else if (stack === "y") div.style({ "flex-direction": "column" });
