@@ -1,4 +1,4 @@
-import { addStyle, view, txt, ele, spacer, setTranslate, pureStyle, input, button } from "../src/main";
+import { addStyle, view, txt, ele, spacer, setTranslate, pureStyle, p, input, button, frame } from "../src/main";
 pureStyle();
 
 setTranslate((s) => s.toUpperCase());
@@ -60,3 +60,16 @@ document.body.append(
         c.sv(el.value);
     }).el
 );
+
+const f = frame("a", {
+    o: view(),
+    a: txt("hi"),
+    b: p("p2"),
+    _: { x: view(), xx: input("a"), bu: button(txt("ok")) },
+    e: p("end"),
+});
+
+f.els.xx.sv("123456");
+f.els.x.style({ display: "flex", "flex-direction": "column" });
+console.log(f);
+document.body.append(f.el.el);

@@ -2,7 +2,7 @@
 
 import { css } from "./type";
 
-export { setTranslate, pureStyle, pack, ele, elFromId, txt, p, a, view, spacer, image, input, button, addStyle };
+export { setTranslate, pureStyle, pack, ele, elFromId, txt, p, a, view, spacer, image, input, button, addStyle, frame };
 
 let t = (s: string) => s;
 
@@ -162,6 +162,33 @@ function pureStyle() {
             display: "none",
         },
     });
+}
+
+type v<x> = { [key in keyof x]: x[key] } & ("_" extends keyof x ? v<x["_"]> : {});
+
+type frameI = { [key: string]: el0 | frameI; children?: frameI };
+function frame<t extends { [key: string]: any }>(id: string, f: t) {
+    let l = {};
+    function w(ff: frameI) {
+        let vi: ReturnType<typeof view>;
+        for (let i in ff) {
+            l[i] = ff[i];
+            if (Object.keys(ff).indexOf(i) === 0) {
+                vi = ff[i] as el<HTMLDivElement>;
+                if (!vi.el.id) vi.el.id = `${id}_${i}`;
+                continue;
+            }
+            if (i === "_") {
+                vi.add(w(ff[i] as frameI));
+            } else {
+                const el = ff[i] as el0;
+                if (!el.el.id) el.el.id = `${id}_${i}`;
+                vi.add(ff[i] as el0);
+            }
+        }
+        return vi;
+    }
+    return { el: w(f), els: l as v<t> };
 }
 
 function pack<EL extends HTMLElement>(
