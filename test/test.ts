@@ -1,4 +1,17 @@
-import { addStyle, view, txt, ele, spacer, setTranslate, pureStyle, p, input, button, frame } from "../src/main";
+import {
+    addStyle,
+    view,
+    txt,
+    ele,
+    spacer,
+    setTranslate,
+    pureStyle,
+    p,
+    input,
+    button,
+    frame,
+    setProperties,
+} from "../src/main";
 pureStyle();
 
 setTranslate((s) => s.toUpperCase());
@@ -70,6 +83,8 @@ const f = frame("a", {
 });
 
 f.els.xx.sv("123456");
-f.els.x.style({ display: "flex", "flex-direction": "column" });
+f.els.x.style({ display: "flex", "flex-direction": "column" }).style({ "--color": "#ff0" });
 console.log(f);
 document.body.append(f.el.el);
+
+setProperties({ "--main-color": "#0f0", "--font-size": "20px" });

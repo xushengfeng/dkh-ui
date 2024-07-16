@@ -2,7 +2,25 @@
 
 import { css } from "./type";
 
-export { setTranslate, pureStyle, pack, ele, elFromId, txt, p, a, view, spacer, image, input, button, addStyle, frame };
+export {
+    setTranslate,
+    pureStyle,
+    pack,
+    ele,
+    elFromId,
+    txt,
+    p,
+    a,
+    view,
+    spacer,
+    image,
+    input,
+    button,
+    addStyle,
+    setProperty,
+    setProperties,
+    frame,
+};
 
 let t = (s: string) => s;
 
@@ -205,14 +223,18 @@ function pack<EL extends HTMLElement>(
         el,
         style: (css: css) => {
             for (let i in css) {
-                const n = i
-                    .split("-")
-                    .map((v, i) => {
-                        if (i === 0) return v;
-                        else return v.slice(0, 1).toUpperCase() + v.slice(1);
-                    })
-                    .join("");
-                el.style[n] = css[i];
+                if (i.startsWith("--")) {
+                    el.style.setProperty(i, css[i]);
+                } else {
+                    const n = i
+                        .split("-")
+                        .map((v, i) => {
+                            if (i === 0) return v;
+                            else return v.slice(0, 1).toUpperCase() + v.slice(1);
+                        })
+                        .join("");
+                    el.style[n] = css[i];
+                }
             }
             return p(el);
         },
@@ -362,4 +384,19 @@ function addStyle(style: { [className: string]: css }) {
     const styleEl = document.createElement("style");
     styleEl.innerHTML = css;
     document.body.append(styleEl);
+}
+
+function setProperty(name: string, v: string, el?: HTMLElement) {
+    if (!el) {
+        el = document.documentElement;
+    }
+    el.style.setProperty(name, v);
+}
+function setProperties(map: { [name: string]: string }, el?: HTMLElement) {
+    if (!el) {
+        el = document.documentElement;
+    }
+    for (let i in map) {
+        setProperty(i, map[i], el);
+    }
 }
