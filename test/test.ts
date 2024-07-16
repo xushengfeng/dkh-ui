@@ -11,6 +11,7 @@ import {
     button,
     frame,
     setProperties,
+    radioGroup,
 } from "../src/main";
 pureStyle();
 
@@ -88,3 +89,15 @@ console.log(f);
 document.body.append(f.el.el);
 
 setProperties({ "--main-color": "#0f0", "--font-size": "20px" });
+
+const radioG = radioGroup("buttons");
+
+const buttons = view(null, "x");
+
+buttons.add([radioG.new("web", txt("web")), radioG.new("swift", txt("swift")), radioG.new("flutter", txt("flutter"))]);
+
+window["setRadio"] = radioG.set;
+
+document.body.append(buttons.el);
+
+radioG.on(() => console.log(radioG.get()));
