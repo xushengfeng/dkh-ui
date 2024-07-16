@@ -410,6 +410,7 @@ function check(name: string, els: [el0, el0]) {
         input.bindGet((el) => el.checked);
         return input;
     } else {
+        // todo 无障碍
         const v = view();
         const True = els[0];
         const False = els[1];
