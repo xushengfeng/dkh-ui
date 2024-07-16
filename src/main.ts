@@ -440,12 +440,9 @@ function radioGroup(name: string) {
     name = t(name);
     return {
         new: (value: string, el: el0) => {
-            const p = view();
-            p.add(
-                ele("label")
-                    .add(ele("input").attr({ type: "radio", name: name, value: value }))
-                    .add(el)
-            );
+            const p = ele("label")
+                .add(ele("input").attr({ type: "radio", name: name, value: value }))
+                .add(el);
             return p;
         },
         get: () => {
