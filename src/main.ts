@@ -222,7 +222,7 @@ type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 function pack<EL extends HTMLElement>(
     el: EL,
     frag?: DocumentFragment,
-    setter?: (el: EL, v: unknown, trans?: typeof t) => void,
+    setter?: (v: unknown, el: EL, trans?: typeof t) => void,
     getter?: (el: EL) => unknown
 ) {
     if (!frag) frag = document.createDocumentFragment();
@@ -317,7 +317,7 @@ function pack<EL extends HTMLElement>(
             return p(el);
         },
         sv: (v: unknown) => {
-            if (setter) setter(el, v, t);
+            if (setter) setter(v, el, t);
             return p(el);
         },
         gv: () => {
