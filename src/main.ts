@@ -306,7 +306,7 @@ function pack<EL extends HTMLElement>(
             }
             return p(el);
         },
-        bindSet: (f: (el: EL, v: unknown, trans?: typeof t) => void) => {
+        bindSet: (f: (v: unknown, el: EL, trans?: typeof t) => void) => {
             setter = f;
             return p(el);
         },
@@ -394,7 +394,7 @@ function button(el?: el0 | el0[]) {
 function input(name: string) {
     const input = pack(document.createElement("input"));
     input.attr({ name: t(name), type: "text" });
-    input.bindSet((el, v: string) => (el.value = v));
+    input.bindSet((v: string, el) => (el.value = v));
     input.bindGet((el) => el.value);
     return input;
 }

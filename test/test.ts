@@ -18,7 +18,7 @@ setTranslate((s) => s.toUpperCase());
 
 let i = 0;
 const t = txt("")
-    .bindSet((el, v: string, t) => (el.innerText = t("count: ") + v))
+    .bindSet((v: string, el, t) => (el.innerText = t("count: ") + v))
     .sv(0)
     .style({ "font-size": "2rem", "user-select": "none" });
 const b = button(txt("+")).on("click", () => {
@@ -41,7 +41,7 @@ function myComnent() {
     const down = button(txt("-"));
 
     let n = 0;
-    Input.bindSet((el, v) => (el.value = v + "n")).sv(n);
+    Input.bindSet((v, el) => (el.value = v + "n")).sv(n);
     add.on("click", () => {
         n++;
         Input.sv(n);
@@ -52,7 +52,7 @@ function myComnent() {
     });
 
     return view([Input, view([add, down], "y")], "x")
-        .bindSet((el, v) => {
+        .bindSet((v) => {
             Input.sv(v);
         })
         .bindGet(() => {
