@@ -18,6 +18,8 @@ export {
     image,
     input,
     button,
+    check,
+    radioGroup,
     addStyle,
     setProperty,
     setProperties,
@@ -397,6 +399,64 @@ function input(name: string) {
     input.bindSet((v: string, el) => (el.value = v));
     input.bindGet((el) => el.value);
     return input;
+}
+
+function check(name: string, els: [el0, el0]) {
+    name = t(name);
+    if (!els) {
+        const input = pack(document.createElement("input"));
+        input.attr({ name: name, type: "checkbox" });
+        input.bindSet((v: boolean, el) => (el.checked = v));
+        input.bindGet((el) => el.checked);
+        return input;
+    } else {
+        const v = view();
+        const True = els[0];
+        const False = els[1];
+        let value = false;
+        v.add([True.style({ display: "none" }), False])
+            .bindSet((v: boolean) => {
+                value = v;
+                if (v) {
+                    True.style({ display: "" });
+                    False.style({ display: "none" });
+                } else {
+                    True.style({ display: "none" });
+                    False.style({ display: "" });
+                }
+            })
+            .bindGet(() => value)
+            .on("click", () => {
+                v.sv(!v.gv());
+                v.el.dispatchEvent(new Event("input"));
+                v.el.dispatchEvent(new Event("change"));
+            });
+        return v;
+    }
+}
+
+/** form radio, tab, buttons */
+function radioGroup(name: string) {
+    name = t(name);
+    return {
+        new: (value: string, el: el0) => {
+            const p = view();
+            p.add(
+                ele("label")
+                    .add(ele("input").attr({ type: "radio", name: name, value: value }))
+                    .add(el)
+            );
+            return p;
+        },
+        get: () => {
+            const l = document.getElementsByName(name);
+            return Array.from(l).find((i: HTMLInputElement) => i.checked);
+        },
+        set: (value: string) => {
+            const l = document.getElementsByName(name);
+            (Array.from(l) as HTMLInputElement[]).find((i: HTMLInputElement) => i.value === value).checked = true;
+        },
+    };
 }
 
 function addStyle(style: { [className: string]: csshyphen }) {
