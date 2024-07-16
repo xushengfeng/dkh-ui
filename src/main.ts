@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 
-import { css } from "./type";
+import type * as CSS from "csstype";
+
+type csshyphen = CSS.PropertiesHyphen & { [key: `--${any}`]: string };
 
 export {
     setTranslate,
@@ -227,7 +229,7 @@ function pack<EL extends HTMLElement>(
     }
     return {
         el,
-        style: (css: css) => {
+        style: (css: csshyphen) => {
             for (let i in css) {
                 if (i.startsWith("--")) {
                     el.style.setProperty(i, css[i]);
@@ -385,7 +387,7 @@ function input(name: string) {
     return input;
 }
 
-function addStyle(style: { [className: string]: css }) {
+function addStyle(style: { [className: string]: csshyphen }) {
     let css = "";
     for (let i in style) {
         css += `${i} {\n`;
