@@ -209,6 +209,12 @@ function frame<t extends { [key: string]: any }>(id: string, f: t) {
     return { el: w(f), els: l as v<t> };
 }
 
+type NonFunctionKeys<T> = {
+    [K in keyof T]: T[K] extends String ? K : T[K] extends Number ? K : T[K] extends Boolean ? K : never;
+}[keyof T];
+
+type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
+
 function pack<EL extends HTMLElement>(
     el: EL,
     frag?: DocumentFragment,
@@ -249,9 +255,16 @@ function pack<EL extends HTMLElement>(
             classes.forEach((i) => el.classList.add(i));
             return p(el);
         },
-        attr: (attr: { [k: string]: string }) => {
+        attr: (attr: getAttr<EL>) => {
             for (let i in attr) {
-                el.setAttribute(i, attr[i]);
+                el[i] = attr[i];
+            }
+            return p(el);
+        },
+        data: (data: { [key: string]: string }) => {
+            for (let i in data) {
+                const name = !i.startsWith("data-") ? `data-${i}` : i;
+                el.setAttribute(name, data[i]);
             }
             return p(el);
         },

@@ -36,7 +36,7 @@ document.body.append(
 );
 
 function myComnent() {
-    const Input = input("number").attr({ readonly: "true" });
+    const Input = input("number").attr({ readOnly: true }).data({ "data-a": "1", b: "2" });
     const add = button(txt("+"));
     const down = button(txt("-"));
 
