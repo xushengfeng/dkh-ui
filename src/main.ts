@@ -301,7 +301,7 @@ function pack<EL extends HTMLElement>(
                     renderI += firstRender;
                     w();
                 } else {
-                    start(ele.length);
+                    start(els.length);
                 }
             } else {
                 el.append(els.el);
