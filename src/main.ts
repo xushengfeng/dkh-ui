@@ -452,11 +452,11 @@ function radioGroup(name: string) {
         },
         get: () => {
             const l = document.getElementsByName(name);
-            return Array.from(l).find((i: HTMLInputElement) => i.checked);
+            return (Array.from(l) as HTMLInputElement[]).find((i) => i.checked).value;
         },
         set: (value: string) => {
             const l = document.getElementsByName(name);
-            (Array.from(l) as HTMLInputElement[]).find((i: HTMLInputElement) => i.value === value).checked = true;
+            (Array.from(l) as HTMLInputElement[]).find((i) => i.value === value).checked = true;
         },
         on: (callback: () => void) => {
             cb.push(callback);
