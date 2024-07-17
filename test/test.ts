@@ -26,7 +26,7 @@ const b = button(txt("+")).on("click", () => {
     i++;
     t.sv(i);
 });
-const v = view([t, b], "x").style({ "align-items": "center" });
+const v = view("x", [t, b]).style({ "align-items": "center" });
 
 document.body.append(v.el);
 
@@ -52,7 +52,7 @@ function myComnent() {
         Input.sv(n);
     });
 
-    return view([Input, view([add, down], "y")], "x")
+    return view("x", [Input, view("y", [add, down])])
         .bindSet((v) => {
             Input.sv(v);
         })
@@ -92,7 +92,7 @@ setProperties({ "--main-color": "#0f0", "--font-size": "20px" });
 
 const radioG = radioGroup("buttons");
 
-const buttons = view(null, "x");
+const buttons = view("x");
 
 buttons.add([radioG.new("web", txt("web")), radioG.new("swift", txt("swift")), radioG.new("flutter", txt("flutter"))]);
 

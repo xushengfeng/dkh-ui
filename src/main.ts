@@ -355,10 +355,9 @@ function p(text: string) {
     return pack(p);
 }
 
-function a(t: el0, url: string, newTab?: string) {
+function a(url: string, newTab?: string) {
     const a = document.createElement("a");
     a.href = url;
-    a.append(t.el);
     const na = pack(a);
     if (newTab) {
         na.attr({ target: "_blank" });
@@ -366,7 +365,7 @@ function a(t: el0, url: string, newTab?: string) {
     return na;
 }
 
-function view(el?: el0 | el0[], stack?: "x" | "y") {
+function view(stack?: "x" | "y", el?: el0 | el0[]) {
     const div = pack(document.createElement("div"));
     if (el) div.add(el);
     if (stack) div.style({ display: "flex" });
