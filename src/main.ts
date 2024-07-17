@@ -400,7 +400,7 @@ function input(name: string) {
     return input;
 }
 
-function check(name: string, els: [el0, el0]) {
+function check(name: string, els?: [el0, el0]) {
     name = t(name);
     if (!els) {
         const input = pack(document.createElement("input"));
@@ -410,11 +410,11 @@ function check(name: string, els: [el0, el0]) {
         return input;
     } else {
         // todo 无障碍
-        const v = view();
         const True = els[0];
         const False = els[1];
         let value = false;
-        v.add([True.style({ display: "none" }), False])
+        const v = view()
+            .add([True.style({ display: "none" }), False])
             .bindSet((v: boolean) => {
                 value = v;
                 if (v) {
