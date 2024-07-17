@@ -1,6 +1,6 @@
 {
     "name": "dkh-ui",
-    "version": "1.0.13",
+    "version": "0.1.0",
     "description": "",
     "main": "./dist/dkh.umd.js",
     "module": "./dist/dkh.es.js",
