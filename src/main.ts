@@ -222,8 +222,8 @@ type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 function pack<EL extends HTMLElement>(
     el: EL,
     frag?: DocumentFragment,
-    setter?: (v: unknown, el: EL, trans?: typeof t) => void,
-    getter?: (el: EL) => unknown
+    setter?: (v: unknown, el: NoInfer<EL>, trans?: typeof t) => void,
+    getter?: (el: NoInfer<EL>) => unknown
 ) {
     if (!frag) frag = document.createDocumentFragment();
     function p(el: EL) {
@@ -250,9 +250,9 @@ function pack<EL extends HTMLElement>(
         },
         on: <key extends keyof HTMLElementEventMap>(
             e: key,
-            cb: (event?: HTMLElementEventMap[key], cel?: typeof el) => void
+            cb: (event?: HTMLElementEventMap[key], cel?: ReturnType<typeof p>) => void
         ) => {
-            el.addEventListener(e, (ev) => cb(ev, el));
+            el.addEventListener(e, (ev) => cb(ev, p(el)));
             return p(el);
         },
         class: (...classes: string[]) => {

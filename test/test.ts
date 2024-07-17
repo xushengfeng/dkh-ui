@@ -12,6 +12,7 @@ import {
     frame,
     setProperties,
     radioGroup,
+    check,
 } from "../src/main";
 pureStyle();
 
@@ -32,7 +33,7 @@ document.body.append(v.el);
 
 document.body.append(
     input("hi").on("input", (_e, cel) => {
-        t.sv(cel.value);
+        t.sv(cel.el.value);
     }).el
 );
 
@@ -71,7 +72,7 @@ document.body.append(c.el);
 
 document.body.append(
     input("x").on("input", (_, el) => {
-        c.sv(el.value);
+        c.sv(el.gv());
     }).el
 );
 
@@ -101,3 +102,9 @@ window["setRadio"] = radioG.set;
 document.body.append(buttons.el);
 
 radioG.on(() => console.log(radioG.get()));
+
+const ch = check("sw", [txt("hi"), txt("bye")]).on("change", (_, el) => {
+    console.log(el.gv());
+});
+
+document.body.append(ch.el);
