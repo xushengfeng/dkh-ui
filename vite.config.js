@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 
-const name = "myui";
+const name = "dkh";
 
 export default defineConfig({
     // 打包配置
