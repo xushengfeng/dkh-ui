@@ -382,7 +382,7 @@ function spacer() {
 
 function image(src: string, name: string) {
     const img = pack(document.createElement("img"));
-    img.attr({ src: src, name: t(name) });
+    img.attr({ src: src, alt: t(name) });
     return img;
 }
 
