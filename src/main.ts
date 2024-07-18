@@ -17,6 +17,7 @@ export {
     spacer,
     image,
     input,
+    textarea,
     button,
     check,
     radioGroup,
@@ -394,6 +395,14 @@ function input(name: string) {
         .bindSet((v: string, el) => (el.value = v))
         .bindGet((el) => el.value);
     return input;
+}
+
+function textarea(name: string) {
+    const text = ele("textarea")
+        .attr({ name: t(name) })
+        .bindSet((v: string, el) => (el.value = v))
+        .bindGet((el) => el.value);
+    return text;
 }
 
 function check(name: string, els?: [el0, el0]) {
