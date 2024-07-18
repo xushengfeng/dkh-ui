@@ -389,20 +389,20 @@ function button(el?: el0 | el0[]) {
 }
 
 function input(name: string) {
-    const input = pack(document.createElement("input"));
-    input.attr({ name: t(name), type: "text" });
-    input.bindSet((v: string, el) => (el.value = v));
-    input.bindGet((el) => el.value);
+    const input = ele("input")
+        .attr({ name: t(name), type: "text" })
+        .bindSet((v: string, el) => (el.value = v))
+        .bindGet((el) => el.value);
     return input;
 }
 
 function check(name: string, els?: [el0, el0]) {
     name = t(name);
     if (!els) {
-        const input = pack(document.createElement("input"));
-        input.attr({ name: name, type: "checkbox" });
-        input.bindSet((v: boolean, el) => (el.checked = v));
-        input.bindGet((el) => el.checked);
+        const input = ele("input")
+            .attr({ name: name, type: "checkbox" })
+            .bindSet((v: boolean, el) => (el.checked = v))
+            .bindGet((el) => el.checked);
         return input;
     } else {
         // todo 无障碍
