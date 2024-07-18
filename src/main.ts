@@ -313,7 +313,7 @@ function pack<EL extends HTMLElement>(
         bindGet: (f: (el: EL) => unknown) => {
             return pack(el, setter, f);
         },
-        sv: (v: unknown) => {
+        sv: (v?: unknown) => {
             if (setter) setter(v, el, t);
             return p(el);
         },
