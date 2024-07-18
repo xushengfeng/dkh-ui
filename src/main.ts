@@ -436,14 +436,14 @@ function radioGroup(name: string) {
     name = t(name);
     let cb: (() => void)[] = [];
     return {
-        new: (value: string, el: el0) => {
+        new: (value: string, el?: el0) => {
             const p = ele("label")
                 .add(
                     ele("input")
                         .attr({ type: "radio", name: name, value: value })
                         .on("input", () => cb.forEach((c) => c()))
                 )
-                .add(el);
+                .add(el || txt(value));
             return p;
         },
         get: () => {
