@@ -91,7 +91,7 @@ document.body.append(f.el.el);
 
 setProperties({ "--main-color": "#0f0", "--font-size": "20px" });
 
-const radioG = radioGroup("buttons");
+const radioG = radioGroup<"web" | "swift" | "flutter">("buttons");
 
 const buttons = view("x");
 

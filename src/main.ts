@@ -441,12 +441,12 @@ function check(name: string, els?: [el0, el0]) {
 }
 
 /** form radio, tab, buttons */
-function radioGroup(name: string) {
+function radioGroup<t extends string>(name: string) {
     name = t(name);
     let cb: (() => void)[] = [];
     let first = true;
     return {
-        new: (value: string, el?: el0) => {
+        new: (value: t, el?: el0) => {
             const p = ele("label")
                 .add(
                     ele("input")
@@ -459,9 +459,9 @@ function radioGroup(name: string) {
         },
         get: () => {
             const l = document.getElementsByName(name);
-            return (Array.from(l) as HTMLInputElement[]).find((i) => i.checked).value;
+            return (Array.from(l) as HTMLInputElement[]).find((i) => i.checked).value as t;
         },
-        set: (value: string) => {
+        set: (value: t) => {
             const l = document.getElementsByName(name);
             (Array.from(l) as HTMLInputElement[]).find((i) => i.value === value).checked = true;
         },
