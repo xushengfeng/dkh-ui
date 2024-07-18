@@ -339,15 +339,15 @@ function elFromId(id: string) {
     else return pack(el);
 }
 
-function txt(text: string) {
+function txt(text: string, noI18n?: boolean) {
     const span = document.createElement("span");
-    span.innerText = t(text);
+    span.innerText = noI18n ? text : t(text);
     return pack(span);
 }
 
-function p(text: string) {
+function p(text: string, noI18n?: boolean) {
     const p = document.createElement("p");
-    p.innerText = t(text);
+    p.innerText = noI18n ? text : t(text);
     return pack(p);
 }
 
