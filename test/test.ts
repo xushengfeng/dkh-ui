@@ -16,7 +16,7 @@ import {
 } from "../src/main";
 pureStyle();
 
-setTranslate((s) => s.toUpperCase());
+setTranslate((s) => (s[0] || "").toUpperCase() + s.slice(1));
 
 let i = 0;
 const t = txt("")
