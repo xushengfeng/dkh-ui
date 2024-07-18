@@ -307,12 +307,10 @@ function pack<EL extends HTMLElement>(
             return p(el);
         },
         bindSet: (f: (v: unknown, el: EL, trans?: typeof t) => void) => {
-            setter = f;
-            return p(el);
+            return pack(el, f, getter);
         },
         bindGet: (f: (el: EL) => unknown) => {
-            getter = f;
-            return p(el);
+            return pack(el, setter, f);
         },
         sv: (v: unknown) => {
             if (setter) setter(v, el, t);
