@@ -435,15 +435,17 @@ function check(name: string, els?: [el0, el0]) {
 function radioGroup(name: string) {
     name = t(name);
     let cb: (() => void)[] = [];
+    let first = true;
     return {
         new: (value: string, el?: el0) => {
             const p = ele("label")
                 .add(
                     ele("input")
-                        .attr({ type: "radio", name: name, value: value })
+                        .attr({ type: "radio", name: name, value: value, checked: first })
                         .on("input", () => cb.forEach((c) => c()))
                 )
                 .add(el || txt(value));
+            first = false;
             return p;
         },
         get: () => {
