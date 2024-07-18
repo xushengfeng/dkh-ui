@@ -1,7 +1,7 @@
 {
     "name": "dkh-ui",
     "version": "0.2.1",
-    "description": "",
+    "description": "a ui framework",
     "main": "./dist/dkh.umd.js",
     "module": "./dist/dkh.es.js",
     "exports": {
