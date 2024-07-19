@@ -7,6 +7,7 @@ type csshyphen = CSS.PropertiesHyphen & { [key: `--${any}`]: string };
 export {
     setTranslate,
     pureStyle,
+    el as ElType,
     pack,
     ele,
     elFromId,
