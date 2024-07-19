@@ -271,9 +271,16 @@ function pack<EL extends HTMLElement>(
             }
             return p(el);
         },
-        add: (els: { el: HTMLElement } | { el: HTMLElement }[], firstRender?: number, slice?: number) => {
+        add: (
+            els: HTMLElement | { el: HTMLElement } | (HTMLElement | { el: HTMLElement })[],
+            firstRender?: number,
+            slice?: number
+        ) => {
             if (Array.isArray(els)) {
-                const list = els;
+                const list = els.map((el) => {
+                    if ("el" in el) return el;
+                    else return { el: el };
+                });
                 let renderI = 0;
                 function start(width: number) {
                     if (width === 1) {
@@ -303,7 +310,8 @@ function pack<EL extends HTMLElement>(
                     start(els.length);
                 }
             } else {
-                el.append(els.el);
+                if ("el" in els) el.append(els.el);
+                else el.append(els);
             }
             return p(el);
         },
