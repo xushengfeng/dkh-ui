@@ -1,4 +1,4 @@
-# myui
+# dkh-ui
 
 ## 简介（introduction）
 
@@ -39,10 +39,10 @@ object 形式生成 HTML 布局
 
 ```ts
 const f = frame("example", {
-    0: view(),
+    _: view(),
     title: ele("h1").add(txt("Hi")),
-    _: {
-        input: view("x"),
+    input: {
+        _: view("x"),
         name: input("name"),
         b: button(txt("+")),
     },
@@ -59,7 +59,7 @@ document.body.append(f.el.el);
     <div id="example_input" style="display:flex">
         <input id="example_name" name="name" /><button id="example_b"><span>+</span></button>
     </div>
-    <p id="example_end">thansks!</p>
+    <p id="example_end">thanks!</p>
 </div>
 ```
 
