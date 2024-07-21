@@ -318,6 +318,10 @@ function pack<EL extends HTMLElement>(
             }
             return p(el);
         },
+        clear: () => {
+            el.innerHTML = "";
+            return p(el);
+        },
         bindSet: (f: (v: unknown, el: EL, trans?: typeof t) => void) => {
             return pack(el, f, getter);
         },
