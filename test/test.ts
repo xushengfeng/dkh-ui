@@ -84,7 +84,7 @@ const f = frame("a", {
     e: p("end"),
 });
 
-console.log(f.els);
+console.log(f.src);
 
 f.els.xx.sv("123456");
 f.els.v.style({ display: "flex", "flex-direction": "column" }).style({ "--color": "#ff0" });

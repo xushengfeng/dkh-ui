@@ -214,7 +214,7 @@ function frame<Id extends string, t extends { [key: string]: any; _: any }>(id: 
         }
         return vi;
     }
-    return { el: w(id, f), els: l as frameType<t> & { [key in Id]: ReturnType<typeof view> } };
+    return { el: w(id, f), els: l as frameType<t> & { [key in Id]: ReturnType<typeof view> }, src: f };
 }
 
 type NonFunctionKeys<T> = {
