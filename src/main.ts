@@ -192,9 +192,9 @@ function pureStyle() {
 
 type frameI = { [key: string]: el0 | frameI; _: el<HTMLDivElement> };
 function frame<Id extends string, t extends { [key: string]: any; _: any }>(id: Id, f: t) {
-    let l = {};
+    let l: { [key: string]: any } = {};
     function w(iid: string, ff: frameI) {
-        let vi: ReturnType<typeof view>;
+        let vi: ReturnType<typeof view> = view();
         for (let i in ff) {
             if (i === "_") {
                 vi = ff[i];
@@ -225,8 +225,8 @@ type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 
 function pack<EL extends HTMLElement>(
     el: EL,
-    setter?: (v: unknown, el: NoInfer<EL>, trans?: typeof t) => void,
-    getter?: (el: NoInfer<EL>) => unknown
+    setter: (v: unknown, el: NoInfer<EL>, trans: typeof t) => void = () => {},
+    getter: (el: NoInfer<EL>) => unknown = () => {}
 ) {
     function p(el: EL) {
         return pack(el, setter, getter);
@@ -252,7 +252,7 @@ function pack<EL extends HTMLElement>(
         },
         on: <key extends keyof HTMLElementEventMap>(
             e: key,
-            cb: (event?: HTMLElementEventMap[key], cel?: ReturnType<typeof p>) => void
+            cb: (event: HTMLElementEventMap[key], cel: ReturnType<typeof p>) => void
         ) => {
             el.addEventListener(e, (ev) => cb(ev, p(el)));
             return p(el);
@@ -275,9 +275,9 @@ function pack<EL extends HTMLElement>(
             return p(el);
         },
         add: (
-            els: HTMLElement | { el: HTMLElement } | (HTMLElement | { el: HTMLElement })[],
+            els?: HTMLElement | { el: HTMLElement } | (HTMLElement | { el: HTMLElement })[],
             firstRender?: number,
-            slice?: number
+            slice = 1
         ) => {
             if (Array.isArray(els)) {
                 const list = els.map((el) => {
@@ -296,7 +296,6 @@ function pack<EL extends HTMLElement>(
                     }
                 }
                 if (firstRender) {
-                    if (!slice) slice = 1;
                     start(firstRender);
                     function w() {
                         requestAnimationFrame(() => {
@@ -313,8 +312,9 @@ function pack<EL extends HTMLElement>(
                     start(els.length);
                 }
             } else {
-                if ("el" in els) el.append(els.el);
-                else if (els) el.append(els);
+                if (els)
+                    if ("el" in els) el.append(els.el);
+                    else el.append(els);
             }
             return p(el);
         },
@@ -322,14 +322,14 @@ function pack<EL extends HTMLElement>(
             el.innerHTML = "";
             return p(el);
         },
-        bindSet: (f: (v: unknown, el: EL, trans?: typeof t) => void) => {
+        bindSet: (f: (v: any, el: EL, trans: typeof t) => void) => {
             return pack(el, f, getter);
         },
         bindGet: (f: (el: EL) => unknown) => {
             return pack(el, setter, f);
         },
         sv: (v?: unknown) => {
-            if (setter) setter(v, el, t);
+            setter(v, el, t);
             return p(el);
         },
         gv: () => {
@@ -456,12 +456,14 @@ function radioGroup<t extends string>(name: string) {
             return p;
         },
         get: () => {
-            const l = document.getElementsByName(name);
-            return (Array.from(l) as HTMLInputElement[]).find((i) => i.checked).value as t;
+            return (Array.from(document.getElementsByName(name)) as HTMLInputElement[]).find((i) => i.checked)
+                ?.value as t;
         },
         set: (value: t) => {
-            const l = document.getElementsByName(name);
-            (Array.from(l) as HTMLInputElement[]).find((i) => i.value === value).checked = true;
+            const el = (Array.from(document.getElementsByName(name)) as HTMLInputElement[]).find(
+                (i) => i.value === value
+            );
+            if (el) el.checked = true;
         },
         on: (callback: () => void) => {
             cb.push(callback);
