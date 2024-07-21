@@ -2,6 +2,8 @@
 
 import type * as CSS from "csstype";
 
+import { frameType } from "./frame";
+
 type csshyphen = CSS.PropertiesHyphen & { [key: `--${any}`]: string };
 
 export {
@@ -188,31 +190,31 @@ function pureStyle() {
     });
 }
 
-type v<x> = { [key in keyof x]: x[key] } & ("_" extends keyof x ? v<x["_"]> : {});
-
-type frameI = { [key: string]: el0 | frameI; children?: frameI };
-function frame<t extends { [key: string]: any }>(id: string, f: t) {
+type frameI = { [key: string]: el0 | frameI; _: el<HTMLDivElement> };
+function frame<Id extends string, t extends { [key: string]: any; _: any }>(id: Id, f: t) {
     let l = {};
-    function w(ff: frameI) {
+    function w(iid: string, ff: frameI) {
         let vi: ReturnType<typeof view>;
         for (let i in ff) {
-            l[i] = ff[i];
-            if (Object.keys(ff).indexOf(i) === 0) {
-                vi = ff[i] as el<HTMLDivElement>;
-                if (!vi.el.id) vi.el.id = `${id}_${i}`;
-                continue;
-            }
             if (i === "_") {
-                vi.add(w(ff[i] as frameI));
+                vi = ff[i];
+                if (!vi.el.id) vi.el.id = `${id}_${iid}`;
+                l[iid] = ff[i];
             } else {
-                const el = ff[i] as el0;
-                if (!el.el.id) el.el.id = `${id}_${i}`;
-                vi.add(ff[i] as el0);
+                l[i] = ff[i];
+
+                if ("_" in ff[i]) {
+                    vi.add(w(i, ff[i]));
+                } else {
+                    const el = ff[i] as el0;
+                    if (!el.el.id) el.el.id = `${id}_${i}`;
+                    vi.add(el);
+                }
             }
         }
         return vi;
     }
-    return { el: w(f), els: l as v<t> };
+    return { el: w(id, f), els: l as frameType<t> & { [key in Id]: ReturnType<typeof view> } };
 }
 
 type NonFunctionKeys<T> = {

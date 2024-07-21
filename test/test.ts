@@ -77,16 +77,17 @@ document.body.append(
 );
 
 const f = frame("a", {
-    o: view(),
-    a: txt("hi"),
+    _: view(),
+    t: txt("hi"),
     b: p("p2"),
-    _: { x: view(), xx: input("a"), bu: button(txt("ok")) },
+    v: { _: view(), xx: input("a"), bu: button(txt("ok")) },
     e: p("end"),
 });
 
+console.log(f.els);
+
 f.els.xx.sv("123456");
-f.els.x.style({ display: "flex", "flex-direction": "column" }).style({ "--color": "#ff0" });
-console.log(f);
+f.els.v.style({ display: "flex", "flex-direction": "column" }).style({ "--color": "#ff0" });
 document.body.append(f.el.el);
 
 setProperties({ "--main-color": "#0f0", "--font-size": "20px" });
