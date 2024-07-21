@@ -23,6 +23,7 @@ export {
     textarea,
     button,
     check,
+    select,
     radioGroup,
     addStyle,
     setProperty,
@@ -436,6 +437,13 @@ function check(name: string, els?: [el0, el0]) {
             });
         return v;
     }
+}
+
+function select(v: { name?: string; value: string }[]) {
+    return ele("select")
+        .add(v.map((i) => ele("option").attr({ innerText: i.name ?? i.value, value: i.value })))
+        .bindGet((el) => el.value)
+        .bindSet((v, el) => (el.value = v));
 }
 
 /** form radio, tab, buttons */
