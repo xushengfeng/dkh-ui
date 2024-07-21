@@ -281,17 +281,17 @@ function pack<EL extends HTMLElement>(
         ) => {
             if (Array.isArray(els)) {
                 const list = els.map((el) => {
-                    if ("el" in el) return el;
-                    else return { el: el };
+                    if ("el" in el) return el.el;
+                    else return el;
                 });
                 let renderI = 0;
                 function start(width: number) {
                     if (width === 1) {
-                        el.append(list[renderI].el);
+                        el.append(list[renderI]);
                     } else {
                         const end = Math.min(renderI + width, list.length);
                         const f = document.createDocumentFragment();
-                        f.append(...list.slice(renderI, end).map((i) => i.el));
+                        f.append(...list.slice(renderI, end));
                         el.append(f);
                     }
                 }
@@ -314,7 +314,7 @@ function pack<EL extends HTMLElement>(
                 }
             } else {
                 if ("el" in els) el.append(els.el);
-                else el.append(els);
+                else if (els) el.append(els);
             }
             return p(el);
         },
@@ -356,68 +356,51 @@ function elFromId(id: string) {
 }
 
 function txt(text: string, noI18n?: boolean) {
-    const span = document.createElement("span");
-    span.innerText = noI18n ? text : t(text);
-    return pack(span);
+    return ele("span").attr({ innerText: noI18n ? text : t(text) });
 }
 
 function p(text: string, noI18n?: boolean) {
-    const p = document.createElement("p");
-    p.innerText = noI18n ? text : t(text);
-    return pack(p);
+    return ele("p").attr({ innerText: noI18n ? text : t(text) });
 }
 
 function a(url: string, newTab?: string) {
-    const a = document.createElement("a");
-    a.href = url;
-    const na = pack(a);
+    const na = ele("a").attr({ href: url });
     if (newTab) {
-        na.attr({ target: "_blank" });
+        return na.attr({ target: "_blank" });
     }
     return na;
 }
 
 function view(stack?: "x" | "y", el?: el0 | el0[]) {
-    const div = pack(document.createElement("div"));
-    if (el) div.add(el);
-    if (stack) div.style({ display: "flex" });
-    if (stack === "x") div.style({ "flex-direction": "row" });
-    else if (stack === "y") div.style({ "flex-direction": "column" });
+    const div = ele("div").add(el);
+    if (stack) div.style({ display: "flex", "flex-direction": stack === "x" ? "row" : "column" });
     return div;
 }
 
 function spacer() {
-    const div = pack(document.createElement("div"));
-    div.style({ "flex-grow": "1" });
-    return div;
+    return ele("div").style({ "flex-grow": "1" });
 }
 
 function image(src: string, name: string) {
-    const img = pack(document.createElement("img"));
-    img.attr({ src: src, alt: t(name) });
-    return img;
+    return ele("img").attr({ src: src, alt: t(name) });
 }
 
 function button(el?: el0 | el0[]) {
-    const button = pack(document.createElement("button"));
-    if (el) button.add(el);
-    return button;
+    return ele("button").add(el);
 }
 
 function input(name: string) {
-    const input = ele("input")
+    return ele("input")
         .attr({ name: t(name), type: "text" })
         .bindSet((v: string, el) => (el.value = v))
         .bindGet((el) => el.value);
-    return input;
 }
 
 function textarea(name: string) {
-    const text = ele("textarea")
+    return ele("textarea")
         .attr({ name: t(name) })
         .bindSet((v: string, el) => (el.value = v))
         .bindGet((el) => el.value);
-    return text;
 }
 
 function check(name: string, els?: [el0, el0]) {
@@ -495,9 +478,7 @@ function addStyle(style: { [className: string]: csshyphen }) {
         }
         css += "}";
     }
-    const styleEl = document.createElement("style");
-    styleEl.innerHTML = css;
-    document.body.append(styleEl);
+    document.body.append(ele("style").attr({ innerHTML: css }).el);
 }
 
 function setProperty(name: string, v: string, el?: HTMLElement) {
