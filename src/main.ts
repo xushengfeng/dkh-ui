@@ -280,44 +280,38 @@ function pack<EL extends HTMLElement>(
             firstRender?: number,
             slice = 1
         ) => {
-            if (Array.isArray(els)) {
-                const list = els.map((el) => {
-                    if (typeof el === "string") return document.createTextNode(el);
-                    else if ("el" in el) return el.el;
-                    else return el;
-                });
-                let renderI = 0;
-                function start(width: number) {
-                    if (width === 1) {
-                        el.append(list[renderI]);
-                    } else {
-                        const end = Math.min(renderI + width, list.length);
-                        const f = document.createDocumentFragment();
-                        f.append(...list.slice(renderI, end));
-                        el.append(f);
-                    }
-                }
-                if (firstRender) {
-                    start(firstRender);
-                    function w() {
-                        requestAnimationFrame(() => {
-                            if (renderI < list.length) {
-                                start(slice);
-                                renderI += slice;
-                                w();
-                            }
-                        });
-                    }
-                    renderI += firstRender;
-                    w();
+            const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
+            const list = listEl.map((el) => {
+                if (typeof el === "string") return document.createTextNode(el);
+                else if ("el" in el) return el.el;
+                else return el;
+            });
+            let renderI = 0;
+            function start(width: number) {
+                if (width === 1) {
+                    el.append(list[renderI]);
                 } else {
-                    start(els.length);
+                    const end = Math.min(renderI + width, list.length);
+                    const f = document.createDocumentFragment();
+                    f.append(...list.slice(renderI, end));
+                    el.append(f);
                 }
+            }
+            if (firstRender) {
+                start(firstRender);
+                function w() {
+                    requestAnimationFrame(() => {
+                        if (renderI < list.length) {
+                            start(slice);
+                            renderI += slice;
+                            w();
+                        }
+                    });
+                }
+                renderI += firstRender;
+                w();
             } else {
-                if (els)
-                    if (typeof els === "string") el.append(document.createTextNode(els));
-                    else if ("el" in els) el.append(els.el);
-                    else el.append(els);
+                start(listEl.length);
             }
             return p(el);
         },
