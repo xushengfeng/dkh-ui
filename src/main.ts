@@ -353,11 +353,15 @@ function elFromId(id: string) {
 }
 
 function txt(text: string, noI18n?: boolean) {
-    return ele("span").attr({ innerText: noI18n ? text : t(text) });
+    return ele("span")
+        .bindSet((v, el) => (el.innerText = noI18n ? v : t(v)))
+        .sv(text);
 }
 
 function p(text: string, noI18n?: boolean) {
-    return ele("p").attr({ innerText: noI18n ? text : t(text) });
+    return ele("p")
+        .bindSet((v, el) => (el.innerText = noI18n ? v : t(v)))
+        .sv(text);
 }
 
 function a(url: string, newTab?: string) {
