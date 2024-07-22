@@ -276,13 +276,14 @@ function pack<EL extends HTMLElement>(
             return p(el);
         },
         add: (
-            els?: HTMLElement | { el: HTMLElement } | (HTMLElement | { el: HTMLElement })[],
+            els?: HTMLElement | { el: HTMLElement } | string | (HTMLElement | { el: HTMLElement } | string)[],
             firstRender?: number,
             slice = 1
         ) => {
             if (Array.isArray(els)) {
                 const list = els.map((el) => {
-                    if ("el" in el) return el.el;
+                    if (typeof el === "string") return document.createTextNode(el);
+                    else if ("el" in el) return el.el;
                     else return el;
                 });
                 let renderI = 0;
@@ -314,7 +315,8 @@ function pack<EL extends HTMLElement>(
                 }
             } else {
                 if (els)
-                    if ("el" in els) el.append(els.el);
+                    if (typeof els === "string") el.append(document.createTextNode(els));
+                    else if ("el" in els) el.append(els.el);
                     else el.append(els);
             }
             return p(el);
