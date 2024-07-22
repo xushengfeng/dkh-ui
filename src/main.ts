@@ -282,7 +282,7 @@ function pack<EL extends HTMLElement>(
         ) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
             const list = listEl.map((el) => {
-                if (typeof el === "string") return document.createTextNode(el);
+                if (typeof el === "string") return document.createTextNode(t(el));
                 else if ("el" in el) return el.el;
                 else return el;
             });
