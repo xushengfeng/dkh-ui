@@ -29,6 +29,7 @@ export {
     setProperty,
     setProperties,
     frame,
+    trackPoint,
 };
 
 let t = (s: string) => s;
@@ -504,4 +505,48 @@ function setProperties(map: { [name: string]: string }, el?: HTMLElement) {
     for (let i in map) {
         setProperty(i, map[i], el);
     }
+}
+
+function trackPoint(
+    el: el0,
+    op: {
+        start?: (e: PointerEvent) => { x: number; y: number; zoom?: number };
+        ing: (
+            point: { x: number; y: number; zoom?: number },
+            center: { x: number; y: number },
+            e: PointerEvent
+        ) => void;
+        all?: (e: PointerEvent) => void;
+        end?: () => void;
+    }
+) {
+    // todo zoom
+    let start: { x: number; y: number };
+    let abPoint = { x: 0, y: 0 };
+    el.on("pointerdown", (e) => {
+        e.preventDefault();
+        start = op.start ? op.start(e) : { x: 0, y: 0 };
+        abPoint = { x: e.clientX, y: e.clientY };
+    });
+    function ing(e: PointerEvent) {
+        const dx = e.clientX - abPoint.x;
+        const dy = e.clientY - abPoint.y;
+        const point = { x: dx + start.x, y: dy + start.y };
+        op.ing(point, { x: e.clientX, y: e.clientY }, e);
+    }
+    window.addEventListener("pointermove", (e) => {
+        if (!start) {
+            if (op.all) op.all(e);
+            return;
+        }
+        e.preventDefault();
+        ing(e);
+    });
+    window.addEventListener("pointerup", (e) => {
+        if (!start) return;
+        e.preventDefault();
+        ing(e);
+        start = null;
+        if (op.end) op.end();
+    });
 }

@@ -13,6 +13,7 @@ import {
     setProperties,
     radioGroup,
     check,
+    trackPoint,
 } from "../src/main";
 pureStyle();
 
@@ -109,3 +110,29 @@ const ch = check("sw", [txt("hi"), txt("bye")]).on("change", (_, el) => {
 });
 
 document.body.append(ch.el);
+
+const pointEl = view().style({ width: "32px", height: "32px", background: "#0002", position: "relative" });
+document.body.append(pointEl.el);
+trackPoint(pointEl, {
+    start: (e) => {
+        if (!e.shiftKey) {
+            return { x: 0, y: 0 };
+        }
+    },
+    ing: (p, c, e) => {
+        console.log(p);
+        pointEl.style({ left: p.x + "px" });
+    },
+});
+
+trackPoint(pointEl, {
+    start: (e) => {
+        if (e.shiftKey) {
+            return { x: 0, y: 0 };
+        }
+    },
+    ing: (p, c, e) => {
+        console.log(p);
+        pointEl.style({ top: p.y + "px" });
+    },
+});
