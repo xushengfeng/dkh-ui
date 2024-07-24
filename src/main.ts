@@ -25,6 +25,7 @@ export {
     check,
     select,
     radioGroup,
+    table,
     addStyle,
     setProperty,
     setProperties,
@@ -478,6 +479,34 @@ function radioGroup<t extends string>(name: string) {
             cb.push(callback);
         },
     };
+}
+
+function table(body: Array<Array<string | el0>>, head?: { col?: boolean; row?: boolean }) {
+    function el(element: string | el0, type: "td" | "th") {
+        if (typeof element === "string") {
+            return ele(type).attr({ innerText: element });
+        } else {
+            if (element.el.tagName === type.toUpperCase()) {
+                return element as el<HTMLTableCellElement>;
+            } else {
+                return ele(type).add(element);
+            }
+        }
+    }
+    // todo span
+    let yels: el<HTMLTableRowElement>[] = [];
+    for (let y = 0; y < body.length; y++) {
+        let xels: el<HTMLTableCellElement>[] = [];
+        for (let x = 0; x < body[y].length; x++) {
+            const element = body[y][x];
+            if (element) {
+                if ((head.row && x === 0) || (head.col && y === 0)) xels.push(el(element, "th"));
+                else xels.push(el(element, "td"));
+            }
+        }
+        yels.push(ele("tr").add(xels));
+    }
+    return ele("table").add(yels);
 }
 
 function addStyle(style: { [className: string]: csshyphen }) {

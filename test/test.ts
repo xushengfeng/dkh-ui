@@ -14,6 +14,7 @@ import {
     radioGroup,
     check,
     trackPoint,
+    table,
 } from "../src/main";
 pureStyle();
 
@@ -136,3 +137,13 @@ trackPoint(pointEl, {
         pointEl.style({ top: p.y + "px" });
     },
 });
+
+document.body.append(
+    table(
+        [
+            ["1", "2", "3"],
+            ["4", "5", "6"],
+        ],
+        { row: true, col: true }
+    ).el
+);
