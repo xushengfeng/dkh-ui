@@ -348,7 +348,7 @@ function ele(tagname: string) {
 
 function elFromId(id: string) {
     const el = document.getElementById(id);
-    if (!el) return el;
+    if (!el) return null;
     else return pack(el);
 }
 
