@@ -366,12 +366,12 @@ function p(text: string, noI18n?: boolean) {
         .sv(text);
 }
 
-function a(url: string, newTab?: string) {
+function a(url: string, localNav?: boolean) {
     const na = ele("a").attr({ href: url });
-    if (newTab) {
-        return na.attr({ target: "_blank" });
+    if (localNav) {
+        return na;
     }
-    return na;
+    return na.attr({ target: "_blank" });
 }
 
 function view(stack?: "x" | "y", el?: el0 | el0[]) {
