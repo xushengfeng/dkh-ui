@@ -2,14 +2,14 @@
 
 import type * as CSS from "csstype";
 
-import { frameType } from "./frame";
+import type { frameType } from "./frame";
 
-type csshyphen = CSS.PropertiesHyphen & { [key: `--${any}`]: string };
+type csshyphen = CSS.PropertiesHyphen & { [key: `--${string}`]: string };
 
 export {
     setTranslate,
     pureStyle,
-    el as ElType,
+    type el as ElType,
     pack,
     ele,
     elFromId,
@@ -117,11 +117,12 @@ function pureStyle() {
         "button,select": {
             "text-transform": "none",
         },
-        "button,input:where([type='button']),input:where([type='reset']),input:where([type='submit'])": {
-            "-webkit-appearance": "button",
-            "background-color": "transparent",
-            "background-image": "none",
-        },
+        "button,input:where([type='button']),input:where([type='reset']),input:where([type='submit'])":
+            {
+                "-webkit-appearance": "button",
+                "background-color": "transparent",
+                "background-image": "none",
+            },
         ":-moz-focusring": {
             outline: "auto",
         },
@@ -194,11 +195,16 @@ function pureStyle() {
 }
 
 type frameI = { [key: string]: el0 | frameI; _: el<HTMLDivElement> };
-function frame<Id extends string, t extends { [key: string]: any; _: any }>(id: Id, f: t) {
-    let l: { [key: string]: any } = {};
+// biome-ignore lint: I cant ctrl
+function frame<Id extends string, t extends { [key: string]: any; _: any }>(
+    id: Id,
+    f: t,
+) {
+    // biome-ignore lint: I cant ctrl
+    const l: { [key: string]: any } = {};
     function w(iid: string, ff: frameI) {
         let vi: ReturnType<typeof view> = view();
-        for (let i in ff) {
+        for (const i in ff) {
             if (i === "_") {
                 vi = ff[i];
                 if (!vi.el.id) vi.el.id = `${id}_${iid}`;
@@ -217,11 +223,21 @@ function frame<Id extends string, t extends { [key: string]: any; _: any }>(id: 
         }
         return vi;
     }
-    return { el: w(id, f), els: l as frameType<t> & { [key in Id]: ReturnType<typeof view> }, src: f };
+    return {
+        el: w(id, f),
+        els: l as frameType<t> & { [key in Id]: ReturnType<typeof view> },
+        src: f,
+    };
 }
 
 type NonFunctionKeys<T> = {
-    [K in keyof T]: T[K] extends String ? K : T[K] extends Number ? K : T[K] extends Boolean ? K : never;
+    [K in keyof T]: T[K] extends string
+        ? K
+        : T[K] extends number
+          ? K
+          : T[K] extends boolean
+            ? K
+            : never;
 }[keyof T];
 
 type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
@@ -229,7 +245,7 @@ type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 function pack<EL extends HTMLElement>(
     el: EL,
     setter: (v: unknown, el: NoInfer<EL>, trans: typeof t) => void = () => {},
-    getter: (el: NoInfer<EL>) => unknown = () => {}
+    getter: (el: NoInfer<EL>) => unknown = () => {},
 ) {
     function p(el: EL) {
         return pack(el, setter, getter);
@@ -237,7 +253,7 @@ function pack<EL extends HTMLElement>(
     return {
         el,
         style: (css: csshyphen) => {
-            for (let i in css) {
+            for (const i in css) {
                 if (i.startsWith("--")) {
                     el.style.setProperty(i, css[i]);
                 } else {
@@ -245,7 +261,7 @@ function pack<EL extends HTMLElement>(
                         .split("-")
                         .map((v, i) => {
                             if (i === 0) return v;
-                            else return v.slice(0, 1).toUpperCase() + v.slice(1);
+                            return v.slice(0, 1).toUpperCase() + v.slice(1);
                         })
                         .join("");
                     el.style[n] = css[i];
@@ -255,38 +271,46 @@ function pack<EL extends HTMLElement>(
         },
         on: <key extends keyof HTMLElementEventMap>(
             e: key,
-            cb: (event: HTMLElementEventMap[key], cel: ReturnType<typeof p>) => void
+            cb: (
+                event: HTMLElementEventMap[key],
+                cel: ReturnType<typeof p>,
+            ) => void,
         ) => {
             el.addEventListener(e, (ev) => cb(ev, p(el)));
             return p(el);
         },
         class: (...classes: string[]) => {
-            classes.forEach((i) => el.classList.add(i));
+            el.classList.add(...classes);
             return p(el);
         },
         attr: (attr: getAttr<EL>) => {
-            for (let i in attr) {
+            for (const i in attr) {
                 el[i] = attr[i];
             }
             return p(el);
         },
         data: (data: { [key: string]: string }) => {
-            for (let i in data) {
+            for (const i in data) {
                 const name = !i.startsWith("data-") ? `data-${i}` : i;
                 el.setAttribute(name, data[i]);
             }
             return p(el);
         },
         add: (
-            els?: HTMLElement | { el: HTMLElement } | string | (HTMLElement | { el: HTMLElement } | string)[],
+            els?:
+                | HTMLElement
+                | { el: HTMLElement }
+                | string
+                | (HTMLElement | { el: HTMLElement } | string)[],
             firstRender?: number,
-            slice = 1
+            slice = 1,
         ) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
             const list = listEl.map((el) => {
-                if (typeof el === "string") return document.createTextNode(t(el));
-                else if ("el" in el) return el.el;
-                else return el;
+                if (typeof el === "string")
+                    return document.createTextNode(t(el));
+                if ("el" in el) return el.el;
+                return el;
             });
             let renderI = 0;
             function start(width: number) {
@@ -321,6 +345,7 @@ function pack<EL extends HTMLElement>(
             el.innerHTML = "";
             return p(el);
         },
+        // biome-ignore lint: any input
         bindSet: (f: (v: any, el: EL, trans: typeof t) => void) => {
             return pack(el, f, getter);
         },
@@ -341,8 +366,12 @@ type el<t extends HTMLElement> = ReturnType<typeof pack<t>>;
 
 type el0 = ReturnType<typeof pack>;
 
-function ele<K extends keyof HTMLElementTagNameMap>(tagName: K): el<HTMLElementTagNameMap[K]>;
-function ele<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): el<HTMLElementDeprecatedTagNameMap[K]>;
+function ele<K extends keyof HTMLElementTagNameMap>(
+    tagName: K,
+): el<HTMLElementTagNameMap[K]>;
+function ele<K extends keyof HTMLElementDeprecatedTagNameMap>(
+    tagName: K,
+): el<HTMLElementDeprecatedTagNameMap[K]>;
 function ele(tagName: string): el<HTMLElement>;
 function ele(tagname: string) {
     return pack(document.createElement(tagname));
@@ -351,18 +380,22 @@ function ele(tagname: string) {
 function elFromId(id: string) {
     const el = document.getElementById(id);
     if (!el) return null;
-    else return pack(el);
+    return pack(el);
 }
 
 function txt(text: string, noI18n?: boolean) {
     return ele("span")
-        .bindSet((v, el) => (el.innerText = noI18n ? v : t(v)))
+        .bindSet((v, el) => {
+            el.innerText = noI18n ? v : t(v);
+        })
         .sv(text);
 }
 
 function p(text: string, noI18n?: boolean) {
     return ele("p")
-        .bindSet((v, el) => (el.innerText = noI18n ? v : t(v)))
+        .bindSet((v, el) => {
+            el.innerText = noI18n ? v : t(v);
+        })
         .sv(text);
 }
 
@@ -376,7 +409,11 @@ function a(url: string, localNav?: boolean) {
 
 function view(stack?: "x" | "y", el?: el0 | el0[]) {
     const div = ele("div").add(el);
-    if (stack) div.style({ display: "flex", "flex-direction": stack === "x" ? "row" : "column" });
+    if (stack)
+        div.style({
+            display: "flex",
+            "flex-direction": stack === "x" ? "row" : "column",
+        });
     return div;
 }
 
@@ -395,84 +432,110 @@ function button(el?: el0 | el0[]) {
 function input(name: string) {
     return ele("input")
         .attr({ name: t(name), type: "text" })
-        .bindSet((v: string, el) => (el.value = v))
+        .bindSet((v: string, el) => {
+            el.value = v;
+        })
         .bindGet((el) => el.value);
 }
 
 function textarea(name: string) {
     return ele("textarea")
         .attr({ name: t(name) })
-        .bindSet((v: string, el) => (el.value = v))
+        .bindSet((v: string, el) => {
+            el.value = v;
+        })
         .bindGet((el) => el.value);
 }
 
 function check(name: string, els?: [el0, el0]) {
-    name = t(name);
+    const newName = t(name);
     if (!els) {
         const input = ele("input")
-            .attr({ name: name, type: "checkbox" })
-            .bindSet((v: boolean, el) => (el.checked = v))
+            .attr({ name: newName, type: "checkbox" })
+            .bindSet((v: boolean, el) => {
+                el.checked = v;
+            })
             .bindGet((el) => el.checked);
         return input;
-    } else {
-        // todo 无障碍
-        const True = els[0];
-        const False = els[1];
-        let value = false;
-        const v = view()
-            .add([True.style({ display: "none" }), False])
-            .bindSet((v: boolean) => {
-                value = v;
-                if (v) {
-                    True.style({ display: "" });
-                    False.style({ display: "none" });
-                } else {
-                    True.style({ display: "none" });
-                    False.style({ display: "" });
-                }
-            })
-            .bindGet(() => value)
-            .on("click", () => {
-                v.sv(!v.gv());
-                v.el.dispatchEvent(new Event("input"));
-                v.el.dispatchEvent(new Event("change"));
-            });
-        return v;
     }
+    // todo 无障碍
+    const True = els[0];
+    const False = els[1];
+    let value = false;
+    const v = view()
+        .add([True.style({ display: "none" }), False])
+        .bindSet((v: boolean) => {
+            value = v;
+            if (v) {
+                True.style({ display: "" });
+                False.style({ display: "none" });
+            } else {
+                True.style({ display: "none" });
+                False.style({ display: "" });
+            }
+        })
+        .bindGet(() => value)
+        .on("click", () => {
+            v.sv(!v.gv());
+            v.el.dispatchEvent(new Event("input"));
+            v.el.dispatchEvent(new Event("change"));
+        });
+    return v;
 }
 
 function select(v: { name?: string; value: string }[]) {
     return ele("select")
-        .add(v.map((i) => ele("option").attr({ innerText: i.name ?? i.value, value: i.value })))
+        .add(
+            v.map((i) =>
+                ele("option").attr({
+                    innerText: i.name ?? i.value,
+                    value: i.value,
+                }),
+            ),
+        )
         .bindGet((el) => el.value)
-        .bindSet((v, el) => (el.value = v));
+        .bindSet((v, el) => {
+            el.value = v;
+        });
 }
 
 /** form radio, tab, buttons */
 function radioGroup<t extends string>(name: string) {
-    name = t(name);
-    let cb: (() => void)[] = [];
+    const newName = t(name);
+    const cb: (() => void)[] = [];
     let first = true;
     return {
         new: (value: t, el?: el0) => {
             const p = ele("label")
                 .add(
                     ele("input")
-                        .attr({ type: "radio", name: name, value: value, checked: first })
-                        .on("input", () => cb.forEach((c) => c()))
+                        .attr({
+                            type: "radio",
+                            name: newName,
+                            value: value,
+                            checked: first,
+                        })
+                        .on("input", () => {
+                            for (const c of cb) c();
+                        }),
                 )
                 .add(el || txt(value));
             first = false;
             return p;
         },
         get: () => {
-            return (Array.from(document.getElementsByName(name)) as HTMLInputElement[]).find((i) => i.checked)
-                ?.value as t;
+            return (
+                Array.from(
+                    document.getElementsByName(newName),
+                ) as HTMLInputElement[]
+            ).find((i) => i.checked)?.value as t;
         },
         set: (value: t) => {
-            const el = (Array.from(document.getElementsByName(name)) as HTMLInputElement[]).find(
-                (i) => i.value === value
-            );
+            const el = (
+                Array.from(
+                    document.getElementsByName(newName),
+                ) as HTMLInputElement[]
+            ).find((i) => i.value === value);
             if (el) el.checked = true;
         },
         on: (callback: () => void) => {
@@ -481,26 +544,28 @@ function radioGroup<t extends string>(name: string) {
     };
 }
 
-function table(body: Array<Array<string | el0>>, head?: { col?: boolean; row?: boolean }) {
+function table(
+    body: Array<Array<string | el0>>,
+    head?: { col?: boolean; row?: boolean },
+) {
     function el(element: string | el0, type: "td" | "th") {
         if (typeof element === "string") {
             return ele(type).attr({ innerText: element });
-        } else {
-            if (element.el.tagName === type.toUpperCase()) {
-                return element as el<HTMLTableCellElement>;
-            } else {
-                return ele(type).add(element);
-            }
         }
+        if (element.el.tagName === type.toUpperCase()) {
+            return element as el<HTMLTableCellElement>;
+        }
+        return ele(type).add(element);
     }
     // todo span
-    let yels: el<HTMLTableRowElement>[] = [];
+    const yels: el<HTMLTableRowElement>[] = [];
     for (let y = 0; y < body.length; y++) {
-        let xels: el<HTMLTableCellElement>[] = [];
+        const xels: el<HTMLTableCellElement>[] = [];
         for (let x = 0; x < body[y].length; x++) {
             const element = body[y][x];
             if (element) {
-                if ((head.row && x === 0) || (head.col && y === 0)) xels.push(el(element, "th"));
+                if ((head.row && x === 0) || (head.col && y === 0))
+                    xels.push(el(element, "th"));
                 else xels.push(el(element, "td"));
             }
         }
@@ -511,9 +576,9 @@ function table(body: Array<Array<string | el0>>, head?: { col?: boolean; row?: b
 
 function addStyle(style: { [className: string]: csshyphen }) {
     let css = "";
-    for (let i in style) {
+    for (const i in style) {
         css += `${i} {\n`;
-        for (let x in style[i]) {
+        for (const x in style[i]) {
             css += `  ${x}: ${style[i][x]};\n`;
         }
         css += "}";
@@ -521,17 +586,14 @@ function addStyle(style: { [className: string]: csshyphen }) {
     document.body.append(ele("style").attr({ innerHTML: css }).el);
 }
 
-function setProperty(name: string, v: string, el?: HTMLElement) {
-    if (!el) {
-        el = document.documentElement;
-    }
+function setProperty(name: string, v: string, el = document.documentElement) {
     el.style.setProperty(name, v);
 }
-function setProperties(map: { [name: string]: string }, el?: HTMLElement) {
-    if (!el) {
-        el = document.documentElement;
-    }
-    for (let i in map) {
+function setProperties(
+    map: { [name: string]: string },
+    el = document.documentElement,
+) {
+    for (const i in map) {
         setProperty(i, map[i], el);
     }
 }
@@ -543,11 +605,11 @@ function trackPoint(
         ing: (
             point: { x: number; y: number; zoom?: number },
             center: { x: number; y: number },
-            e: PointerEvent
+            e: PointerEvent,
         ) => void;
         all?: (e: PointerEvent) => void;
         end?: () => void;
-    }
+    },
 ) {
     // todo zoom
     let start: { x: number; y: number };
