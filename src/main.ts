@@ -575,11 +575,12 @@ function trackPoint(
             e: PointerEvent
         ) => void;
         all?: (e: PointerEvent) => void;
-        end?: () => void;
+        end?: (moved: boolean, e: PointerEvent) => void;
     }
 ) {
     // todo zoom
     let start: { x: number; y: number };
+    let moved = false;
     let abPoint = { x: 0, y: 0 };
     el.on("pointerdown", (e) => {
         e.preventDefault();
@@ -599,12 +600,13 @@ function trackPoint(
         }
         e.preventDefault();
         ing(e);
+        moved = true;
     });
     window.addEventListener("pointerup", (e) => {
         if (!start) return;
         e.preventDefault();
         ing(e);
         start = null;
-        if (op.end) op.end();
+        if (op.end) op.end(moved, e);
     });
 }
