@@ -117,11 +117,12 @@ function pureStyle() {
         "button,select": {
             "text-transform": "none",
         },
-        "button,input:where([type='button']),input:where([type='reset']),input:where([type='submit'])": {
-            "-webkit-appearance": "button",
-            "background-color": "transparent",
-            "background-image": "none",
-        },
+        "button,input:where([type='button']),input:where([type='reset']),input:where([type='submit'])":
+            {
+                "-webkit-appearance": "button",
+                "background-color": "transparent",
+                "background-image": "none",
+            },
         ":-moz-focusring": {
             outline: "auto",
         },
@@ -195,7 +196,10 @@ function pureStyle() {
 
 type frameI = { [key: string]: el0 | frameI; _: el<HTMLDivElement> };
 // biome-ignore lint: I cant ctrl
-function frame<Id extends string, t extends { [key: string]: any; _: any }>(id: Id, f: t) {
+function frame<Id extends string, t extends { [key: string]: any; _: any }>(
+    id: Id,
+    f: t,
+) {
     // biome-ignore lint: I cant ctrl
     const l: { [key: string]: any } = {};
     function w(iid: string, ff: frameI) {
@@ -227,7 +231,13 @@ function frame<Id extends string, t extends { [key: string]: any; _: any }>(id: 
 }
 
 type NonFunctionKeys<T> = {
-    [K in keyof T]: T[K] extends string ? K : T[K] extends number ? K : T[K] extends boolean ? K : never;
+    [K in keyof T]: T[K] extends string
+        ? K
+        : T[K] extends number
+          ? K
+          : T[K] extends boolean
+            ? K
+            : never;
 }[keyof T];
 
 type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
@@ -235,7 +245,7 @@ type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 function pack<EL extends HTMLElement>(
     el: EL,
     setter: (v: unknown, el: NoInfer<EL>, trans: typeof t) => void = () => {},
-    getter: (el: NoInfer<EL>) => unknown = () => {}
+    getter: (el: NoInfer<EL>) => unknown = () => {},
 ) {
     function p(el: EL) {
         return pack(el, setter, getter);
@@ -261,8 +271,11 @@ function pack<EL extends HTMLElement>(
         },
         on: <key extends keyof HTMLElementEventMap>(
             e: key,
-            cb: (event: HTMLElementEventMap[key], cel: ReturnType<typeof p>) => void,
-            op?: AddEventListenerOptions
+            cb: (
+                event: HTMLElementEventMap[key],
+                cel: ReturnType<typeof p>,
+            ) => void,
+            op?: AddEventListenerOptions,
         ) => {
             el.addEventListener(e, (ev) => cb(ev, p(el)), op);
             return p(el);
@@ -285,13 +298,18 @@ function pack<EL extends HTMLElement>(
             return p(el);
         },
         add: (
-            els?: HTMLElement | { el: HTMLElement } | string | (HTMLElement | { el: HTMLElement } | string)[],
+            els?:
+                | HTMLElement
+                | { el: HTMLElement }
+                | string
+                | (HTMLElement | { el: HTMLElement } | string)[],
             firstRender?: number,
-            slice = 1
+            slice = 1,
         ) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
             const list = listEl.map((el) => {
-                if (typeof el === "string") return document.createTextNode(t(el));
+                if (typeof el === "string")
+                    return document.createTextNode(t(el));
                 if ("el" in el) return el.el;
                 return el;
             });
@@ -349,8 +367,12 @@ type el<t extends HTMLElement> = ReturnType<typeof pack<t>>;
 
 type el0 = ReturnType<typeof pack>;
 
-function ele<K extends keyof HTMLElementTagNameMap>(tagName: K): el<HTMLElementTagNameMap[K]>;
-function ele<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): el<HTMLElementDeprecatedTagNameMap[K]>;
+function ele<K extends keyof HTMLElementTagNameMap>(
+    tagName: K,
+): el<HTMLElementTagNameMap[K]>;
+function ele<K extends keyof HTMLElementDeprecatedTagNameMap>(
+    tagName: K,
+): el<HTMLElementDeprecatedTagNameMap[K]>;
 function ele(tagName: string): el<HTMLElement>;
 function ele(tagname: string) {
     return pack(document.createElement(tagname));
@@ -469,8 +491,8 @@ function select(v: { name?: string; value: string }[]) {
                 ele("option").attr({
                     innerText: i.name ?? i.value,
                     value: i.value,
-                })
-            )
+                }),
+            ),
         )
         .bindGet((el) => el.value)
         .bindSet((v, el) => {
@@ -496,20 +518,25 @@ function radioGroup<t extends string>(name: string) {
                         })
                         .on("input", () => {
                             for (const c of cb) c();
-                        })
+                        }),
                 )
                 .add(el || txt(value));
             first = false;
             return p;
         },
         get: () => {
-            return (Array.from(document.getElementsByName(newName)) as HTMLInputElement[]).find((i) => i.checked)
-                ?.value as t;
+            return (
+                Array.from(
+                    document.getElementsByName(newName),
+                ) as HTMLInputElement[]
+            ).find((i) => i.checked)?.value as t;
         },
         set: (value: t) => {
-            const el = (Array.from(document.getElementsByName(newName)) as HTMLInputElement[]).find(
-                (i) => i.value === value
-            );
+            const el = (
+                Array.from(
+                    document.getElementsByName(newName),
+                ) as HTMLInputElement[]
+            ).find((i) => i.value === value);
             if (el) el.checked = true;
         },
         on: (callback: () => void) => {
@@ -518,7 +545,10 @@ function radioGroup<t extends string>(name: string) {
     };
 }
 
-function table(body: Array<Array<string | el0>>, head?: { col?: boolean; row?: boolean }) {
+function table(
+    body: Array<Array<string | el0>>,
+    head?: { col?: boolean; row?: boolean },
+) {
     function el(element: string | el0, type: "td" | "th") {
         if (typeof element === "string") {
             return ele(type).attr({ innerText: element });
@@ -535,7 +565,8 @@ function table(body: Array<Array<string | el0>>, head?: { col?: boolean; row?: b
         for (let x = 0; x < body[y].length; x++) {
             const element = body[y][x];
             if (element) {
-                if ((head.row && x === 0) || (head.col && y === 0)) xels.push(el(element, "th"));
+                if ((head.row && x === 0) || (head.col && y === 0))
+                    xels.push(el(element, "th"));
                 else xels.push(el(element, "td"));
             }
         }
@@ -559,7 +590,10 @@ function addStyle(style: { [className: string]: csshyphen }) {
 function setProperty(name: string, v: string, el = document.documentElement) {
     el.style.setProperty(name, v);
 }
-function setProperties(map: { [name: string]: string }, el = document.documentElement) {
+function setProperties(
+    map: { [name: string]: string },
+    el = document.documentElement,
+) {
     for (const i in map) {
         setProperty(i, map[i], el);
     }
@@ -572,11 +606,11 @@ function trackPoint(
         ing: (
             point: { x: number; y: number; zoom?: number },
             center: { x: number; y: number },
-            e: PointerEvent
+            e: PointerEvent,
         ) => void;
         all?: (e: PointerEvent) => void;
         end?: (moved: boolean, e: PointerEvent) => void;
-    }
+    },
 ) {
     // todo zoom
     let start: { x: number; y: number };
