@@ -506,7 +506,7 @@ function radioGroup<t extends string>(name: string) {
     const cb: (() => void)[] = [];
     let first = true;
     return {
-        new: (value: t, el?: el0) => {
+        new: (value: t, el?: el0, showInput?: boolean) => {
             const p = ele("label")
                 .add(
                     ele("input")
@@ -515,6 +515,9 @@ function radioGroup<t extends string>(name: string) {
                             name: newName,
                             value: value,
                             checked: first,
+                        })
+                        .style({
+                            display: el && !showInput ? "none" : "",
                         })
                         .on("input", () => {
                             for (const c of cb) c();
