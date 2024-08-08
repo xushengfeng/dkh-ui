@@ -532,6 +532,13 @@ function radioGroup<t extends string>(name: string) {
             ).find((i) => i.checked)?.value as t;
         },
         set: (value: t) => {
+            if (!value) {
+                for (const el of Array.from(
+                    document.getElementsByName(newName),
+                ) as HTMLInputElement[])
+                    el.checked = false;
+                return;
+            }
             const el = (
                 Array.from(
                     document.getElementsByName(newName),
