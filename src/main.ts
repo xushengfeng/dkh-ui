@@ -378,10 +378,10 @@ function ele(tagname: string) {
     return pack(document.createElement(tagname));
 }
 
-function elFromId(id: string) {
+function elFromId<EL extends HTMLElement>(id: string) {
     const el = document.getElementById(id);
     if (!el) return null;
-    return pack(el);
+    return pack<EL>(el as EL);
 }
 
 function txt(text: string, noI18n?: boolean) {
