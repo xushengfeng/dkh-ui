@@ -250,11 +250,8 @@ function pack<EL extends HTMLElement>(
     function p(el: EL) {
         return pack(el, setter, getter);
     }
-    const error = new Error();
-    if (!devMap.get(el)) devMap.set(el, { pos: [] });
-    devMap.get(el).pos.push(error);
 
-    return {
+    const pel = {
         el,
         style: (css: csshyphen) => {
             for (const i in css) {
@@ -365,16 +362,21 @@ function pack<EL extends HTMLElement>(
             return getter(el);
         },
     };
+    const error = new Error();
+    if (!devMap.get(el)) devMap.set(el, []);
+    devMap.get(el).push({ el: pel, pos: error });
+    return pel;
 }
 
 // todo only on dev
-const devMap: Map<HTMLElement, { pos: Error[] }> = new Map();
+const devMap: Map<HTMLElement, { pos: Error; el: el0 }[]> = new Map();
 
 // @ts-ignore
 window._dkhDEV = (el: HTMLElement) => {
-    for (const i of devMap.get(el).pos) {
-        console.log(i);
+    for (const i of devMap.get(el)) {
+        console.log(i.pos);
     }
+    return devMap.get(el).map((i) => i.el);
 };
 
 type el<t extends HTMLElement> = ReturnType<typeof pack<t>>;
