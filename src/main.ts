@@ -31,7 +31,10 @@ export {
     setProperties,
     frame,
     trackPoint,
+    initDev,
 };
+
+let dev = false;
 
 let t = (s: string) => s;
 
@@ -362,22 +365,26 @@ function pack<EL extends HTMLElement>(
             return getter(el);
         },
     };
-    const error = new Error();
-    if (!devMap.get(el)) devMap.set(el, []);
-    devMap.get(el).push({ el: pel, pos: error });
+    if (dev) {
+        const error = new Error();
+        if (!devMap.get(el)) devMap.set(el, []);
+        devMap.get(el).push({ el: pel, pos: error });
+    }
     return pel;
 }
 
-// todo only on dev
 const devMap: Map<HTMLElement, { pos: Error; el: el0 }[]> = new Map();
 
-// @ts-ignore
-window._dkhDEV = (el: HTMLElement) => {
-    for (const i of devMap.get(el)) {
-        console.log(i.pos);
-    }
-    return devMap.get(el).map((i) => i.el);
-};
+function initDev() {
+    dev = true;
+    // @ts-ignore
+    window._dkhDEV = (el: HTMLElement) => {
+        for (const i of devMap.get(el)) {
+            console.log(i.pos);
+        }
+        return devMap.get(el).map((i) => i.el);
+    };
+}
 
 type el<t extends HTMLElement> = ReturnType<typeof pack<t>>;
 

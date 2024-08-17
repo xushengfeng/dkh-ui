@@ -15,8 +15,11 @@ import {
     check,
     trackPoint,
     table,
+    initDev,
 } from "../src/main";
 pureStyle();
+
+initDev();
 
 setTranslate((s) => (s[0] || "").toUpperCase() + s.slice(1));
 
@@ -36,11 +39,13 @@ document.body.append(v.el);
 document.body.append(
     input("hi").on("input", (_e, cel) => {
         t.sv(cel.el.value);
-    }).el
+    }).el,
 );
 
 function myComnent() {
-    const Input = input("number").attr({ readOnly: true }).data({ "data-a": "1", b: "2" });
+    const Input = input("number")
+        .attr({ readOnly: true })
+        .data({ "data-a": "1", b: "2" });
     const add = button(txt("+"));
     const down = button(txt("-"));
 
@@ -75,7 +80,7 @@ document.body.append(c.el);
 document.body.append(
     input("x").on("input", (_, el) => {
         c.sv(el.gv());
-    }).el
+    }).el,
 );
 
 const f = frame("a", {
@@ -89,7 +94,9 @@ const f = frame("a", {
 console.log(f.src);
 
 f.els.xx.sv("123456");
-f.els.v.style({ display: "flex", "flex-direction": "column" }).style({ "--color": "#ff0" });
+f.els.v
+    .style({ display: "flex", "flex-direction": "column" })
+    .style({ "--color": "#ff0" });
 document.body.append(f.el.el);
 
 setProperties({ "--main-color": "#0f0", "--font-size": "20px" });
@@ -98,7 +105,11 @@ const radioG = radioGroup<"web" | "swift" | "flutter">("buttons");
 
 const buttons = view("x");
 
-buttons.add([radioG.new("web", txt("web")), radioG.new("swift", txt("swift")), radioG.new("flutter", txt("flutter"))]);
+buttons.add([
+    radioG.new("web"),
+    radioG.new("swift", txt("swift"), true),
+    radioG.new("flutter", txt("flutter")),
+]);
 
 window["setRadio"] = radioG.set;
 
@@ -112,7 +123,12 @@ const ch = check("sw", [txt("hi"), txt("bye")]).on("change", (_, el) => {
 
 document.body.append(ch.el);
 
-const pointEl = view().style({ width: "32px", height: "32px", background: "#0002", position: "relative" });
+const pointEl = view().style({
+    width: "32px",
+    height: "32px",
+    background: "#0002",
+    position: "relative",
+});
 document.body.append(pointEl.el);
 trackPoint(pointEl, {
     start: (e) => {
@@ -144,6 +160,6 @@ document.body.append(
             ["1", "2", "3"],
             ["4", "5", "6"],
         ],
-        { row: true, col: true }
-    ).el
+        { row: true, col: true },
+    ).el,
 );
