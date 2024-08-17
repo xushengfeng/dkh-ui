@@ -632,33 +632,49 @@ function setProperties(
     }
 }
 
-function trackPoint(
+function trackPoint<Data, Data2>(
     el: el0,
     op: {
-        start?: (e: PointerEvent) => { x: number; y: number; zoom?: number };
+        start?: (e: PointerEvent) => {
+            x: number;
+            y: number;
+            zoom?: number;
+            data?: Data;
+        };
         ing: (
             point: { x: number; y: number; zoom?: number },
             center: { x: number; y: number },
             e: PointerEvent,
-        ) => void;
+            data: Data,
+        ) => Data2;
         all?: (e: PointerEvent) => void;
-        end?: (moved: boolean, e: PointerEvent) => void;
+        end?: (moved: boolean, e: PointerEvent, data: Data2) => void;
     },
 ) {
     // todo zoom
     let start: { x: number; y: number };
     let moved = false;
     let abPoint = { x: 0, y: 0 };
+    let initData: unknown;
     el.on("pointerdown", (e) => {
         e.preventDefault();
-        start = op.start ? op.start(e) : { x: 0, y: 0 };
+        if (op.start) {
+            const s = op.start(e);
+            start = { x: s.x, y: s.y };
+            if (s.data) initData = s.data;
+        } else start = { x: 0, y: 0 };
         abPoint = { x: e.clientX, y: e.clientY };
     });
     function ing(e: PointerEvent) {
         const dx = e.clientX - abPoint.x;
         const dy = e.clientY - abPoint.y;
         const point = { x: dx + start.x, y: dy + start.y };
-        op.ing(point, { x: e.clientX, y: e.clientY }, e);
+        return op.ing(
+            point,
+            { x: e.clientX, y: e.clientY },
+            e,
+            initData as Data,
+        );
     }
     window.addEventListener("pointermove", (e) => {
         if (!start) {
@@ -672,8 +688,8 @@ function trackPoint(
     window.addEventListener("pointerup", (e) => {
         if (!start) return;
         e.preventDefault();
-        ing(e);
+        const endData = ing(e);
         start = null;
-        if (op.end) op.end(moved, e);
+        if (op.end) op.end(moved, e, endData);
     });
 }
