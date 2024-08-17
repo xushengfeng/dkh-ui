@@ -449,7 +449,7 @@ function image(src: string, name: string) {
     return ele("img").attr({ src: src, alt: t(name) });
 }
 
-function button(el?: el0 | el0[]) {
+function button(el?: el0 | el0[] | string) {
     return ele("button").add(el);
 }
 
