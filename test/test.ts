@@ -25,7 +25,9 @@ setTranslate((s) => (s[0] || "").toUpperCase() + s.slice(1));
 
 let i = 0;
 const t = txt("")
-    .bindSet((v: string, el, t) => (el.innerText = t("count: ") + v))
+    .bindSet((v: string, el, t) => {
+        el.innerText = t("count: ") + v;
+    })
     .sv(0)
     .style({ "font-size": "2rem", "user-select": "none" });
 const b = button(txt("+")).on("click", () => {
@@ -50,7 +52,7 @@ function myComnent() {
     const down = button(txt("-"));
 
     let n = 0;
-    Input.bindSet((v, el) => (el.value = v + "n")).sv(n);
+    Input.bindSet((v, el) => {(el.value = `${v}n`)}).sv(n);
     add.on("click", () => {
         n++;
         Input.sv(n);
@@ -71,7 +73,8 @@ function myComnent() {
 
 const c = myComnent();
 
-window["g"] = c.gv;
+// @ts-ignore
+window.g = c.gv;
 
 document.body.append(ele("hr").el);
 
@@ -111,7 +114,8 @@ buttons.add([
     radioG.new("flutter", txt("flutter")),
 ]);
 
-window["setRadio"] = radioG.set;
+// @ts-ignore
+window.setRadio = radioG.set;
 
 document.body.append(buttons.el);
 
@@ -138,7 +142,7 @@ trackPoint(pointEl, {
     },
     ing: (p, c, e) => {
         console.log(p);
-        pointEl.style({ left: p.x + "px" });
+        pointEl.style({ left: `${p.x}px` });
     },
 });
 
@@ -150,7 +154,7 @@ trackPoint(pointEl, {
     },
     ing: (p, c, e) => {
         console.log(p);
-        pointEl.style({ top: p.y + "px" });
+        pointEl.style({ top: `${p.y}px` });
     },
 });
 
