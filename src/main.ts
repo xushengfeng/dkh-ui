@@ -244,7 +244,35 @@ type NonFunctionKeys<T> = {
             : never;
 }[keyof T];
 
-type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
+type inputTypeType =
+    | "button"
+    | "checkbox"
+    | "color"
+    | "date"
+    | "datetime-local"
+    | "email"
+    | "file"
+    | "hidden"
+    | "image"
+    | "month"
+    | "number"
+    | "password"
+    | "radio"
+    | "range"
+    | "reset"
+    | "search"
+    | "submit"
+    | "tel"
+    | "text"
+    | "time"
+    | "url"
+    | "week";
+
+type getAttr<el extends HTMLElement> = el extends HTMLInputElement
+    ? Omit<{ [k in NonFunctionKeys<el>]?: el[k] }, "type"> & {
+          type?: inputTypeType;
+      }
+    : { [k in NonFunctionKeys<el>]?: el[k] };
 
 type generalEl = HTMLElement | { el: HTMLElement } | string | DocumentFragment;
 type addType = generalEl | generalEl[];
@@ -320,6 +348,7 @@ function pack<EL extends HTMLElement>(
         },
         attr: (attr) => {
             for (const i in attr) {
+                // @ts-ignore
                 el[i] = attr[i];
             }
             return p(el);
