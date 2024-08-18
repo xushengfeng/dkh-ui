@@ -245,6 +245,9 @@ type NonFunctionKeys<T> = {
 
 type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 
+type generalEl = HTMLElement | { el: HTMLElement } | string;
+type addType = generalEl | generalEl[];
+
 function pack<EL extends HTMLElement>(
     el: EL,
     setter: (v: unknown, el: NoInfer<EL>, trans: typeof t) => void = () => {},
@@ -301,15 +304,7 @@ function pack<EL extends HTMLElement>(
             }
             return p(el);
         },
-        add: (
-            els?:
-                | HTMLElement
-                | { el: HTMLElement }
-                | string
-                | (HTMLElement | { el: HTMLElement } | string)[],
-            firstRender?: number,
-            slice = 1,
-        ) => {
+        add: (els?: addType, firstRender?: number, slice = 1) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
             const list = listEl.map((el) => {
                 if (typeof el === "string")
@@ -431,8 +426,8 @@ function a(url: string, localNav?: boolean) {
     return na.attr({ target: "_blank" });
 }
 
-function view(stack?: "x" | "y", el?: el0 | el0[]) {
-    const div = ele("div").add(el);
+function view(stack?: "x" | "y") {
+    const div = ele("div");
     if (stack)
         div.style({
             display: "flex",
@@ -449,7 +444,7 @@ function image(src: string, name: string) {
     return ele("img").attr({ src: src, alt: t(name) });
 }
 
-function button(el?: el0 | el0[] | string) {
+function button(el?: addType) {
     return ele("button").add(el);
 }
 
@@ -529,7 +524,7 @@ function radioGroup<t extends string>(name: string) {
     const cb: (() => void)[] = [];
     let first = true;
     return {
-        new: (value: t, el?: el0, showInput?: boolean) => {
+        new: (value: t, el?: generalEl, showInput?: boolean) => {
             const p = ele("label")
                 .add(
                     ele("input")
@@ -579,15 +574,19 @@ function radioGroup<t extends string>(name: string) {
 }
 
 function table(
-    body: Array<Array<string | el0>>,
+    body: Array<Array<generalEl>>,
     head?: { col?: boolean; row?: boolean },
 ) {
-    function el(element: string | el0, type: "td" | "th") {
+    function el(element: generalEl, type: "td" | "th") {
         if (typeof element === "string") {
             return ele(type).attr({ innerText: element });
         }
-        if (element.el.tagName === type.toUpperCase()) {
-            return element as el<HTMLTableCellElement>;
+        if ("el" in element) {
+            if (element.el.tagName === type.toUpperCase()) {
+                return element as el<HTMLTableCellElement>;
+            }
+        } else if (element.tagName === type.toUpperCase()) {
+            return ele(type).add(element);
         }
         return ele(type).add(element);
     }

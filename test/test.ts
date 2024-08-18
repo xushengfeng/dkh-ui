@@ -34,7 +34,7 @@ const b = button(txt("+")).on("click", () => {
     i++;
     t.sv(i);
 });
-const v = view("x", [t, b]).style({ "align-items": "center" });
+const v = view("x").add([t, b]).style({ "align-items": "center" });
 
 document.body.append(v.el);
 
@@ -52,7 +52,9 @@ function myComnent() {
     const down = button(txt("-"));
 
     let n = 0;
-    Input.bindSet((v, el) => {(el.value = `${v}n`)}).sv(n);
+    Input.bindSet((v, el) => {
+        el.value = `${v}n`;
+    }).sv(n);
     add.on("click", () => {
         n++;
         Input.sv(n);
@@ -62,7 +64,8 @@ function myComnent() {
         Input.sv(n);
     });
 
-    return view("x", [Input, view("y", [add, down])])
+    return view("x")
+        .add([Input, view("y").add([add, down])])
         .bindSet((v) => {
             Input.sv(v);
         })
