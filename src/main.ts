@@ -24,6 +24,7 @@ export {
     button,
     check,
     select,
+    label,
     radioGroup,
     table,
     addStyle,
@@ -554,6 +555,10 @@ function select<t extends string>(v: { name?: string; value: t }[]) {
         .bindSet((v: t, el) => {
             el.value = v;
         });
+}
+
+function label(els: generalEl[]) {
+    return ele("label").add(els);
 }
 
 /** form radio, tab, buttons */
