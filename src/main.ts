@@ -245,7 +245,7 @@ type NonFunctionKeys<T> = {
 
 type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 
-type generalEl = HTMLElement | { el: HTMLElement } | string;
+type generalEl = HTMLElement | { el: HTMLElement } | string | DocumentFragment;
 type addType = generalEl | generalEl[];
 
 function pack<EL extends HTMLElement>(
@@ -584,13 +584,22 @@ function table(
         if (typeof element === "string") {
             return ele(type).attr({ innerText: element });
         }
+        const tagName = type.toUpperCase();
         if ("el" in element) {
-            if (element.el.tagName === type.toUpperCase()) {
+            if (element.el.tagName === tagName)
                 return element as el<HTMLTableCellElement>;
-            }
-        } else if (element.tagName === type.toUpperCase()) {
-            return ele(type).add(element);
+        } else if ("tagName" in element) {
+            if (element.tagName === tagName)
+                return pack(element) as el<HTMLTableCellElement>;
+        } else if (
+            element.childElementCount === 1 &&
+            element.children[0].tagName === tagName
+        ) {
+            return pack(
+                element.children[0] as HTMLElement,
+            ) as el<HTMLTableCellElement>;
         }
+
         return ele(type).add(element);
     }
     // todo span
