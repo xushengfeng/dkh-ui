@@ -248,6 +248,32 @@ type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 type generalEl = HTMLElement | { el: HTMLElement } | string | DocumentFragment;
 type addType = generalEl | generalEl[];
 
+type p<EL extends HTMLElement> = {
+    // todo 可选泛型参数以支持链式sv gv
+    el: EL;
+    style: (css: csshyphen) => p<EL>;
+    on: <key extends keyof HTMLElementEventMap>(
+        e: key,
+        cb: (event: HTMLElementEventMap[key], cel: p<EL>) => void,
+        op?: AddEventListenerOptions,
+    ) => p<EL>;
+    class: (...classes: string[]) => p<EL>;
+    attr: (attr: getAttr<EL>) => p<EL>;
+    data: (data: { [key: string]: string }) => p<EL>;
+    add: (els?: addType, firstRender?: number, slice?: number) => p<EL>;
+    clear: () => void;
+    remove: () => void;
+    query: (q: string) => p<HTMLElement>;
+    queryAll: (q: string) => p<HTMLElement>[];
+    bindSet: <SV>(
+        f: (v: SV, el: EL, trans: typeof t) => void,
+    ) => Omit<p<EL>, "sv"> & { sv: (v: SV) => p<EL> };
+    bindGet: <GV>(f: (el: EL) => GV) => Omit<p<EL>, "gv"> & { gv: () => GV };
+    sv: (v?) => p<EL>;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    gv: () => any;
+};
+
 function pack<EL extends HTMLElement>(
     el: EL,
     setter: (v: unknown, el: NoInfer<EL>, trans: typeof t) => void = () => {},
@@ -257,9 +283,9 @@ function pack<EL extends HTMLElement>(
         return pack(el, setter, getter);
     }
 
-    const pel = {
+    const pel: p<EL> = {
         el,
-        style: (css: csshyphen) => {
+        style: (css) => {
             for (const i in css) {
                 if (i.startsWith("--")) {
                     el.style.setProperty(i, css[i]);
@@ -287,24 +313,24 @@ function pack<EL extends HTMLElement>(
             el.addEventListener(e, (ev) => cb(ev, p(el)), op);
             return p(el);
         },
-        class: (...classes: string[]) => {
+        class: (...classes) => {
             el.classList.add(...classes);
             return p(el);
         },
-        attr: (attr: getAttr<EL>) => {
+        attr: (attr) => {
             for (const i in attr) {
                 el[i] = attr[i];
             }
             return p(el);
         },
-        data: (data: { [key: string]: string }) => {
+        data: (data) => {
             for (const i in data) {
                 const name = !i.startsWith("data-") ? `data-${i}` : i;
                 el.setAttribute(name, data[i]);
             }
             return p(el);
         },
-        add: (els?: addType, firstRender?: number, slice = 1) => {
+        add: (els, firstRender, slice = 1) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
             const list = listEl.map((el) => {
                 if (typeof el === "string")
@@ -348,17 +374,16 @@ function pack<EL extends HTMLElement>(
         remove: () => {
             el.remove();
         },
-        query: (q: string) => pack(el.querySelector(q) as HTMLElement),
-        queryAll: (q: string) =>
+        query: (q) => pack(el.querySelector(q) as HTMLElement),
+        queryAll: (q) =>
             Array.from(el.querySelectorAll(q)).map((i: HTMLElement) => pack(i)),
-        // biome-ignore lint: any input
-        bindSet: (f: (v: any, el: EL, trans: typeof t) => void) => {
+        bindSet: (f: (v, el: EL, trans: typeof t) => void) => {
             return pack(el, f, getter);
         },
         bindGet: (f: (el: EL) => unknown) => {
             return pack(el, setter, f);
         },
-        sv: (v?: unknown) => {
+        sv: (v?) => {
             setter(v, el, t);
             return p(el);
         },
@@ -415,7 +440,7 @@ function elFromId<EL extends HTMLElement>(id: string) {
 
 function txt(text: string, noI18n?: boolean) {
     return ele("span")
-        .bindSet((v, el) => {
+        .bindSet((v: string, el) => {
             el.innerText = noI18n ? v : t(v);
         })
         .sv(text);
@@ -423,7 +448,7 @@ function txt(text: string, noI18n?: boolean) {
 
 function p(text: string, noI18n?: boolean) {
     return ele("p")
-        .bindSet((v, el) => {
+        .bindSet((v: string, el) => {
             el.innerText = noI18n ? v : t(v);
         })
         .sv(text);
@@ -524,7 +549,7 @@ function select(v: { name?: string; value: string }[]) {
             ),
         )
         .bindGet((el) => el.value)
-        .bindSet((v, el) => {
+        .bindSet((v: string, el) => {
             el.value = v;
         });
 }
