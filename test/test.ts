@@ -25,7 +25,7 @@ setTranslate((s) => (s[0] || "").toUpperCase() + s.slice(1));
 
 let i = 0;
 const t = txt("")
-    .bindSet((v: string, el, t) => {
+    .bindSet((v: number | string, el, t) => {
         el.innerText = t("count: ") + v;
     })
     .sv(0)
@@ -57,16 +57,16 @@ function myComnent() {
     }).sv(n);
     add.on("click", () => {
         n++;
-        Input.sv(n);
+        Input.sv(n.toString());
     });
     down.on("click", () => {
         n--;
-        Input.sv(n);
+        Input.sv(n.toString());
     });
 
     return view("x")
         .add([Input, view("y").add([add, down])])
-        .bindSet((v) => {
+        .bindSet((v: string) => {
             Input.sv(v);
         })
         .bindGet(() => {

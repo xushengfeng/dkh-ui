@@ -248,30 +248,30 @@ type getAttr<el extends HTMLElement> = { [k in NonFunctionKeys<el>]?: el[k] };
 type generalEl = HTMLElement | { el: HTMLElement } | string | DocumentFragment;
 type addType = generalEl | generalEl[];
 
-type p<EL extends HTMLElement> = {
-    // todo 可选泛型参数以支持链式sv gv
+type dkhEL<EL extends HTMLElement, Value> = {
     el: EL;
-    style: (css: csshyphen) => p<EL>;
+    style: (css: csshyphen) => dkhEL<EL, Value>;
     on: <key extends keyof HTMLElementEventMap>(
         e: key,
-        cb: (event: HTMLElementEventMap[key], cel: p<EL>) => void,
+        cb: (event: HTMLElementEventMap[key], cel: dkhEL<EL, Value>) => void,
         op?: AddEventListenerOptions,
-    ) => p<EL>;
-    class: (...classes: string[]) => p<EL>;
-    attr: (attr: getAttr<EL>) => p<EL>;
-    data: (data: { [key: string]: string }) => p<EL>;
-    add: (els?: addType, firstRender?: number, slice?: number) => p<EL>;
+    ) => dkhEL<EL, Value>;
+    class: (...classes: string[]) => dkhEL<EL, Value>;
+    attr: (attr: getAttr<EL>) => dkhEL<EL, Value>;
+    data: (data: { [key: string]: string }) => dkhEL<EL, Value>;
+    add: (
+        els?: addType,
+        firstRender?: number,
+        slice?: number,
+    ) => dkhEL<EL, Value>;
     clear: () => void;
     remove: () => void;
-    query: (q: string) => p<HTMLElement>;
-    queryAll: (q: string) => p<HTMLElement>[];
-    bindSet: <SV>(
-        f: (v: SV, el: EL, trans: typeof t) => void,
-    ) => Omit<p<EL>, "sv"> & { sv: (v: SV) => p<EL> };
-    bindGet: <GV>(f: (el: EL) => GV) => Omit<p<EL>, "gv"> & { gv: () => GV };
-    sv: (v?) => p<EL>;
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    gv: () => any;
+    query: (q: string) => dkhEL<HTMLElement, unknown>;
+    queryAll: (q: string) => dkhEL<HTMLElement, unknown>[];
+    bindSet: <SV>(f: (v: SV, el: EL, trans: typeof t) => void) => dkhEL<EL, SV>;
+    bindGet: <GV>(f: (el: EL) => GV) => dkhEL<EL, GV>;
+    sv: (v?: NoInfer<Value>) => dkhEL<EL, Value>;
+    gv: () => NoInfer<Value>;
 };
 
 function pack<EL extends HTMLElement>(
@@ -283,7 +283,7 @@ function pack<EL extends HTMLElement>(
         return pack(el, setter, getter);
     }
 
-    const pel: p<EL> = {
+    const pel: dkhEL<EL, unknown> = {
         el,
         style: (css) => {
             for (const i in css) {
@@ -377,9 +377,11 @@ function pack<EL extends HTMLElement>(
         query: (q) => pack(el.querySelector(q) as HTMLElement),
         queryAll: (q) =>
             Array.from(el.querySelectorAll(q)).map((i: HTMLElement) => pack(i)),
+        // @ts-ignore
         bindSet: (f: (v, el: EL, trans: typeof t) => void) => {
             return pack(el, f, getter);
         },
+        // @ts-ignore
         bindGet: (f: (el: EL) => unknown) => {
             return pack(el, setter, f);
         },
