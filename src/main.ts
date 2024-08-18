@@ -345,6 +345,9 @@ function pack<EL extends HTMLElement>(
             el.innerHTML = "";
             return p(el);
         },
+        query: (q: string) => pack(el.querySelector(q) as HTMLElement),
+        queryAll: (q: string) =>
+            Array.from(el.querySelectorAll(q)).map((i: HTMLElement) => pack(i)),
         // biome-ignore lint: any input
         bindSet: (f: (v: any, el: EL, trans: typeof t) => void) => {
             return pack(el, f, getter);
