@@ -365,22 +365,27 @@ function pack<EL extends HTMLElement>(
     };
     if (dev) {
         const error = new Error();
-        if (!devMap.get(el)) devMap.set(el, []);
-        devMap.get(el).push({ el: pel, pos: error });
+        // @ts-ignore
+        if (!el._dkh) el._dkh = [];
+        // @ts-ignore
+        el._dkh.push({ el: pel, pos: error });
     }
     return pel;
 }
 
-const devMap: Map<HTMLElement, { pos: Error; el: el0 }[]> = new Map();
+type devData = { pos: Error; el: el0 }[];
 
 function initDev() {
     dev = true;
     // @ts-ignore
     window._dkhDEV = (el: HTMLElement) => {
-        for (const i of devMap.get(el)) {
+        // @ts-ignore
+        const data: devData = el._dkh;
+        if (!data) return null;
+        for (const i of data) {
             console.log(i.pos);
         }
-        return devMap.get(el).map((i) => i.el);
+        return data.map((i) => i.el);
     };
 }
 
