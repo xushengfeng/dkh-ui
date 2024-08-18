@@ -538,7 +538,7 @@ function check(name: string, els?: [el0, el0]) {
     return v;
 }
 
-function select(v: { name?: string; value: string }[]) {
+function select<t extends string>(v: { name?: string; value: t }[]) {
     return ele("select")
         .add(
             v.map((i) =>
@@ -548,8 +548,8 @@ function select(v: { name?: string; value: string }[]) {
                 }),
             ),
         )
-        .bindGet((el) => el.value)
-        .bindSet((v: string, el) => {
+        .bindGet((el) => el.value as t)
+        .bindSet((v: t, el) => {
             el.value = v;
         });
 }
