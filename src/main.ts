@@ -308,6 +308,7 @@ function pack<EL extends HTMLElement>(
     setter: (v: unknown, el: NoInfer<EL>, trans: typeof t) => void = () => {},
     getter: (el: NoInfer<EL>) => unknown = () => {},
 ) {
+    if (!el) return null;
     function p(el: EL) {
         return pack(el, setter, getter);
     }
