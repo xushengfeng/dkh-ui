@@ -300,7 +300,7 @@ type dkhEL<EL extends HTMLElement, Value> = {
     bindSet: <SV>(f: (v: SV, el: EL, trans: typeof t) => void) => dkhEL<EL, SV>;
     bindGet: <GV>(f: (el: EL) => GV) => dkhEL<EL, GV>;
     sv: (v?: NoInfer<Value>) => dkhEL<EL, Value>;
-    gv: () => NoInfer<Value>;
+    gv: NoInfer<Value>;
 };
 
 function pack<EL extends HTMLElement>(
@@ -420,18 +420,26 @@ function pack<EL extends HTMLElement>(
             setter(v, el, t);
             return p(el);
         },
-        gv: () => {
-            return getter(el);
-        },
+        gv: null,
     };
+    const pro = new Proxy(pel, {
+        set(_, prop, v) {
+            if (prop === "gv") setter(v, el, t);
+            return true;
+        },
+        get(target, p) {
+            if (p === "gv") return getter(el);
+            return target[p];
+        },
+    });
     if (dev) {
         const error = new Error();
         // @ts-ignore
         if (!el._dkh) el._dkh = [];
         // @ts-ignore
-        el._dkh.push({ el: pel, pos: error });
+        el._dkh.push({ el: pro, pos: error });
     }
-    return pel;
+    return pro;
 }
 
 type devData = { pos: Error; el: el0 }[];
@@ -564,7 +572,7 @@ function check(name: string, els?: [el0, el0]) {
         })
         .bindGet(() => value)
         .on("click", () => {
-            v.sv(!v.gv());
+            v.sv(!v.gv);
             v.el.dispatchEvent(new Event("input"));
             v.el.dispatchEvent(new Event("change"));
         });

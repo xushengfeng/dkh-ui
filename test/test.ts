@@ -70,7 +70,7 @@ function myComnent() {
             Input.sv(v);
         })
         .bindGet(() => {
-            return Input.gv();
+            return Input.gv;
         });
 }
 
@@ -85,7 +85,7 @@ document.body.append(c.el);
 
 document.body.append(
     input("x").on("input", (_, el) => {
-        c.sv(el.gv());
+        c.sv(el.gv);
     }).el,
 );
 
@@ -125,7 +125,7 @@ document.body.append(buttons.el);
 radioG.on(() => console.log(radioG.get()));
 
 const ch = check("sw", [txt("hi"), txt("bye")]).on("change", (_, el) => {
-    console.log(el.gv());
+    console.log(el.gv);
 });
 
 document.body.append(ch.el);
