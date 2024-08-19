@@ -293,7 +293,7 @@ type dkhEL<EL extends HTMLElement, Value> = {
         firstRender?: number,
         slice?: number,
     ) => dkhEL<EL, Value>;
-    clear: () => void;
+    clear: () => dkhEL<EL, Value>;
     remove: () => void;
     query: (q: string) => dkhEL<HTMLElement, unknown>;
     queryAll: (q: string) => dkhEL<HTMLElement, unknown>[];
