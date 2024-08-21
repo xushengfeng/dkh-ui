@@ -479,7 +479,7 @@ function elFromId<EL extends HTMLElement>(id: string) {
     return pack<EL>(el as EL);
 }
 
-function txt(text: string, noI18n?: boolean) {
+function txt(text = "", noI18n?: boolean) {
     return ele("span")
         .bindSet((v: string, el) => {
             el.innerText = noI18n ? v : t(v);
@@ -487,7 +487,7 @@ function txt(text: string, noI18n?: boolean) {
         .sv(text);
 }
 
-function p(text: string, noI18n?: boolean) {
+function p(text = "", noI18n?: boolean) {
     return ele("p")
         .bindSet((v: string, el) => {
             el.innerText = noI18n ? v : t(v);
@@ -525,18 +525,18 @@ function button(el?: addType) {
     return ele("button").add(el);
 }
 
-function input(name: string) {
+function input(type: inputTypeType = "text") {
     return ele("input")
-        .attr({ name: t(name), type: "text" })
+        .attr({ type })
         .bindSet((v: string, el) => {
             el.value = v;
         })
         .bindGet((el) => el.value);
 }
 
-function textarea(name: string) {
+function textarea(placeholder?: string) {
     return ele("textarea")
-        .attr({ name: t(name) })
+        .attr({ placeholder })
         .bindSet((v: string, el) => {
             el.value = v;
         })
