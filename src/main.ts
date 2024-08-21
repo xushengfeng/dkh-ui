@@ -344,7 +344,7 @@ function pack<EL extends HTMLElement>(
             return p(el);
         },
         class: (...classes) => {
-            el.classList.add(...classes);
+            el.classList.add(...classes.filter(Boolean));
             return p(el);
         },
         attr: (attr) => {
