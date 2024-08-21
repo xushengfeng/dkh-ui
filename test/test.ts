@@ -39,7 +39,7 @@ const v = view("x").add([t, b]).style({ "align-items": "center" });
 document.body.append(v.el);
 
 document.body.append(
-    input("hi").on("input", (_e, cel) => {
+    input().on("input", (_e, cel) => {
         t.sv(cel.el.value);
     }).el,
 );
@@ -84,7 +84,7 @@ document.body.append(ele("hr").el);
 document.body.append(c.el);
 
 document.body.append(
-    input("x").on("input", (_, el) => {
+    input().on("input", (_, el) => {
         c.sv(el.gv);
     }).el,
 );
@@ -93,7 +93,7 @@ const f = frame("a", {
     _: view(),
     t: txt("hi"),
     b: p("p2"),
-    v: { _: view(), xx: input("a"), bu: button(txt("ok")) },
+    v: { _: view(), xx: input(), bu: button(txt("ok")) },
     e: p("end"),
 });
 
