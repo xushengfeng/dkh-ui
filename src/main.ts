@@ -6,6 +6,11 @@ import type { frameType } from "./frame";
 
 type csshyphen = CSS.PropertiesHyphen & { [key: `--${string}`]: string };
 
+import type {
+    ParseSelector,
+    StrictlyParseSelector, // or use the strict parser
+} from "typed-query-selector/parser";
+
 export {
     setTranslate,
     pureStyle,
@@ -295,8 +300,12 @@ type dkhEL<EL extends HTMLElement, Value> = {
     ) => dkhEL<EL, Value>;
     clear: () => dkhEL<EL, Value>;
     remove: () => void;
-    query: (q: string) => dkhEL<HTMLElement, unknown>;
-    queryAll: (q: string) => dkhEL<HTMLElement, unknown>[];
+    query: <selector extends string>(
+        q: selector,
+    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown>;
+    queryAll: <selector extends string>(
+        q: selector,
+    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown>[];
     bindSet: <SV>(f: (v: SV, el: EL, trans: typeof t) => void) => dkhEL<EL, SV>;
     bindGet: <GV>(f: (el: EL) => GV) => dkhEL<EL, GV>;
     sv: (v?: NoInfer<Value>) => dkhEL<EL, Value>;
@@ -405,9 +414,12 @@ function pack<EL extends HTMLElement>(
         remove: () => {
             el.remove();
         },
-        query: (q) => pack(el.querySelector(q) as HTMLElement),
-        queryAll: (q) =>
-            Array.from(el.querySelectorAll(q)).map((i: HTMLElement) => pack(i)),
+        query: <s extends string>(q: s) =>
+            pack(el.querySelector(q) as ParseSelector<s, HTMLElement>),
+        queryAll: <s extends string>(q: s) =>
+            Array.from(el.querySelectorAll(q)).map(
+                (i: ParseSelector<s, HTMLElement>) => pack(i),
+            ),
         // @ts-ignore
         bindSet: (f: (v, el: EL, trans: typeof t) => void) => {
             return pack(el, f, getter);
