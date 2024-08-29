@@ -546,9 +546,9 @@ function input(type: inputTypeType = "text") {
         .bindGet((el) => el.value);
 }
 
-function textarea(placeholder?: string) {
+function textarea(placeholder = "") {
     return ele("textarea")
-        .attr({ placeholder })
+        .attr(placeholder ? { placeholder } : {})
         .bindSet((v: string, el) => {
             el.value = v;
         })
