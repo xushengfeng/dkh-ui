@@ -279,7 +279,12 @@ type getAttr<el extends HTMLElement> = el extends HTMLInputElement
       }
     : { [k in NonFunctionKeys<el>]?: el[k] };
 
-type generalEl = HTMLElement | { el: HTMLElement } | string | DocumentFragment;
+type generalEl =
+    | HTMLElement
+    | { el: HTMLElement }
+    | el0
+    | string
+    | DocumentFragment;
 type addType = generalEl | generalEl[];
 
 type dkhEL<EL extends HTMLElement, Value> = {
@@ -607,8 +612,20 @@ function select<t extends string>(v: { name?: string; value: t }[]) {
         });
 }
 
-function label(els: generalEl[]) {
-    return ele("label").add(els);
+function label<xel extends el0>(els: [xel, ...generalEl[]], insertIndex = 0) {
+    const el = els[0];
+    const nels = els
+        .slice(1, insertIndex + 1)
+        .concat(el)
+        .concat(els.slice(insertIndex + 1));
+    return ele("label")
+        .add(nels)
+        .bindGet(() => {
+            return el.gv;
+        })
+        .bindSet((v: xel["gv"]) => {
+            el.sv(v);
+        });
 }
 
 /** form radio, tab, buttons */
