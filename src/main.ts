@@ -534,8 +534,8 @@ function spacer() {
     return ele("div").style({ "flex-grow": "1" });
 }
 
-function image(src: string, name: string) {
-    return ele("img").attr({ src: src, alt: t(name) });
+function image(src: string, name: string, noI18n?: boolean) {
+    return ele("img").attr({ src: src, alt: noI18n ? name : t(name) });
 }
 
 function button(el?: addType) {
@@ -561,7 +561,7 @@ function textarea(placeholder = "") {
 }
 
 function check(name: string, els?: [el0, el0]) {
-    const newName = t(name);
+    const newName = name;
     if (!els) {
         const input = ele("input")
             .attr({ name: newName, type: "checkbox" })
@@ -630,7 +630,7 @@ function label<xel extends el0>(els: [xel, ...generalEl[]], insertIndex = 0) {
 
 /** form radio, tab, buttons */
 function radioGroup<t extends string>(name: string) {
-    const newName = t(name);
+    const newName = name;
     const cb: (() => void)[] = [];
     let first = true;
     return {
