@@ -814,5 +814,6 @@ function trackPoint<Data, Data2>(
         const endData = ing(e);
         start = null;
         if (op.end) op.end(moved, e, endData);
+        moved = false;
     });
 }
