@@ -753,12 +753,16 @@ function setProperties(
 function trackPoint<Data, Data2>(
     el: el0,
     op: {
-        start?: (e: PointerEvent) => {
-            x: number;
-            y: number;
-            zoom?: number;
-            data?: Data;
-        };
+        start?: (e: PointerEvent) =>
+            | {
+                  x: number;
+                  y: number;
+                  zoom?: number;
+                  data?: Data;
+              }
+            | null
+            | undefined
+            | false;
         ing: (
             point: { x: number; y: number; zoom?: number },
             center: { x: number; y: number },
@@ -778,6 +782,7 @@ function trackPoint<Data, Data2>(
         e.preventDefault();
         if (op.start) {
             const s = op.start(e);
+            if (!s) return;
             start = { x: s.x, y: s.y };
             if (s.data) initData = s.data;
         } else start = { x: 0, y: 0 };
