@@ -784,7 +784,7 @@ function trackPoint<Data, Data2>(
             const s = op.start(e);
             if (!s) return;
             start = { x: s.x, y: s.y };
-            if (s.data) initData = s.data;
+            initData = s.data;
         } else start = { x: 0, y: 0 };
         abPoint = { x: e.clientX, y: e.clientY };
     });
