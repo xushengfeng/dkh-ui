@@ -750,34 +750,43 @@ function setProperties(
     }
 }
 
+type Point = { x: number; y: number };
+
 function trackPoint<Data, Data2>(
     el: el0,
     op: {
         start?: (e: PointerEvent) =>
-            | {
-                  x: number;
-                  y: number;
+            | (Point & {
                   zoom?: number;
                   data?: Data;
-              }
+              })
             | null
             | undefined
             | false;
         ing: (
-            point: { x: number; y: number; zoom?: number },
-            center: { x: number; y: number },
+            point: Point & { zoom?: number },
+            center: Point,
             e: PointerEvent,
             data: Data,
+            v: ReturnType<typeof speed>,
         ) => Data2;
         all?: (e: PointerEvent) => void;
-        end?: (moved: boolean, e: PointerEvent, data: Data2) => void;
+        end?: (
+            moved: boolean,
+            e: PointerEvent,
+            data: Data2,
+            v: ReturnType<typeof speed>,
+        ) => void;
     },
 ) {
     // todo zoom
-    let start: { x: number; y: number };
+    let start: Point;
     let moved = false;
     let abPoint = { x: 0, y: 0 };
     let initData: unknown;
+
+    const history: (Point & { t: number })[] = [];
+
     el.on("pointerdown", (e) => {
         e.preventDefault();
         if (op.start) {
@@ -787,16 +796,20 @@ function trackPoint<Data, Data2>(
             initData = s.data;
         } else start = { x: 0, y: 0 };
         abPoint = { x: e.clientX, y: e.clientY };
+        history.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
     });
     function ing(e: PointerEvent) {
         const dx = e.clientX - abPoint.x;
         const dy = e.clientY - abPoint.y;
         const point = { x: dx + start.x, y: dy + start.y };
+        const v = speed(history);
+        history.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
         return op.ing(
             point,
             { x: e.clientX, y: e.clientY },
             e,
             initData as Data,
+            v,
         );
     }
     window.addEventListener("pointermove", (e) => {
@@ -813,7 +826,24 @@ function trackPoint<Data, Data2>(
         e.preventDefault();
         const endData = ing(e);
         start = null;
-        if (op.end) op.end(moved, e, endData);
+        if (op.end) op.end(moved, e, endData, speed(history));
         moved = false;
     });
+}
+
+function speed(history: (Point & { t: number })[]): { v: number } & Point {
+    const t = 100;
+    if (history.length < 2) return { v: 0, x: 0, y: 0 };
+    const last = history.at(-1);
+    let first = history.at(0);
+    for (let i = history.length - 1; i >= 0; i--) {
+        first = history[i];
+        if (history[i].t < last.t - t) break;
+    }
+    const dt = last.t - first.t;
+    if (dt === 0) return { v: 0, x: 0, y: 0 };
+    const dx = last.x - first.x;
+    const dy = last.y - first.y;
+    const v = Math.sqrt(dx * dx + dy * dy) / dt;
+    return { v, x: dx / dt, y: dy / dt };
 }
