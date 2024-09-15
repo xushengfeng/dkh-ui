@@ -377,7 +377,7 @@ function pack<EL extends HTMLElement>(
         },
         add: (els, firstRender, slice = 1) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
-            const list = listEl.map((el) => {
+            const list = listEl.filter(Boolean).map((el) => {
                 if (typeof el === "string")
                     return document.createTextNode(t(el));
                 if ("el" in el) return el.el;
