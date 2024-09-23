@@ -777,17 +777,22 @@ function trackPoint<Data, Data2>(
             | false;
         ing: (
             point: Point & { zoom?: number },
-            center: Point,
             e: PointerEvent,
-            data: Data,
-            v: ReturnType<typeof speed>,
+            more: {
+                center: Point;
+                startData: Data;
+                v: ReturnType<typeof speed>;
+            },
         ) => Data2;
         all?: (e: PointerEvent) => void;
         end?: (
-            moved: boolean,
             e: PointerEvent,
-            data: Data2,
-            v: ReturnType<typeof speed>,
+            more: {
+                moved: boolean;
+                startData: Data;
+                ingData: Data2;
+                v: ReturnType<typeof speed>;
+            },
         ) => void;
     },
 ) {
@@ -816,13 +821,11 @@ function trackPoint<Data, Data2>(
         const point = { x: dx + start.x, y: dy + start.y };
         const v = speed(history);
         history.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
-        return op.ing(
-            point,
-            { x: e.clientX, y: e.clientY },
-            e,
-            initData as Data,
+        return op.ing(point, e, {
+            center: { x: e.clientX, y: e.clientY },
+            startData: initData as Data,
             v,
-        );
+        });
     }
     window.addEventListener("pointermove", (e) => {
         if (!start) {
@@ -838,7 +841,13 @@ function trackPoint<Data, Data2>(
         e.preventDefault();
         const endData = ing(e);
         start = null;
-        if (op.end) op.end(moved, e, endData, speed(history));
+        if (op.end)
+            op.end(e, {
+                moved,
+                startData: initData as Data,
+                ingData: endData,
+                v: speed(history),
+            });
         moved = false;
     });
 }
