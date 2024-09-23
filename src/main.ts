@@ -520,12 +520,13 @@ function a(url: string, localNav?: boolean) {
     return na.attr({ target: "_blank" });
 }
 
-function view(stack?: "x" | "y") {
+function view(stack?: "x" | "y", wrap?: "wrap") {
     const div = ele("div");
     if (stack)
         div.style({
             display: "flex",
             "flex-direction": stack === "x" ? "row" : "column",
+            "flex-wrap": wrap ?? "nowrap",
         });
     return div;
 }
