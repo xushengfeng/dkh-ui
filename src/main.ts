@@ -18,6 +18,7 @@ export {
     pack,
     ele,
     elFromId,
+    noI18n,
     txt,
     p,
     a,
@@ -42,10 +43,12 @@ export {
 
 let dev = false;
 
-let t = (s: string) => s;
+type Text = string | PureText;
 
-function setTranslate(f: typeof t) {
-    t = f;
+let t = (s: Text) => (s instanceof PureText ? s.text : s);
+
+function setTranslate(f: (s: string) => string) {
+    t = (s) => (s instanceof PureText ? s.text : f(s));
 }
 
 function pureStyle() {
@@ -283,7 +286,7 @@ type generalEl =
     | HTMLElement
     | { el: HTMLElement }
     | el0
-    | string
+    | Text
     | DocumentFragment;
 type addType = generalEl | generalEl[];
 
@@ -378,7 +381,7 @@ function pack<EL extends HTMLElement>(
         add: (els, firstRender, slice = 1) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
             const list = listEl.filter(Boolean).map((el) => {
-                if (typeof el === "string")
+                if (typeof el === "string" || el instanceof PureText)
                     return document.createTextNode(t(el));
                 if ("el" in el) return el.el;
                 return el;
@@ -496,18 +499,26 @@ function elFromId<EL extends HTMLElement>(id: string) {
     return pack<EL>(el as EL);
 }
 
-function txt(text = "", noI18n?: boolean) {
+class PureText {
+    constructor(public text: string) {}
+}
+
+function noI18n(text: string) {
+    return new PureText(text);
+}
+
+function txt(text: Text = "", noI18n?: boolean) {
     return ele("span")
-        .bindSet((v: string, el) => {
-            el.innerText = noI18n ? v : t(v);
+        .bindSet((v: Text, el) => {
+            el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
         })
         .sv(text);
 }
 
-function p(text = "", noI18n?: boolean) {
+function p(text: Text = "", noI18n?: boolean) {
     return ele("p")
-        .bindSet((v: string, el) => {
-            el.innerText = noI18n ? v : t(v);
+        .bindSet((v: Text, el) => {
+            el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
         })
         .sv(text);
 }
@@ -535,8 +546,8 @@ function spacer() {
     return ele("div").style({ "flex-grow": "1" });
 }
 
-function image(src: string, name: string, noI18n?: boolean) {
-    return ele("img").attr({ src: src, alt: noI18n ? name : t(name) });
+function image(src: string, name: Text) {
+    return ele("img").attr({ src: src, alt: t(name) });
 }
 
 function button(el?: addType) {
@@ -554,7 +565,7 @@ function input(type: inputTypeType = "text") {
 
 function textarea(placeholder = "") {
     return ele("textarea")
-        .attr(placeholder ? { placeholder } : {})
+        .attr(placeholder ? { placeholder: t(placeholder) } : {})
         .bindSet((v: string, el) => {
             el.value = v;
         })
@@ -597,12 +608,12 @@ function check(name: string, els?: [el0, el0]) {
     return v;
 }
 
-function select<t extends string>(v: { name?: string; value: t }[]) {
+function select<t extends string>(v: { name?: Text; value: t }[]) {
     return ele("select")
         .add(
             v.map((i) =>
                 ele("option").attr({
-                    innerText: i.name ?? i.value,
+                    innerText: i.name ? t(i.name) : i.value,
                     value: i.value,
                 }),
             ),
@@ -689,8 +700,8 @@ function table(
     head?: { col?: boolean; row?: boolean },
 ) {
     function el(element: generalEl, type: "td" | "th") {
-        if (typeof element === "string") {
-            return ele(type).attr({ innerText: element });
+        if (typeof element === "string" || element instanceof PureText) {
+            return ele(type).attr({ innerText: t(element) });
         }
         const tagName = type.toUpperCase();
         if ("el" in element) {
