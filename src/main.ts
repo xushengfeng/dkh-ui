@@ -4,7 +4,8 @@ import type * as CSS from "csstype";
 
 import type { frameType } from "./frame";
 
-type csshyphen = CSS.PropertiesHyphen & { [key: `--${string}`]: string };
+type csshyphen = CSS.PropertiesHyphen &
+    CSS.Properties & { [key: `--${string}`]: string };
 
 import type {
     ParseSelector,
@@ -743,11 +744,15 @@ function addStyle(style: { [className: string]: csshyphen }) {
     for (const i in style) {
         css += `${i} {\n`;
         for (const x in style[i]) {
-            css += `  ${x}: ${style[i][x]};\n`;
+            css += `  ${css2css(x)}: ${style[i][x]};\n`;
         }
         css += "}";
     }
     document.body.append(ele("style").attr({ innerHTML: css }).el);
+}
+
+function css2css(css: string) {
+    return css.replaceAll(/([A-Z])/g, "-$1").toLowerCase();
 }
 
 function setProperty(name: string, v: string, el = document.documentElement) {
