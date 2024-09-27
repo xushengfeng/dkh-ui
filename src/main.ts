@@ -311,7 +311,7 @@ type dkhEL<EL extends HTMLElement, Value> = {
     remove: () => void;
     query: <selector extends string>(
         q: selector,
-    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown>;
+    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown> | null;
     queryAll: <selector extends string>(
         q: selector,
     ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown>[];
@@ -326,7 +326,6 @@ function pack<EL extends HTMLElement>(
     setter: (v: unknown, el: NoInfer<EL>, trans: typeof t) => void = () => {},
     getter: (el: NoInfer<EL>) => unknown = () => {},
 ) {
-    if (!el) return null;
     function p(el: EL) {
         return pack(el, setter, getter);
     }
@@ -334,9 +333,9 @@ function pack<EL extends HTMLElement>(
     const pel: dkhEL<EL, unknown> = {
         el,
         style: (css) => {
-            for (const i in css) {
+            for (const [i, x] of Object.entries(css)) {
                 if (i.startsWith("--")) {
-                    el.style.setProperty(i, css[i]);
+                    el.style.setProperty(i, x);
                 } else {
                     const n = i
                         .split("-")
@@ -345,7 +344,8 @@ function pack<EL extends HTMLElement>(
                             return v.slice(0, 1).toUpperCase() + v.slice(1);
                         })
                         .join("");
-                    el.style[n] = css[i];
+                    // @ts-ignore
+                    el.style[n] = x;
                 }
             }
             return p(el);
@@ -423,11 +423,14 @@ function pack<EL extends HTMLElement>(
         remove: () => {
             el.remove();
         },
-        query: <s extends string>(q: s) =>
-            pack(el.querySelector(q) as ParseSelector<s, HTMLElement>),
+        query: <s extends string>(q: s) => {
+            const qel = el.querySelector(q) as ParseSelector<s, HTMLElement>;
+            if (!qel) return null;
+            return pack(qel);
+        },
         queryAll: <s extends string>(q: s) =>
-            Array.from(el.querySelectorAll(q)).map(
-                (i: ParseSelector<s, HTMLElement>) => pack(i),
+            Array.from(el.querySelectorAll(q)).map((i) =>
+                pack(i as ParseSelector<s, HTMLElement>),
             ),
         // @ts-ignore
         bindSet: (f: (v, el: EL, trans: typeof t) => void) => {
@@ -441,26 +444,21 @@ function pack<EL extends HTMLElement>(
             setter(v, el, t);
             return p(el);
         },
-        gv: null,
+        get gv() {
+            return getter(el);
+        },
+        set gv(v) {
+            setter(v, el, t);
+        },
     };
-    const pro = new Proxy(pel, {
-        set(_, prop, v) {
-            if (prop === "gv") setter(v, el, t);
-            return true;
-        },
-        get(target, p) {
-            if (p === "gv") return getter(el);
-            return target[p];
-        },
-    });
     if (dev) {
         const error = new Error();
         // @ts-ignore
         if (!el._dkh) el._dkh = [];
         // @ts-ignore
-        el._dkh.push({ el: pro, pos: error });
+        el._dkh.push({ el: pel, pos: error });
     }
-    return pro;
+    return pel;
 }
 
 type devData = { pos: Error; el: el0 }[];
@@ -479,9 +477,10 @@ function initDev() {
     };
 }
 
-type el<t extends HTMLElement> = ReturnType<typeof pack<t>>;
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+type el<t extends HTMLElement> = dkhEL<t, any>;
 
-type el0 = ReturnType<typeof pack>;
+type el0 = el<HTMLElement>;
 
 function ele<K extends keyof HTMLElementTagNameMap>(
     tagName: K,
@@ -729,7 +728,7 @@ function table(
         for (let x = 0; x < body[y].length; x++) {
             const element = body[y][x];
             if (element) {
-                if ((head.row && x === 0) || (head.col && y === 0))
+                if ((head?.row && x === 0) || (head?.col && y === 0))
                     xels.push(el(element, "th"));
                 else xels.push(el(element, "td"));
             }
@@ -739,12 +738,12 @@ function table(
     return ele("table").add(yels);
 }
 
-function addStyle(style: { [className: string]: csshyphen }) {
+function addStyle(style: Record<string, csshyphen>) {
     let css = "";
-    for (const i in style) {
-        css += `${i} {\n`;
-        for (const x in style[i]) {
-            css += `  ${css2css(x)}: ${style[i][x]};\n`;
+    for (const [name, i] of Object.entries(style)) {
+        css += `${name} {\n`;
+        for (const [x, n] of Object.entries(i)) {
+            css += `  ${css2css(x)}: ${n};\n`;
         }
         css += "}";
     }
@@ -802,7 +801,7 @@ function trackPoint<Data, Data2>(
     },
 ) {
     // todo zoom
-    let start: Point;
+    let start: Point | null = null;
     let moved = false;
     let abPoint = { x: 0, y: 0 };
     let initData: unknown;
@@ -823,7 +822,7 @@ function trackPoint<Data, Data2>(
     function ing(e: PointerEvent) {
         const dx = e.clientX - abPoint.x;
         const dy = e.clientY - abPoint.y;
-        const point = { x: dx + start.x, y: dy + start.y };
+        const point = { x: dx + (start?.x ?? 0), y: dy + (start?.y ?? 0) };
         const v = speed(history);
         history.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
         return op.ing(point, e, {
@@ -860,8 +859,8 @@ function trackPoint<Data, Data2>(
 function speed(history: (Point & { t: number })[]): { v: number } & Point {
     const t = 100;
     if (history.length < 2) return { v: 0, x: 0, y: 0 };
-    const last = history.at(-1);
-    let first = history.at(0);
+    const last = history.at(-1) as (typeof history)[0];
+    let first = history.at(0) as (typeof history)[0];
     for (let i = history.length - 1; i >= 0; i--) {
         first = history[i];
         if (history[i].t < last.t - t) break;

@@ -4,6 +4,7 @@
     "module": "ESNext",
     "rootDir": "./",
     "outDir": "./dist",
+    "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
