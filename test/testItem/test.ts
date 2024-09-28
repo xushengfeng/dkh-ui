@@ -21,6 +21,7 @@ import {
     label,
     radioGroup,
 } from "../../src/main";
+import assert from "../lib/assert";
 pureStyle();
 
 addStyle({
@@ -38,24 +39,11 @@ function add(...els: ElType<HTMLElement>[]) {
     }
 }
 
-function assert(
-    el: ElType<HTMLElement>,
-    expected: string,
-    path: "innerText" | "innerHTML" | "outerHTML",
-) {
-    add(view().add(el));
-    console.assert(
-        el.el[path] === expected,
-        el.el,
-        `${path} should be\n${expected}\nbut got\n${el.el[path]}`,
-    );
-}
-
 function assertContent(el: ElType<HTMLElement>, expected: string) {
-    assert(el, expected, "innerText");
+    assert(el, expected, (el) => el.el.innerText);
 }
 function assertHTML(el: ElType<HTMLElement>, expected: string) {
-    assert(el, expected, "outerHTML");
+    assert(el, expected, (el) => el.el.outerHTML);
 }
 
 add(ele("h2").add("i18n"));

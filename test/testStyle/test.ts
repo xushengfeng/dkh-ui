@@ -1,26 +1,11 @@
 import {
     addStyle,
     view,
-    txt,
-    ele,
-    a,
-    setTranslate,
     pureStyle,
-    p,
     initDev,
     type ElType,
-    noI18n,
-    spacer,
-    image,
-    button,
-    input,
-    textarea,
-    check,
-    select,
-    table,
-    label,
-    radioGroup,
 } from "../../src/main";
+import assert from "../lib/assert";
 pureStyle();
 
 addStyle({
@@ -32,32 +17,8 @@ addStyle({
 
 initDev();
 
-function add(...els: ElType<HTMLElement>[]) {
-    for (const el of els) {
-        document.body.append(el.el);
-    }
-}
-
-function assert(
-    el: ElType<HTMLElement>,
-    expected: string,
-    path: "innerHTML" | "style",
-) {
-    add(view().add(el));
-    console.assert(
-        el.el[path] === expected,
-        el.el,
-        `${path} should be\n${expected}\nbut got\n${el.el[path]}`,
-    );
-}
-
 function assertStyle(el: ElType<HTMLElement>, expected: string) {
-    add(view().add(el));
-    console.assert(
-        el.el.getAttribute("style") === expected,
-        el.el,
-        `style should be\n${expected}\nbut got\n${el.el.getAttribute("style")}`,
-    );
+    assert(el, expected, (el) => el.el.getAttribute("style") || "");
 }
 
 assertStyle(
