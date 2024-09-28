@@ -197,7 +197,7 @@ assertHTML(
     // @ts-ignore
     view().add(["1", txt("2"), null, undefined, 0, false, {}, [], "3"]),
     "<div>1<span>2</span>3</div>",
-); // todo filter
+);
 assertHTML(view().attr({ id: "test" }), '<div id="test"></div>');
 assertHTML(
     view().attr({ className: "testClass" }),

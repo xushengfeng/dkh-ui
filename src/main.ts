@@ -381,11 +381,13 @@ function pack<EL extends HTMLElement>(
         },
         add: (els, firstRender, slice = 1) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
-            const list = listEl.filter(Boolean).map((el) => {
+            const list = listEl.filter(Boolean).flatMap((el) => {
                 if (typeof el === "string" || el instanceof PureText)
                     return document.createTextNode(t(el));
-                if ("el" in el) return el.el;
-                return el;
+                if ("el" in el && el.el instanceof HTMLElement) return el.el;
+                if (el instanceof DocumentFragment || el instanceof HTMLElement)
+                    return el;
+                return [];
             });
             let renderI = 0;
             function start(width: number) {
