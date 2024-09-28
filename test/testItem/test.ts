@@ -191,3 +191,48 @@ assertHTML(
     ),
     "<table><tr><th>1</th><th>2</th><th>3</th></tr><tr><th>4</th><td>5</td><td>6</td></tr></table>",
 );
+
+add(ele("h2").add("add data attr class clear"));
+assertHTML(
+    // @ts-ignore
+    view().add(["1", txt("2"), null, undefined, 0, false, {}, [], "3"]),
+    "<div>1<span>2</span>3</div>",
+); // todo filter
+assertHTML(view().attr({ id: "test" }), '<div id="test"></div>');
+assertHTML(
+    view().attr({ className: "testClass" }),
+    '<div class="testClass"></div>',
+);
+assertHTML(
+    view().attr({ className: "testClass" }).attr({ className: "" }),
+    '<div class=""></div>',
+);
+assertHTML(
+    view().attr({ className: "testClass" }).attr({ className: undefined }),
+    "<div></div>", // todo filter undefined
+);
+assertHTML(view().data({ id: "test" }), '<div data-id="test"></div>');
+assertHTML(
+    view().data({ id: "test", name: "test" }),
+    '<div data-id="test" data-name="test"></div>',
+);
+assertHTML(
+    view().data({ name: "test" }).data({ name: "test2" }),
+    '<div data-name="test2"></div>',
+);
+assertHTML(
+    view().data({ name: "test" }).data({ name: undefined }),
+    "<div></div>",
+);
+assertHTML(view().data({ name: "test" }).data({ name: null }), "<div></div>");
+assertHTML(view().class("testClass"), '<div class="testClass"></div>');
+assertHTML(
+    view().class("testClass").class("testClass2"),
+    '<div class="testClass testClass2"></div>',
+);
+assertHTML(
+    // @ts-ignore
+    view().class("testClass", "testClass2", null, undefined, 0, false, {}, []),
+    '<div class="testClass testClass2"></div>',
+); // todo filter more
+assertHTML(view().add("test1").add(view().add("test2")).clear(), "<div></div>");
