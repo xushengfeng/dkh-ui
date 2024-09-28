@@ -114,4 +114,4 @@ tools.els.clear.on("click", () => {
     tools.els.count.sv("");
 });
 
-document.body.append(view("y").add([inputEl.el, list, tools.el]).el);
+view("y").add([inputEl.el, list, tools.el]).addInto();

@@ -34,20 +34,11 @@ addStyle({
 
 initDev();
 
-function add(...els: ElType<HTMLElement>[]) {
-    for (const el of els) {
-        document.body.append(el.el);
-    }
-}
-
-function assertContent(el: ElType<HTMLElement>, expected: string) {
-    assert(el, expected, (el) => el.el.innerText);
-}
 function assertHTML(el: ElType<HTMLElement>, expected: string) {
     assert(el, expected, (el) => el.el.outerHTML);
 }
 
-add(ele("h2").add("frame"));
+ele("h2").add("frame").addInto();
 
 const f = frame("test", {
     _: view("y"),

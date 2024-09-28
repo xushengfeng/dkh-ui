@@ -313,6 +313,7 @@ type dkhEL<EL extends HTMLElement, Value> = {
     ) => dkhEL<EL, Value>;
     clear: () => dkhEL<EL, Value>;
     remove: () => void;
+    addInto: (el?: HTMLElement | el0) => dkhEL<EL, Value>;
     query: <selector extends string>(
         q: selector,
     ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown> | null;
@@ -435,6 +436,14 @@ function pack<EL extends HTMLElement>(
         },
         remove: () => {
             el.remove();
+        },
+        addInto: (pel = document.body) => {
+            if (pel instanceof HTMLElement) {
+                pel.appendChild(el);
+            } else {
+                pel.add(el);
+            }
+            return p(el);
         },
         query: <s extends string>(q: s) => {
             const qel = el.querySelector(q) as ParseSelector<s, HTMLElement>;

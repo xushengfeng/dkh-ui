@@ -14,8 +14,8 @@ initDev();
 
 setTranslate((s) => (s[0] || "").toUpperCase() + s.slice(1));
 
-pack(document.body).add(
-    view().add([
+view()
+    .add([
         view().add([
             ele("h2").add("element"),
             a("./testItem/test.html").add(
@@ -34,5 +34,5 @@ pack(document.body).add(
             ele("h2").add("todo MVC"),
             a("./todoMVC/main.html").add(p("todo")),
         ]),
-    ]),
-);
+    ])
+    .addInto();

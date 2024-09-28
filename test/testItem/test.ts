@@ -33,12 +33,6 @@ addStyle({
 
 initDev();
 
-function add(...els: ElType<HTMLElement>[]) {
-    for (const el of els) {
-        document.body.append(el.el);
-    }
-}
-
 function assertContent(el: ElType<HTMLElement>, expected: string) {
     assert(el, expected, (el) => el.el.innerText);
 }
@@ -46,7 +40,7 @@ function assertHTML(el: ElType<HTMLElement>, expected: string) {
     assert(el, expected, (el) => el.el.outerHTML);
 }
 
-add(ele("h2").add("i18n"));
+ele("h2").add("i18n").addInto();
 
 setTranslate((s) => (s[0] || "").toUpperCase() + s.slice(1));
 
@@ -81,7 +75,7 @@ assertHTML(table([["table"]]), "<table><tr><td>Table</td></tr></table>");
 
 setTranslate((s) => s);
 
-add(ele("h2").add("els"));
+ele("h2").add("els").addInto();
 
 assertHTML(ele("div"), "<div></div>");
 assertHTML(
@@ -160,7 +154,7 @@ assertHTML(
     '<label><input type="radio" name="radio" value="radio3">radio3</label>',
 );
 const radio1 = radioGroup("radio1", true);
-add(txt("radio show input"));
+txt("radio show input").addInto();
 assertHTML(
     radio1.new("radio1", "default"),
     '<label><input type="radio" name="radio1" value="radio1">default</label>',
@@ -210,7 +204,7 @@ assertHTML(
     "<table><tr><th>1</th><th>2</th><th>3</th></tr><tr><th>4</th><td>5</td><td>6</td></tr></table>",
 );
 
-add(ele("h2").add("add data attr class clear"));
+ele("h2").add("add data attr class clear").addInto();
 assertHTML(
     // @ts-ignore
     view().add(["1", txt("2"), null, undefined, 0, false, {}, [], "3"]),

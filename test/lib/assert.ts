@@ -5,7 +5,7 @@ function assert<El extends ElType<HTMLElement>>(
     expected: string,
     path: (el: El) => string,
 ) {
-    document.body.append(view().add(el).el);
+    view().add(el).addInto();
     console.assert(
         path(el) === expected,
         el.el,

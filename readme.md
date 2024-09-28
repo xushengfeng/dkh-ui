@@ -48,7 +48,7 @@ const f = frame("example", {
     },
     end: p("thanks!"),
 });
-document.body.append(f.el.el);
+f.el.addInto();
 ```
 
 =>
