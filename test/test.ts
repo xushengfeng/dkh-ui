@@ -23,6 +23,10 @@ pack(document.body).add(
             ),
         ]),
         view().add([
+            ele("h2").add("frame"),
+            a("./testFrame/test.html").add(p("test frame")),
+        ]),
+        view().add([
             ele("h2").add("style"),
             a("./testStyle/test.html").add(p("test style")),
         ]),
