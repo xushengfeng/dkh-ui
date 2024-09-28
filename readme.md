@@ -4,9 +4,9 @@
 
 一个渐进式 ui 框架
 
-是一个 ts 库，无须学习新的语法，更无须学习 jsx，也不需要编译。
+是一个 ts 库，无须学习新的语法，更无须学习 jsx，也不需要编译，零配置。
 
-使用链式调用：
+受 jq、swiftUI 启发，使用链式调用：
 
 ```ts
 view("x")
@@ -14,7 +14,7 @@ view("x")
     .style({ gap: "4px" });
 ```
 
-为所有文字和 name/alt 属性添加 i18n 支持。CSS in JS 支持类型提示。
+为所有文字和 alt 属性添加 i18n 支持。CSS in JS 支持类型提示。
 
 ## 安装（installation）
 
@@ -90,7 +90,7 @@ button.onclick = () => {
 
 ```ts
 let i = 0;
-const span = txt("")
+const span = txt()
     .bindSet((v, el) => (el.innerText = `${v} days`))
     .sv(i);
 button.on("click", () => {
@@ -104,7 +104,7 @@ button.on("click", () => {
 注意，`sv`必须在`bindSet`返回的元素后面，因为`bindSet`和`bindGet`无副作用，不更改原先变量，而是返回一个简单拷贝。
 
 ```ts
-const span = txt("");
+const span = txt();
 const spanEv = span.bindSet(() => {
     log("ok");
 });
@@ -115,7 +115,7 @@ spanEv.sv(0); // "ok"
 可见，dhk-ui 与命令式编程存在区别，函数式调用存在类似于作用域的效果，如果你熟悉 Array 操作，这可以类比：
 
 ```ts
-const span = txt("");
+const span = txt();
 const list = [];
 
 span.add(a("https://...")); //attr style on 等类似命令式，已经更改元素属性
@@ -123,6 +123,17 @@ list.push(1);
 
 span.bindSet(() => {}).sv(0);
 list.map((i) => i).filter(() => {});
+```
+
+通过类型提示，你可以直接在编辑器提示中看到要求的类型。
+
+```ts
+const span = txt()
+    .bindSet((v: number[], el) => {
+        el.innerText = v.join(",");
+    }) // sv 可以提示输入为number[]
+    .bindGet((el) => el.innerText.split(",").map(Number));
+span.gv; // 提示类型为number[]
 ```
 
 ### 减少`null` `undefined` `[object Object]`显示
