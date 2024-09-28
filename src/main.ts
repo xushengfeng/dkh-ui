@@ -659,7 +659,7 @@ function label<xel extends el0>(els: [xel, ...generalEl[]], insertIndex = 0) {
 }
 
 /** form radio, tab, buttons */
-function radioGroup<t extends string>(name: string) {
+function radioGroup<t extends string>(name: string, _showInput = false) {
     const newName = name;
     const cb: (() => void)[] = [];
     let first = true;
@@ -675,7 +675,7 @@ function radioGroup<t extends string>(name: string) {
                             checked: first,
                         })
                         .style({
-                            display: el && !showInput ? "none" : "",
+                            display: !(showInput ?? _showInput) ? "none" : "",
                         })
                         .on("input", () => {
                             for (const c of cb) c();

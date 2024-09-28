@@ -152,8 +152,26 @@ assertHTML(
     '<label><input type="radio" name="radio" value="radio1" style="display: none;">radio1</label>',
 );
 assertHTML(
-    radio.new("radio2", undefined, true),
-    '<label><input type="radio" name="radio" value="radio2">radio2</label>',
+    radio.new("radio2"),
+    '<label><input type="radio" name="radio" value="radio2" style="display: none;">radio2</label>',
+);
+assertHTML(
+    radio.new("radio3", undefined, true),
+    '<label><input type="radio" name="radio" value="radio3">radio3</label>',
+);
+const radio1 = radioGroup("radio1", true);
+add(txt("radio show input"));
+assertHTML(
+    radio1.new("radio1", "default"),
+    '<label><input type="radio" name="radio1" value="radio1">default</label>',
+);
+assertHTML(
+    radio1.new("radio2", "hide", false),
+    '<label><input type="radio" name="radio1" value="radio2" style="display: none;">hide</label>',
+);
+assertHTML(
+    radio1.new("radio3", "force show", true),
+    '<label><input type="radio" name="radio1" value="radio3">force show</label>',
 );
 assertHTML(table([]), "<table></table>");
 assertHTML(
