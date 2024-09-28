@@ -149,7 +149,7 @@ assertHTML(
 );
 assertHTML(
     radio.new("radio2", undefined, true),
-    '<label><input type="radio" name="radio" value="radio2"><span>radio2</span></label>', // todo remove span
+    '<label><input type="radio" name="radio" value="radio2">radio2</label>',
 );
 assertHTML(table([]), "<table></table>");
 assertHTML(

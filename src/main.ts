@@ -663,7 +663,7 @@ function radioGroup<t extends string>(name: string) {
                             for (const c of cb) c();
                         }),
                 )
-                .add(el || txt(value));
+                .add(el || value);
             first = false;
             return p;
         },
