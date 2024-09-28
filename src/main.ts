@@ -301,7 +301,10 @@ type dkhEL<EL extends HTMLElement, Value> = {
     ) => dkhEL<EL, Value>;
     class: (...classes: string[]) => dkhEL<EL, Value>;
     attr: (attr: getAttr<EL>) => dkhEL<EL, Value>;
-    data: (data: { [key: string]: string }) => dkhEL<EL, Value>;
+    data: (data: { [key: string]: string | null | undefined }) => dkhEL<
+        EL,
+        Value
+    >;
     add: (
         els?: addType,
         firstRender?: number,
@@ -375,7 +378,9 @@ function pack<EL extends HTMLElement>(
         data: (data) => {
             for (const i in data) {
                 const name = !i.startsWith("data-") ? `data-${i}` : i;
-                el.setAttribute(name, data[i]);
+                if (data[i] !== null && data[i] !== undefined)
+                    el.setAttribute(name, data[i]);
+                else el.removeAttribute(name);
             }
             return p(el);
         },
