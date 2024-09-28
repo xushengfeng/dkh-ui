@@ -70,8 +70,12 @@ assertHTML(
     '<textarea placeholder="Textarea placeholder i18n"></textarea>',
 );
 assertHTML(
-    select([{ value: "option1", name: "option1" }, { value: "option2" }]),
-    '<select><option value="option1">Option1</option><option value="option2">option2</option></select>',
+    select([
+        { value: "option1", name: "option1" },
+        { value: "option2" },
+        { value: "option3", name: noI18n("option3") },
+    ]),
+    '<select><option value="option1">Option1</option><option value="option2">Option2</option><option value="option3">option3</option></select>',
 );
 assertHTML(table([["table"]]), "<table><tr><td>Table</td></tr></table>");
 
@@ -128,7 +132,7 @@ assertHTML(
         { value: "option2", name: "" },
         { value: "option3" },
     ]),
-    '<select><option value="option1">option1</option><option value="option2">option2</option><option value="option3">option3</option></select>',
+    '<select><option value="option1">option1</option><option value="option2"></option><option value="option3">option3</option></select>',
 );
 assertHTML(
     label([check("label checkbox")]),

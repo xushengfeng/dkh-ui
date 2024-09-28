@@ -619,7 +619,7 @@ function select<t extends string>(v: { name?: Text; value: t }[]) {
         .add(
             v.map((i) =>
                 ele("option").attr({
-                    innerText: i.name ? t(i.name) : i.value,
+                    innerText: t(i.name ?? i.value),
                     value: i.value,
                 }),
             ),
