@@ -1,5 +1,9 @@
 # dkh-ui
 
+> [!IMPORTANT]
+>
+> 现在是 0.x.x 测试版，api 可能发生巨大变动
+
 ## 简介（introduction）
 
 一个渐进式 ui 框架
