@@ -1,4 +1,14 @@
-import { button, check, ele, frame, image, input, radioGroup, txt, view } from "../../src/main";
+import {
+    button,
+    check,
+    ele,
+    frame,
+    image,
+    input,
+    radioGroup,
+    txt,
+    view,
+} from "../../src/main";
 
 let data: { id: string; content: string; active: boolean }[] = [];
 
@@ -8,29 +18,30 @@ function filterData() {
     if (filter === "all") return data;
     if (filter === "active") return data.filter((i) => i.active);
     if (filter === "completed") return data.filter((i) => !i.active);
+    return [];
 }
 
 function getData(id: string) {
-    return data.find((i) => i.id === id);
+    return data.find((i) => i.id === id) as (typeof data)[0];
 }
 
 function item(i: string) {
     const d = getData(i);
     const fr = frame("item", {
-        0: view("x"),
+        _: view("x"),
         check: check("finished").sv(!d.active),
-        t: input("content").attr({ readOnly: true, value: d.content }),
+        t: input().attr({ readOnly: true, value: d.content }),
         close: button(),
     });
     fr.els.check.on("input", (_, el) => {
         const item = getData(i);
-        item.active = !el.gv();
+        item.active = !el.gv;
 
         list.sv(filterData());
         tools.els.count.sv("");
     });
     fr.els.close.on("click", () => {
-        data = data.filter((item) => item.id != i);
+        data = data.filter((item) => item.id !== i);
         fr.el.el.remove();
 
         list.sv(filterData());
@@ -39,19 +50,25 @@ function item(i: string) {
     return fr;
 }
 
-const filterEl = radioGroup("filter");
+const filterEl = radioGroup("filter", true);
 
 const tools = frame("tools", {
-    0: view("x"),
-    count: txt("").bindSet((_, el) => (el.innerText = `${data.filter((i) => i.active).length} items left!`)),
-    radio: view().add([filterEl.new("all"), filterEl.new("active"), filterEl.new("completed")]),
+    _: view("x"),
+    count: txt("").bindSet((_, el) => {
+        el.innerText = `${data.filter((i) => i.active).length} items left!`;
+    }),
+    radio: view().add([
+        filterEl.new("all"),
+        filterEl.new("active"),
+        filterEl.new("completed"),
+    ]),
     clear: button().add(txt("Clear completed")),
 });
 
 const inputEl = frame("input", {
-    0: view("x"),
+    _: view("x"),
     all: button().add(txt("v")),
-    add: input("add"),
+    add: input(),
 });
 
 const list = view("y").bindSet((v: typeof data, el) => {
@@ -62,7 +79,7 @@ const list = view("y").bindSet((v: typeof data, el) => {
 inputEl.els.add.on("keydown", (e, el) => {
     if (e.key === "Enter") {
         const id = new Date().getTime().toString();
-        data.push({ id, active: true, content: el.gv() as string });
+        data.push({ id, active: true, content: el.gv });
         list.sv(filterData());
 
         el.sv("");
@@ -71,13 +88,16 @@ inputEl.els.add.on("keydown", (e, el) => {
 });
 
 inputEl.els.all.on("click", () => {
-    let fdata = filterData();
+    const fdata = filterData();
     if (fdata.filter((i) => !i.active).length < fdata.length) {
-        fdata.forEach((i) => (getData(i.id).active = false));
+        for (const i of fdata) {
+            getData(i.id).active = false;
+        }
     } else {
-        fdata.forEach((i) => (getData(i.id).active = true));
+        for (const i of fdata) {
+            getData(i.id).active = true;
+        }
     }
-
     list.sv(filterData());
     tools.els.count.sv("");
 });
@@ -94,4 +114,4 @@ tools.els.clear.on("click", () => {
     tools.els.count.sv("");
 });
 
-document.body.append(view("y", [inputEl.el, list, tools.el]).el);
+document.body.append(view("y").add([inputEl.el, list, tools.el]).el);
