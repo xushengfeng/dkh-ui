@@ -37,6 +37,7 @@ export {
     addStyle,
     setProperty,
     setProperties,
+    theme,
     frame,
     trackPoint,
     initDev,
@@ -782,6 +783,34 @@ function setProperties(
     for (const i in map) {
         setProperty(i, map[i], el);
     }
+}
+
+function theme<base extends Record<string, string>, themeName extends string>(
+    baseTheme: base,
+    themes: Record<themeName, Partial<base>>,
+) {
+    function setVar(map: { [name: string]: string }) {
+        for (const i in map) {
+            setProperty(`--${i}`, map[i]);
+        }
+    }
+    setVar(baseTheme);
+    const _var: Record<string, string> = {};
+    for (const i of Object.keys(baseTheme)) {
+        _var[i] = `var(--${i})`;
+    }
+
+    return {
+        set: (name: themeName | "0") => {
+            if (name === "0") {
+                setVar(baseTheme);
+                return;
+            }
+            setVar({ ...baseTheme, ...themes[name] });
+        },
+        var: _var as Record<keyof base, string>,
+        getThemeNames: [...Object.keys(themes), "0"] as (themeName | "0")[],
+    };
 }
 
 type Point = { x: number; y: number };
