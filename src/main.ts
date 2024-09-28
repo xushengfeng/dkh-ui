@@ -292,38 +292,45 @@ type generalEl =
     | DocumentFragment;
 type addType = generalEl | generalEl[];
 
-type dkhEL<EL extends HTMLElement, Value> = {
+type dkhEL<EL extends HTMLElement, setValue, getValue> = {
     el: EL;
-    style: (css: csshyphen) => dkhEL<EL, Value>;
+    style: (css: csshyphen) => dkhEL<EL, setValue, getValue>;
     on: <key extends keyof HTMLElementEventMap>(
         e: key,
-        cb: (event: HTMLElementEventMap[key], cel: dkhEL<EL, Value>) => void,
+        cb: (
+            event: HTMLElementEventMap[key],
+            cel: dkhEL<EL, setValue, getValue>,
+        ) => void,
         op?: AddEventListenerOptions,
-    ) => dkhEL<EL, Value>;
-    class: (...classes: string[]) => dkhEL<EL, Value>;
-    attr: (attr: getAttr<EL>) => dkhEL<EL, Value>;
+    ) => dkhEL<EL, setValue, getValue>;
+    class: (...classes: string[]) => dkhEL<EL, setValue, getValue>;
+    attr: (attr: getAttr<EL>) => dkhEL<EL, setValue, getValue>;
     data: (data: { [key: string]: string | null | undefined }) => dkhEL<
         EL,
-        Value
+        setValue,
+        getValue
     >;
     add: (
         els?: addType,
         firstRender?: number,
         slice?: number,
-    ) => dkhEL<EL, Value>;
-    clear: () => dkhEL<EL, Value>;
+    ) => dkhEL<EL, setValue, getValue>;
+    clear: () => dkhEL<EL, setValue, getValue>;
     remove: () => void;
-    addInto: (el?: HTMLElement | el0) => dkhEL<EL, Value>;
+    addInto: (el?: HTMLElement | el0) => dkhEL<EL, setValue, getValue>;
     query: <selector extends string>(
         q: selector,
-    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown> | null;
+    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown, unknown> | null;
     queryAll: <selector extends string>(
         q: selector,
-    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown>[];
-    bindSet: <SV>(f: (v: SV, el: EL, trans: typeof t) => void) => dkhEL<EL, SV>;
-    bindGet: <GV>(f: (el: EL) => GV) => dkhEL<EL, GV>;
-    sv: (v?: NoInfer<Value>) => dkhEL<EL, Value>;
-    gv: NoInfer<Value>;
+    ) => dkhEL<ParseSelector<selector, HTMLElement>, unknown, unknown>[];
+    bindSet: <SV>(
+        f: (v: SV, el: EL, trans: typeof t) => void,
+    ) => dkhEL<EL, SV, getValue>;
+    bindGet: <GV>(f: (el: EL) => GV) => dkhEL<EL, setValue, GV>;
+    sv: (v?: NoInfer<setValue>) => dkhEL<EL, setValue, getValue>;
+    svc: NoInfer<setValue>;
+    readonly gv: NoInfer<getValue>;
 };
 
 function pack<EL extends HTMLElement>(
@@ -335,7 +342,7 @@ function pack<EL extends HTMLElement>(
         return pack(el, setter, getter);
     }
 
-    const pel: dkhEL<EL, unknown> = {
+    const pel: dkhEL<EL, unknown, unknown> = {
         el,
         style: (css) => {
             for (const [i, x] of Object.entries(css)) {
@@ -469,7 +476,8 @@ function pack<EL extends HTMLElement>(
         get gv() {
             return getter(el);
         },
-        set gv(v) {
+        // @ts-ignore
+        set svc(v) {
             setter(v, el, t);
         },
     };
@@ -500,7 +508,7 @@ function initDev() {
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type el<t extends HTMLElement> = dkhEL<t, any>;
+type el<t extends HTMLElement> = dkhEL<t, any, any>;
 
 type el0 = el<HTMLElement>;
 
@@ -534,6 +542,7 @@ function txt(text: Text = "", noI18n?: boolean) {
         .bindSet((v: Text, el) => {
             el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
         })
+        .bindGet((el) => el.innerText)
         .sv(text);
 }
 
@@ -542,6 +551,7 @@ function p(text: Text = "", noI18n?: boolean) {
         .bindSet((v: Text, el) => {
             el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
         })
+        .bindGet((el) => el.innerText)
         .sv(text);
 }
 

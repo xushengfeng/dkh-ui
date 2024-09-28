@@ -101,7 +101,7 @@ button.on("click", () => {
 
 如你所见，这与原生没有太大区别，少了一个函数的命名，使用匿名函数挂到元素的`sv`上，但语义更明显了，可以明确知道操作作用在哪个函数。
 
-注意，`sv`必须在`bindSet`返回的元素后面，因为`bindSet`和`bindGet`无副作用，不更改原先变量，而是返回一个简单拷贝。
+注意，`sv`必须在`bindSet`返回的元素后面，`gv`必须在`bindGet`返回的元素后面，因为`bindSet`和`bindGet`无副作用，不更改原先变量，而是返回一个简单拷贝。
 
 ```ts
 const span = txt();
@@ -132,8 +132,8 @@ const span = txt()
     .bindSet((v: number[], el) => {
         el.innerText = v.join(",");
     }) // sv 可以提示输入为number[]
-    .bindGet((el) => el.innerText.split(",").map(Number));
-span.gv; // 提示类型为number[]
+    .bindGet((el) => el.innerText.split(","));
+span.gv; // 提示类型为string[]
 ```
 
 ### 减少`null` `undefined` `[object Object]`显示

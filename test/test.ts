@@ -27,6 +27,10 @@ view()
             a("./testFrame/test.html").add(p("test frame")),
         ]),
         view().add([
+            ele("h2").add("bind"),
+            a("./testBind/test.html").add(p("test bind")),
+        ]),
+        view().add([
             ele("h2").add("style"),
             a("./testStyle/test.html").add(p("test style")),
         ]),
