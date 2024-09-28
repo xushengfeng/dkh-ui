@@ -118,7 +118,7 @@ assertHTML(
 );
 assertHTML(check("checkbox"), '<input name="checkbox" type="checkbox">');
 assertHTML(
-    check("checkbox", [txt("true"), txt("false")]),
+    check("checkbox", [txt("true"), "false"]),
     '<div><span style="display: none;">true</span><span>false</span></div>',
 );
 assertHTML(select([]), "<select></select>");

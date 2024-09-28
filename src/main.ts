@@ -572,7 +572,7 @@ function textarea(placeholder = "") {
         .bindGet((el) => el.value);
 }
 
-function check(name: string, els?: [el0, el0]) {
+function check(name: string, els?: [generalEl, generalEl]) {
     const newName = name;
     if (!els) {
         const input = ele("input")
@@ -584,8 +584,14 @@ function check(name: string, els?: [el0, el0]) {
         return input;
     }
     // todo 无障碍
-    const True = els[0];
-    const False = els[1];
+    const True =
+        typeof els[0] === "object" && "gv" in els[0]
+            ? els[0]
+            : txt().add(els[0]);
+    const False =
+        typeof els[1] === "object" && "gv" in els[1]
+            ? els[1]
+            : txt().add(els[1]);
     let value = false;
     const v = view()
         .add([True.style({ display: "none" }), False])
