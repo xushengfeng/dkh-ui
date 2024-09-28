@@ -232,7 +232,12 @@ assertHTML(
 );
 assertHTML(
     // @ts-ignore
-    view().class("testClass", "testClass2", null, undefined, 0, false, {}, []),
-    '<div class="testClass testClass2"></div>',
-); // todo filter more
+    view().class("test", "", "test1", "test x", "  testn ", "test测试"),
+    '<div class="test test1 testn test测试"></div>',
+);
+assertHTML(
+    // @ts-ignore
+    view().class("test", null, undefined, 0, false, {}, []),
+    '<div class="test"></div>',
+);
 assertHTML(view().add("test1").add(view().add("test2")).clear(), "<div></div>");

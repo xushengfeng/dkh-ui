@@ -365,7 +365,12 @@ function pack<EL extends HTMLElement>(
             return p(el);
         },
         class: (...classes) => {
-            el.classList.add(...classes.filter(Boolean));
+            el.classList.add(
+                ...classes
+                    .filter((i) => typeof i === "string")
+                    .map((i) => i.trim())
+                    .filter((i) => i !== "" && !i.match(/\s/)),
+            );
             return p(el);
         },
         attr: (attr) => {
