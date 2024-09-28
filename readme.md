@@ -125,6 +125,10 @@ span.bindSet(() => {}).sv(0);
 list.map((i) => i).filter(() => {});
 ```
 
+### 减少`null` `undefined` `[object Object]`显示
+
+通过类型检查限制和过滤，ui 上尽量减少上述意外文字的生成。
+
 ### radio 单选
 
 `input[type=radio]`和导航栏 tab 等都是单选
