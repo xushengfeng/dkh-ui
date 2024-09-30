@@ -8,6 +8,7 @@ import {
     theme,
     check,
     radioGroup,
+    addClass,
 } from "../../src/main";
 import assert from "../lib/assert";
 pureStyle();
@@ -63,6 +64,24 @@ assertStyle(
         .style({ backgroundColor: "" }),
     "width: 100px; height: 100px; border: 1px solid black;",
 );
+
+const cssStyle = addClass(
+    {
+        background: "white",
+        width: "50px",
+        height: "50px",
+    },
+    {
+        "&:hover": {
+            background: "black",
+        },
+        "&::after": {
+            content: "'test'",
+        },
+    },
+);
+
+view().class(cssStyle).addInto();
 
 ele("h2").add("theme").addInto();
 

@@ -35,6 +35,7 @@ export {
     radioGroup,
     table,
     addStyle,
+    addClass,
     setProperty,
     setProperties,
     theme,
@@ -776,16 +777,34 @@ function table(
     return ele("table").add(yels);
 }
 
-function addStyle(style: Record<string, csshyphen>) {
+function createStyle(style: Record<string, csshyphen>) {
     let css = "";
     for (const [name, i] of Object.entries(style)) {
         css += `${name} {\n`;
         for (const [x, n] of Object.entries(i)) {
-            css += `  ${css2css(x)}: ${n};\n`;
+            css += `${css2css(x)}: ${n};\n`;
         }
-        css += "}";
+        css += "}\n";
     }
-    document.body.append(ele("style").attr({ innerHTML: css }).el);
+    return css;
+}
+
+function addStyle(style: Record<string, csshyphen>) {
+    ele("style")
+        .attr({ innerHTML: createStyle(style) })
+        .addInto();
+}
+
+function addClass(style: csshyphen, c: Record<string, csshyphen>) {
+    const className = `dkh_${crypto.randomUUID().slice(0, 7)}`;
+    let css = `.${className} {\n`;
+    for (const [x, n] of Object.entries(style)) {
+        css += `${css2css(x)}: ${n};\n`;
+    }
+    css += createStyle(c);
+    css += "}\n";
+    ele("style").attr({ innerHTML: css }).addInto();
+    return className;
 }
 
 function css2css(css: string) {
