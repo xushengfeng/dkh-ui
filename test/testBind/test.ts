@@ -105,3 +105,9 @@ console.assert(set.el.innerHTML === "y set1");
 v.clear();
 const get1 = get.bindGet((el) => `${el.innerText} get1`).sv("x");
 console.assert(get1.gv === " get1");
+
+// svc set value chain
+const svc1 = view().bindSet((v) => console.assert(v === "hello"));
+const svc2 = view().bindSet((v) => console.assert(v === "hello"));
+const svc3 = view().bindSet((v) => console.assert(v === "hello"));
+svc1.svc = svc2.svc = svc3.svc = "hello";
