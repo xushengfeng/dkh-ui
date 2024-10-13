@@ -5,10 +5,17 @@ import {
     pureStyle,
     p,
     initDev,
-    pack,
     a,
+    addStyle,
 } from "../src/main";
 pureStyle();
+
+addStyle({
+    h2: {
+        fontWeight: "bold",
+        fontSize: "20px",
+    },
+});
 
 initDev();
 
@@ -33,6 +40,10 @@ view()
         view().add([
             ele("h2").add("style"),
             a("./testStyle/test.html").add(p("test style")),
+        ]),
+        view().add([
+            ele("h2").add("animate"),
+            a("./testAnimate/test.html").add(p("test animate")),
         ]),
         view().add([
             ele("h2").add("todo MVC"),
