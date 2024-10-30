@@ -895,10 +895,10 @@ function trackPoint<Data, Data2>(
     const history: (Point & { t: number })[] = [];
 
     el.on("pointerdown", (e) => {
-        e.preventDefault();
         if (op.start) {
             const s = op.start(e);
             if (!s) return;
+            e.preventDefault();
             start = { x: s.x, y: s.y };
             initData = s.data;
         } else start = { x: 0, y: 0 };
