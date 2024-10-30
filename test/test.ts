@@ -42,6 +42,10 @@ view()
             a("./testStyle/test.html").add(p("test style")),
         ]),
         view().add([
+            ele("h2").add("trackPoint"),
+            a("./testTrackPoint/test.html").add(p("test trackPoint")),
+        ]),
+        view().add([
             ele("h2").add("animate"),
             a("./testAnimate/test.html").add(p("test animate")),
         ]),
