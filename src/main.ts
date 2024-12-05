@@ -541,7 +541,7 @@ function txt(text: Text = "", noI18n?: boolean) {
         .bindSet((v: Text, el) => {
             el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
         })
-        .bindGet((el) => el.innerText)
+        .bindGet((el) => el.textContent ?? "")
         .sv(text);
 }
 
@@ -550,7 +550,7 @@ function p(text: Text = "", noI18n?: boolean) {
         .bindSet((v: Text, el) => {
             el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
         })
-        .bindGet((el) => el.innerText)
+        .bindGet((el) => el.textContent ?? "")
         .sv(text);
 }
 
