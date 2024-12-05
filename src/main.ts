@@ -247,13 +247,8 @@ function frame<Id extends string, t extends { [key: string]: any; _: any }>(
 }
 
 type NonFunctionKeys<T> = {
-    [K in keyof T]: T[K] extends string
-        ? K
-        : T[K] extends number
-          ? K
-          : T[K] extends boolean
-            ? K
-            : never;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    [K in keyof T]: T[K] extends (...Args: any[]) => unknown ? never : K;
 }[keyof T];
 
 type inputTypeType =
