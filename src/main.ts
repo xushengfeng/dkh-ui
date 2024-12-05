@@ -539,16 +539,18 @@ function noI18n(text: string) {
 function txt(text: Text = "", noI18n?: boolean) {
     return ele("span")
         .bindSet((v: Text, el) => {
-            el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
+            el.textContent = v instanceof PureText ? v.text : noI18n ? v : t(v);
         })
         .bindGet((el) => el.textContent ?? "")
         .sv(text);
 }
 
-function p(text: Text = "", noI18n?: boolean) {
+function p(text: Text = "", noI18n?: boolean, display?: "display") {
     return ele("p")
         .bindSet((v: Text, el) => {
-            el.innerText = v instanceof PureText ? v.text : noI18n ? v : t(v);
+            const text = v instanceof PureText ? v.text : noI18n ? v : t(v);
+            if (display === "display") el.innerText = text;
+            else el.textContent = text;
         })
         .bindGet((el) => el.textContent ?? "")
         .sv(text);
@@ -650,7 +652,7 @@ function select<t extends string>(v: { name?: Text; value: t }[]) {
         .add(
             v.map((i) =>
                 ele("option").attr({
-                    innerText: t(i.name ?? i.value),
+                    text: t(i.name ?? i.value),
                     value: i.value,
                 }),
             ),
@@ -738,7 +740,7 @@ function table(
 ) {
     function el(element: generalEl, type: "td" | "th") {
         if (typeof element === "string" || element instanceof PureText) {
-            return ele(type).attr({ innerText: t(element) });
+            return ele(type).attr({ textContent: t(element) });
         }
         const tagName = type.toUpperCase();
         if ("el" in element) {

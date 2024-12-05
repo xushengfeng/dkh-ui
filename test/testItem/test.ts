@@ -58,6 +58,14 @@ assertContent(
         .sv("bindSet trans"),
     "BindSet trans",
 );
+assertHTML(
+    p("this is a paragraph\nwith line break", true),
+    "<p>this is a paragraph\nwith line break</p>",
+);
+assertHTML(
+    p("this is a paragraph\nwith line break", true, "display"),
+    "<p>this is a paragraph<br>with line break</p>",
+);
 assertHTML(image("./test.png", "image"), '<img src="./test.png" alt="Image">');
 assertHTML(
     textarea("textarea placeholder i18n"),
