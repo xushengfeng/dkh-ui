@@ -22,6 +22,7 @@ export {
     noI18n,
     txt,
     p,
+    pText,
     a,
     view,
     spacer,
@@ -536,23 +537,34 @@ function noI18n(text: string) {
     return new PureText(text);
 }
 
+function rawText(v: Text, noI18n?: boolean) {
+    return v instanceof PureText ? v.text : noI18n ? v : t(v);
+}
+
 function txt(text: Text = "", noI18n?: boolean) {
     return ele("span")
         .bindSet((v: Text, el) => {
-            el.textContent = v instanceof PureText ? v.text : noI18n ? v : t(v);
+            el.textContent = rawText(v, noI18n);
         })
         .bindGet((el) => el.textContent ?? "")
         .sv(text);
 }
 
-function p(text: Text = "", noI18n?: boolean, display?: "display") {
+function p(text: Text = "", noI18n?: boolean) {
     return ele("p")
         .bindSet((v: Text, el) => {
-            const text = v instanceof PureText ? v.text : noI18n ? v : t(v);
-            if (display === "display") el.innerText = text;
-            else el.textContent = text;
+            el.textContent = rawText(v, noI18n);
         })
         .bindGet((el) => el.textContent ?? "")
+        .sv(text);
+}
+
+function pText(text: Text = "", noI18n?: boolean) {
+    return ele("p")
+        .bindSet((v: Text, el) => {
+            el.innerText = rawText(v, noI18n);
+        })
+        .bindGet((el) => el.innerText)
         .sv(text);
 }
 

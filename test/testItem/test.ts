@@ -20,6 +20,7 @@ import {
     table,
     label,
     radioGroup,
+    pText,
 } from "../../src/main";
 import assert from "../lib/assert";
 pureStyle();
@@ -63,7 +64,7 @@ assertHTML(
     "<p>this is a paragraph\nwith line break</p>",
 );
 assertHTML(
-    p("this is a paragraph\nwith line break", true, "display"),
+    pText("this is a paragraph\nwith line break", true),
     "<p>this is a paragraph<br>with line break</p>",
 );
 assertHTML(image("./test.png", "image"), '<img src="./test.png" alt="Image">');
