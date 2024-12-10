@@ -889,11 +889,18 @@ function trackPoint<Data, Data2>(
         end?: (
             e: PointerEvent,
             more: {
-                moved: boolean;
                 startData: Data;
-                ingData: Data2;
                 v: ReturnType<typeof speed>;
-            },
+            } & (
+                | {
+                      moved: true;
+                      ingData: Data2;
+                  }
+                | {
+                      moved: false;
+                      ingData: undefined;
+                  }
+            ),
         ) => void;
     },
 ) {
@@ -940,9 +947,10 @@ function trackPoint<Data, Data2>(
     window.addEventListener("pointerup", (e) => {
         if (!start) return;
         e.preventDefault();
-        const endData = ing(e);
+        const endData = moved ? ing(e) : undefined;
         start = null;
         if (op.end)
+            // @ts-ignore
             op.end(e, {
                 moved,
                 startData: initData as Data,

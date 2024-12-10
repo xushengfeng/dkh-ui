@@ -39,6 +39,14 @@ trackPoint(b, {
     ing: ({ x, y }) => {
         b.el.style.left = `${x}px`;
         b.el.style.top = `${y}px`;
+        return { x, y };
+    },
+    end: (_, { moved, ingData }) => {
+        if (moved) {
+            console.log("moved", ingData.x, ingData.y);
+        } else {
+            ingData; // undefined
+        }
     },
 });
 
