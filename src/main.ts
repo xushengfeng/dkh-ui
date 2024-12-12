@@ -276,12 +276,16 @@ type inputTypeType =
     | "url"
     | "week";
 
-type getAttr<el extends HTMLElement> = (el extends HTMLInputElement
-    ? Omit<{ [k in NonFunctionKeys<el>]?: el[k] }, "type"> & {
-          type?: inputTypeType;
-      }
-    : { [k in NonFunctionKeys<el>]?: el[k] }) & {
+type getAttr<el extends HTMLElement> = Omit<
+    el extends HTMLInputElement
+        ? Omit<{ [k in NonFunctionKeys<el>]?: el[k] }, "type"> & {
+              type?: inputTypeType;
+          }
+        : { [k in NonFunctionKeys<el>]?: el[k] },
+    "style"
+> & {
     popover?: "auto" | "manual";
+    style?: string;
 };
 
 type generalEl =
