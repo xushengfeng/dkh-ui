@@ -641,17 +641,19 @@ function check(name: string, els?: [generalEl, generalEl]) {
         typeof els[1] === "object" && "gv" in els[1]
             ? els[1]
             : txt().add(els[1]);
+    const trueDisplay = True.el.style.display;
+    const falseDisplay = False.el.style.display;
     let value = false;
     const v = view()
         .add([True.style({ display: "none" }), False])
         .bindSet((v: boolean) => {
             value = v;
             if (v) {
-                True.style({ display: "" });
+                True.style({ display: trueDisplay });
                 False.style({ display: "none" });
             } else {
                 True.style({ display: "none" });
-                False.style({ display: "" });
+                False.style({ display: falseDisplay });
             }
         })
         .bindGet(() => value)
