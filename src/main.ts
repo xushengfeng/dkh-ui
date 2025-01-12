@@ -32,6 +32,7 @@ export {
     button,
     check,
     select,
+    dynamicSelect,
     label,
     radioGroup,
     table,
@@ -679,6 +680,25 @@ function select<t extends string>(v: { name?: Text; value: t }[]) {
         .bindSet((v: t, el) => {
             el.value = v;
         });
+}
+
+function dynamicSelect() {
+    const el = ele("select")
+        .bindGet((el) => el.value)
+        .bindSet((v: string, el) => {
+            el.value = v;
+        });
+    function setList(v: { name?: Text; value: string }[]) {
+        el.clear().add(
+            v.map((i) =>
+                ele("option").attr({
+                    text: t(i.name ?? i.value),
+                    value: i.value,
+                }),
+            ),
+        );
+    }
+    return { el, setList };
 }
 
 function label<xel extends el0>(els: [xel, ...generalEl[]], insertIndex = 0) {
