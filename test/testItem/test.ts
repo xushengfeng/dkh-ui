@@ -21,6 +21,9 @@ import {
     label,
     radioGroup,
     pText,
+    alert,
+    confirm,
+    prompt,
 } from "../../src/main";
 import assert from "../lib/assert";
 pureStyle();
@@ -265,3 +268,13 @@ assertHTML(
     '<div class="test"></div>',
 );
 assertHTML(view().add("test1").add(view().add("test2")).clear(), "<div></div>");
+
+button("alert")
+    .addInto()
+    .on("click", () => alert("hi"));
+button("confirm")
+    .addInto()
+    .on("click", async () => console.log(await confirm("hi")));
+button("prompt")
+    .addInto()
+    .on("click", async () => console.log(await prompt("hi", "x")));

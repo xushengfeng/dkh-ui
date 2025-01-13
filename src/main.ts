@@ -36,6 +36,9 @@ export {
     label,
     radioGroup,
     table,
+    alert,
+    confirm,
+    prompt,
     addStyle,
     addClass,
     setProperty,
@@ -52,6 +55,9 @@ let dev = false;
 type Text = string | PureText;
 
 let t = (s: Text) => (s instanceof PureText ? s.text : s);
+
+const OK = "确定";
+const CANCEL = "取消";
 
 function setTranslate(f: (s: string) => string) {
     t = (s) => (s instanceof PureText ? s.text : f(s));
@@ -813,6 +819,71 @@ function table(
         yels.push(ele("tr").add(xels));
     }
     return ele("table").add(yels);
+}
+
+function tmpDialog() {
+    const el = ele("dialog")
+        .addInto()
+        .on("close", () => {
+            el.remove();
+        });
+    el.el.showModal();
+    return el;
+}
+
+function alert(message = "") {
+    const { promise, resolve } = Promise.withResolvers<undefined>();
+    const el = tmpDialog().add([
+        p(message),
+        button(t(OK)).on("click", () => {
+            resolve(undefined);
+            el.el.close();
+        }),
+    ]);
+    return promise;
+}
+
+function confirm(message = "") {
+    const { promise, resolve } = Promise.withResolvers<boolean>();
+    const el = tmpDialog()
+        .add([
+            p(message),
+            button(t(OK)).on("click", () => {
+                resolve(true);
+                el.el.close();
+            }),
+            button(t(CANCEL)).on("click", () => {
+                resolve(false);
+                el.el.close();
+            }),
+        ])
+        .on("cancel", () => {
+            resolve(false);
+        });
+    return promise;
+}
+
+function prompt(message = "", _default = "") {
+    const { promise, resolve } = Promise.withResolvers<string | null>();
+    const inp = input().sv(_default);
+    const el = tmpDialog()
+        .add([
+            p(message),
+            view().add(inp),
+            button(t(OK)).on("click", () => {
+                resolve(inp.gv);
+                el.el.close();
+            }),
+            button(t(CANCEL)).on("click", () => {
+                resolve(null);
+                el.el.close();
+            }),
+        ])
+        .on("cancel", () => {
+            resolve(null);
+        });
+    inp.el.select();
+    return promise;
 }
 
 function createStyle(style: Record<string, csshyphen>) {
