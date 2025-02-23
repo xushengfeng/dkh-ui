@@ -7,7 +7,8 @@
     "exports": {
         ".": {
             "import": "./dist/dkh.es.js",
-            "require": "./dist/dkh.umd.js"
+            "require": "./dist/dkh.umd.js",
+            "types": "./src/main.ts"
         }
     },
     "homepage": "https://github.com/xushengfeng/dkh-ui",
