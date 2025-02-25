@@ -302,7 +302,8 @@ type generalEl =
     | el0
     | Text
     | DocumentFragment;
-type addType = generalEl | generalEl[];
+type addTypeItem = undefined | null | generalEl;
+type addType = addTypeItem | addTypeItem[];
 
 type dkhEL<EL extends HTMLElement, setValue, getValue> = {
     el: EL;
@@ -412,7 +413,8 @@ function pack<EL extends HTMLElement>(
         },
         add: (els, firstRender, slice = 1) => {
             const listEl = els ? (Array.isArray(els) ? els : [els]) : [];
-            const list = listEl.filter(Boolean).flatMap((el) => {
+            const list = listEl.flatMap((el) => {
+                if (!el) return [];
                 if (typeof el === "string" || el instanceof PureText)
                     return document.createTextNode(t(el));
                 if ("el" in el && el.el instanceof HTMLElement) return el.el;
@@ -847,7 +849,7 @@ function dynamicList(
                 Array.from(added).map((i) => {
                     const el = newEl?.(i);
                     if (el) map.set(i, el);
-                    return el ?? "";
+                    return el;
                 }),
             );
             for (const x of removed) {
