@@ -824,10 +824,10 @@ function table(
     return ele("table").add(yels);
 }
 
-function dynamicList(
+function dynamicList<ID extends string | number | symbol>(
     pel: el0,
-    list: Iterable<[string, el0]>,
-    newEl?: (id: string) => el0,
+    list: Iterable<[ID, el0]>,
+    newEl?: (id: ID) => el0,
 ) {
     const map = new Map(list);
     let nowList = Array.from(map.keys());
@@ -842,7 +842,7 @@ function dynamicList(
         }
     }
     return {
-        setList: (l: string[]) => {
+        setList: (l: ID[]) => {
             const removed = new Set(nowList).difference(new Set(l));
             const added = new Set(l).difference(new Set(nowList));
             pel.add(
@@ -860,7 +860,7 @@ function dynamicList(
                 .filter((i) => !removed.has(i))
                 .concat(Array.from(added));
 
-            const ts = new Map<number, string[]>();
+            const ts = new Map<number, ID[]>();
             for (const [i, el] of oldList.entries()) {
                 const targetI = l.indexOf(el);
                 if (targetI === -1) continue;
@@ -888,7 +888,7 @@ function dynamicList(
 
             nowList = structuredClone(l);
         },
-        get(id: string) {
+        get(id: ID) {
             return map.get(id);
         },
     };
