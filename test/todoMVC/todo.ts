@@ -27,8 +27,24 @@ function getData(id: string) {
     return data.find((i) => i.id === id) as (typeof data)[0];
 }
 
-function saveData() {
+function dataChange(all = false) {
     localStorage.setItem(dbName, JSON.stringify(data));
+    tools.els.count.sv("");
+    if (all) {
+        list.sv(filterData());
+    }
+    if (data.length === 0) {
+        mainEl.style({ display: "none" });
+        tools.el.style({ display: "none" });
+    } else {
+        mainEl.style({ display: "block" });
+        tools.el.style({ display: "block" });
+    }
+    if (data.find((i) => i.completed)) {
+        tools.els.clear.style({ display: "" });
+    } else {
+        tools.els.clear.style({ display: "none" });
+    }
 }
 
 function item(i: string) {
@@ -50,8 +66,7 @@ function item(i: string) {
     fr.els.check.on("input", (_, el) => {
         const item = getData(i);
         item.completed = el.gv;
-        list.sv(filterData());
-        tools.els.count.sv("");
+        dataChange();
     });
     fr.els.t.on("dblclick", () => {
         fr.els.edit.sv(d.title);
@@ -74,14 +89,12 @@ function item(i: string) {
         fr.els.t.sv(d.title);
         fr.el.el.classList.remove("editing");
         if (t.trim() === "") remove();
+        dataChange();
     }
     function remove() {
         data = data.filter((item) => item.id !== i);
-        saveData();
+        dataChange();
         fr.el.el.remove();
-
-        list.sv(filterData());
-        tools.els.count.sv("");
     }
     fr.els.close.on("click", () => {
         remove();
@@ -124,27 +137,12 @@ const list = ele("ul")
     .bindSet((v: typeof data, el) => {
         list.clear();
         list.add(v.map((i) => item(i.id).el));
-        if (data.length === 0) {
-            mainEl.style({ display: "none" });
-            tools.el.style({ display: "none" });
-        } else {
-            mainEl.style({ display: "block" });
-            tools.el.style({ display: "block" });
-        }
-        if (data.find((i) => i.completed)) {
-            tools.els.clear.style({ display: "" });
-        } else {
-            tools.els.clear.style({ display: "none" });
-        }
     })
     .class("todo-list");
 
 tools.els.clear.on("click", () => {
     data = data.filter((i) => !i.completed);
-    saveData();
-
-    list.sv(filterData());
-    tools.els.count.sv("");
+    dataChange(true);
 });
 
 const inputEl = input()
@@ -157,11 +155,8 @@ const inputEl = input()
         if (e.key === "Enter") {
             const id = new Date().getTime().toString();
             data.push({ id, completed: false, title: el.gv });
-            saveData();
-            list.sv(filterData());
-
+            dataChange(true);
             el.sv("");
-            tools.els.count.sv("");
         }
     });
 
@@ -180,8 +175,7 @@ const markAll = input("checkbox")
                 getData(i.id).completed = false;
             }
         }
-        list.sv(filterData());
-        tools.els.count.sv("");
+        dataChange(true);
     })
     .addInto(mainEl);
 mainEl
@@ -213,6 +207,7 @@ ele("footer")
 try {
     data = JSON.parse(localStorage.getItem(dbName) || "[]");
     list.sv(data);
+    dataChange();
 } catch (error) {
     list.sv([]);
 }
