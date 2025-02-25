@@ -34,6 +34,10 @@ view()
             a("./testFrame/test.html").add(p("test frame")),
         ]),
         view().add([
+            ele("h2").add("list"),
+            a("./testMove/test.html").add(p("test dynamic list")),
+        ]),
+        view().add([
             ele("h2").add("bind"),
             a("./testBind/test.html").add(p("test bind")),
         ]),

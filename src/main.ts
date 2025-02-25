@@ -36,6 +36,7 @@ export {
     label,
     radioGroup,
     table,
+    dynamicList,
     alert,
     confirm,
     prompt,
@@ -819,6 +820,76 @@ function table(
         yels.push(ele("tr").add(xels));
     }
     return ele("table").add(yels);
+}
+
+function dynamicList(
+    pel: el0,
+    list: Iterable<[string, el0]>,
+    newEl?: (id: string) => el0,
+) {
+    const map = new Map(list);
+    let nowList = Array.from(map.keys());
+    pel.clear();
+    pel.add(Array.from(map.values()));
+    function move(el: el0, ref: el0 | undefined) {
+        if ("moveBefore" in pel.el) {
+            // @ts-ignore
+            pel.el.moveBefore(el.el, ref?.el || null);
+        } else {
+            pel.el.insertBefore(el.el, ref?.el || null);
+        }
+    }
+    return {
+        setList: (l: string[]) => {
+            const removed = new Set(nowList).difference(new Set(l));
+            const added = new Set(l).difference(new Set(nowList));
+            pel.add(
+                Array.from(added).map((i) => {
+                    const el = newEl?.(i);
+                    if (el) map.set(i, el);
+                    return el ?? "";
+                }),
+            );
+            for (const x of removed) {
+                map.get(x)?.remove();
+                map.delete(x);
+            }
+            const oldList = nowList
+                .filter((i) => !removed.has(i))
+                .concat(Array.from(added));
+
+            const ts = new Map<number, string[]>();
+            for (const [i, el] of oldList.entries()) {
+                const targetI = l.indexOf(el);
+                if (targetI === -1) continue;
+                const distant = i - targetI;
+                ts.set(distant, (ts.get(distant) ?? []).concat(el));
+            }
+            const x = Array.from(ts.entries()).toSorted(
+                (a, b) => a[1].length - b[1].length,
+            );
+
+            const maxC = ts.get(x.at(-1)?.[0] as number) ?? [];
+            let moveCount = 0;
+            for (const el of l.toReversed()) {
+                if (maxC.includes(el)) continue;
+                const ref = l.indexOf(el) + 1;
+                const refEl = map.get(l[ref]);
+                const thisEl = map.get(el);
+                if (thisEl && thisEl.el.nextElementSibling !== refEl?.el) {
+                    move(thisEl, refEl);
+                    moveCount++;
+                }
+            }
+
+            if (dev) console.log(`moved ${moveCount}`);
+
+            nowList = structuredClone(l);
+        },
+        get(id: string) {
+            return map.get(id);
+        },
+    };
 }
 
 function tmpDialog() {
