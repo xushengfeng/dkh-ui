@@ -24,6 +24,7 @@ import {
     alert,
     confirm,
     prompt,
+    initDKH,
 } from "../../src/main";
 import assert from "../lib/assert";
 pureStyle();
@@ -46,7 +47,7 @@ function assertHTML(el: ElType<HTMLElement>, expected: string) {
 
 ele("h2").add("i18n").addInto();
 
-setTranslate((s) => (s[0] || "").toUpperCase() + s.slice(1));
+initDKH({ translate: (s) => (s[0] || "").toUpperCase() + s.slice(1) });
 
 assertContent(txt("hello world"), "Hello world");
 assertContent(p("this is a paragraph"), "This is a paragraph");

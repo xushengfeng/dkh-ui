@@ -13,7 +13,14 @@ import type {
 } from "typed-query-selector/parser";
 
 export {
+    init as initDKH,
+    /**
+     * @deprecated use `init` instead.
+     */
     setTranslate,
+    /**
+     * @deprecated use `init` instead.
+     */
     pureStyle,
     type el as ElType,
     pack,
@@ -62,6 +69,16 @@ const CANCEL = "取消";
 
 function setTranslate(f: (s: string) => string) {
     t = (s) => (s instanceof PureText ? s.text : f(s));
+}
+
+function init(op: {
+    dev?: boolean;
+    translate?: (s: string) => string;
+    pureStyle?: boolean;
+}) {
+    if (op.dev) initDev();
+    if (op.translate) setTranslate(op.translate);
+    if (op.pureStyle) pureStyle();
 }
 
 function pureStyle() {
