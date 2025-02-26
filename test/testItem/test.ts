@@ -27,7 +27,6 @@ import {
     initDKH,
 } from "../../src/main";
 import assert from "../lib/assert";
-pureStyle();
 
 addStyle({
     h2: {
@@ -47,7 +46,15 @@ function assertHTML(el: ElType<HTMLElement>, expected: string) {
 
 ele("h2").add("i18n").addInto();
 
-initDKH({ translate: (s) => (s[0] || "").toUpperCase() + s.slice(1) });
+initDKH({
+    translate: (s) => (s[0] || "").toUpperCase() + s.slice(1),
+    attrMap: {
+        title: (v: string, el) => {
+            el.setAttribute("data-title", v);
+            return undefined;
+        },
+    },
+});
 
 assertContent(txt("hello world"), "Hello world");
 assertContent(p("this is a paragraph"), "This is a paragraph");
@@ -97,6 +104,10 @@ assertHTML(
         .add("test")
         .add(txt("test")),
     '<div id="test" class="testClass">test<span>test</span></div>',
+);
+assertHTML(
+    ele("div").attr({ title: "test title" }).add("test title"),
+    '<div data-title="test title">test title</div>',
 );
 assertHTML(txt("test"), "<span>test</span>");
 assertHTML(p("test"), "<p>test</p>");

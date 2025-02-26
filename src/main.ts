@@ -14,9 +14,6 @@ import type {
 
 export {
     init as initDKH,
-    /**
-     * @deprecated use `init` instead.
-     */
     setTranslate,
     /**
      * @deprecated use `init` instead.
@@ -71,14 +68,28 @@ function setTranslate(f: (s: string) => string) {
     t = (s) => (s instanceof PureText ? s.text : f(s));
 }
 
+const attrMapFun = new Map<
+    string,
+    (v: unknown, el: HTMLElement) => unknown | undefined
+>();
+
 function init(op: {
     dev?: boolean;
     translate?: (s: string) => string;
     pureStyle?: boolean;
+    attrMap?: {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        [key: string]: (v: any, el: HTMLElement) => any | undefined;
+    };
 }) {
     if (op.dev) initDev();
     if (op.translate) setTranslate(op.translate);
     if (op.pureStyle) pureStyle();
+    if (op.attrMap) {
+        for (const [k, v] of Object.entries(op.attrMap)) {
+            attrMapFun.set(k, v);
+        }
+    }
 }
 
 function pureStyle() {
@@ -414,8 +425,17 @@ function pack<EL extends HTMLElement>(
         },
         attr: (attr) => {
             for (const i in attr) {
+                const mapFun = attrMapFun.get(i);
+                if (mapFun) {
+                    // @ts-ignore
+                    const v = mapFun(attr[i], el);
+                    if (v !== undefined) {
+                        // @ts-ignore
+                        el[i] = v;
+                    }
+                }
                 // @ts-ignore
-                el[i] = attr[i];
+                else el[i] = attr[i];
             }
             return p(el);
         },
