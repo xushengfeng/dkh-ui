@@ -47,13 +47,14 @@ const f = frame("test", {
     l1: {
         _: view("x"),
         deepInput: input(),
+        _ignore: input(),
     },
+    _ignore: view(),
 });
 
 f.els.content.sv("hello");
 f.els.deepInput.sv("test");
 console.assert(f.els.deepInput.gv === "test");
-
 assertHTML(
     f._,
     '<div style="display: flex; flex-flow: column;" id="test_test"><span id="test_title">t</span><p id="test_content">hello</p><div style="display: flex; flex-flow: row;" id="test_l1"><input type="text" id="test_deepInput"></div></div>',

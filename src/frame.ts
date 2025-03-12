@@ -3,9 +3,11 @@ type HasUnderline<T> = "_" extends keyof T ? true : false;
 type ExtractKeys<T> = {
     [K in keyof T]-?: K extends "_"
         ? never // 排除下划线键
-        : HasUnderline<T[K]> extends true
-          ? K | ExtractKeys<T[K]> // 如果存在下划线，则提取当前键及其嵌套键
-          : K;
+        : K extends `_${string}`
+          ? never
+          : HasUnderline<T[K]> extends true
+            ? K | ExtractKeys<T[K]> // 如果存在下划线，则提取当前键及其嵌套键
+            : K;
 }[keyof T];
 
 type AllKeys<T> = ExtractKeys<T>;
