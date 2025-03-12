@@ -277,7 +277,9 @@ function frame<Id extends string, t extends { [key: string]: any; _: any }>(
         return vi;
     }
     return {
+        /**@deprecated use _ instead */
         el: w(id, f),
+        _: w(id, f),
         els: l as frameType<t> & { [key in Id]: ReturnType<typeof view> },
         src: f,
     };

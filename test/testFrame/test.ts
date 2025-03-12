@@ -55,6 +55,6 @@ f.els.deepInput.sv("test");
 console.assert(f.els.deepInput.gv === "test");
 
 assertHTML(
-    f.el,
+    f._,
     '<div style="display: flex; flex-flow: column;" id="test_test"><span id="test_title">t</span><p id="test_content">hello</p><div style="display: flex; flex-flow: row;" id="test_l1"><input type="text" id="test_deepInput"></div></div>',
 );
