@@ -536,27 +536,25 @@ function pack<EL extends HTMLElement>(
     };
     if (dev) {
         const error = new Error();
-        // @ts-ignore
-        if (!el._dkh) el._dkh = [];
-        // @ts-ignore
-        el._dkh.push({ el: pel, pos: error });
+        const d = devData.get(el) ?? [];
+        d.push({ pos: error });
+        devData.set(el, d);
     }
     return pel;
 }
 
-type devData = { pos: Error; el: el0 }[];
+const devData = new WeakMap<HTMLElement, { pos: Error }[]>();
 
 function initDev() {
     dev = true;
     // @ts-ignore
     window._dkhDEV = (el: HTMLElement) => {
         // @ts-ignore
-        const data: devData = el._dkh;
-        if (!data) return null;
-        for (const i of data) {
-            console.log(i.pos);
-        }
-        return data.map((i) => i.el);
+        const data = devData.get(el);
+        if (data)
+            for (const i of data) {
+                console.log(i.pos);
+            }
     };
 }
 
