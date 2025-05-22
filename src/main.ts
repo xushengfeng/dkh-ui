@@ -486,7 +486,7 @@ function pack<EL extends HTMLElement>(
                 renderI += firstRender;
                 w();
             } else {
-                start(listEl.length);
+                start(list.length);
             }
             return p(el);
         },

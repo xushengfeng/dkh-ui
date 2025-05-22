@@ -234,6 +234,8 @@ assertHTML(
     view().add(["1", txt("2"), null, undefined, 0, false, {}, [], "3"]),
     "<div>1<span>2</span>3</div>",
 );
+assertHTML(view().add([undefined]), "<div></div>");
+assertHTML(view().add([]), "<div></div>");
 assertHTML(
     view().attr({ id: "test", style: "background-color: red;" }),
     '<div id="test" style="background-color: red;"></div>',
