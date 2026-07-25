@@ -4,6 +4,8 @@
     "module": "ESNext",
     "rootDir": "./",
     "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

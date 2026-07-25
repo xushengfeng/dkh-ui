@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
-import { resolve } from "path";
+import { resolve } from "node:path";
+import dts from "vite-plugin-dts";
 
 const name = "dkh";
 
@@ -12,4 +13,9 @@ export default defineConfig({
             fileName: (format) => `${name}.${format}.js`,
         },
     },
+    plugins: [
+        dts({
+            rollupTypes: true,
+        }),
+    ],
 });
