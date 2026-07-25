@@ -11,6 +11,7 @@
             "types": "./dist/src/main.d.ts"
         }
     },
+    "repository": { "url": "https://github.com/xushengfeng/dkh-ui" },
     "homepage": "https://github.com/xushengfeng/dkh-ui",
     "type": "module",
     "types": "./dist/src/main.d.ts",
